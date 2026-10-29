@@ -1,3 +1,10 @@
+<!doctype html>
+<html lang="el">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+</head>
+<body>
 <title>Ροή Συνεδρίασης 02.11.2026</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -93,7 +100,7 @@ h1{font:400 clamp(32px,6.4vw,48px)/1.1 var(--f-display);margin:18px 0 6px;text-w
 .head{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;flex-wrap:wrap}
 .eyebrow{font:700 11px/1 var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
 h2{font:700 22px/1.3 var(--f-body);margin:0;text-wrap:balance;color:var(--blue);letter-spacing:-.005em}
-.sgy-btn{display:inline-flex;align-items:center;gap:7px;margin-top:10px;padding:7px 13px;border-radius:6px;background:var(--red);color:var(--red-ink);font:700 12.5px/1 var(--f-body);letter-spacing:.03em;text-decoration:none;box-shadow:0 2px 6px color-mix(in srgb,var(--red) 35%,transparent)}
+.sgy-btn{display:inline-flex;align-items:center;gap:7px;margin-top:10px;padding:7px 13px;border-radius:6px;background:var(--red);color:var(--red-ink);font:700 12.5px/1 var(--f-body);letter-spacing:.03em;text-decoration:none;box-shadow:0 2px 6px rgba(192,33,26,.3)}
 .sgy-btn:hover{filter:brightness(1.1)}
 .sgy-btn svg{width:15px;height:15px}
 .ref{font-size:13px;color:var(--muted);margin-top:4px}
@@ -106,13 +113,13 @@ h2{font:700 22px/1.3 var(--f-body);margin:0;text-wrap:balance;color:var(--blue);
 .item.is-done h2{color:var(--blue);opacity:.6}
 
 .script{background:var(--script-bg);border:1px solid var(--script-line);border-radius:8px;padding:14px 16px}
-.script .who{font:700 11px/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:7px}
-.script .who svg{width:14px;height:14px}
+.script .who,.panel .who{font:700 11px/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:7px}
+.script .who svg,.panel .who svg{width:14px;height:14px}
 .script p{margin:0;font:400 17.5px/1.5 var(--f-display);max-width:65ch}
 .script p+p{margin-top:8px}
-.script .ed{border-radius:4px;padding:2px 4px;margin-inline:-4px;cursor:text;outline:1px dashed transparent}
-.script .ed:hover{outline-color:var(--gold-line)}
-.script .ed:focus{outline:2px solid var(--gold-line);background:var(--field)}
+.ed{border-radius:4px;padding:2px 4px;margin-inline:-4px;cursor:text;outline:1px dashed transparent}
+.ed:hover{outline-color:var(--gold-line)}
+.ed:focus{outline:2px solid var(--gold-line);background:var(--field)}
 .script div.ed+.ed,.script p.ed+.ed{margin-top:8px}
 .inl{display:inline-flex;align-items:center;gap:5px;margin-left:4px;padding:2px 8px;border:1px solid var(--gold-line);border-radius:999px;background:var(--solid);color:var(--gold);font:600 12.5px/1.4 var(--f-body);text-decoration:none;white-space:nowrap;vertical-align:1px;cursor:pointer}
 .inl.att{color:var(--red);border-color:var(--red);font-weight:800}
@@ -148,9 +155,9 @@ label.f{display:flex;flex-direction:column;gap:5px;font-size:12px;font-weight:60
 input[type=text],input[type=number],input[type=time],textarea{font:400 15px/1.4 var(--f-body);color:var(--ink);background:var(--field);border:1px solid var(--line);border-radius:6px;padding:9px 11px;width:100%;min-width:0}
 input[type=number]{font-family:var(--f-num);font-size:15px;text-align:center}
 textarea{resize:vertical;min-height:76px}
-input:focus,textarea:focus{border-color:var(--gold-line);outline:none;box-shadow:0 0 0 3px color-mix(in srgb,var(--gold-line) 30%,transparent)}
-.tally .yes input{border-color:color-mix(in srgb,var(--ok) 50%,var(--line))}
-.tally .no input{border-color:color-mix(in srgb,var(--bad) 50%,var(--line))}
+input:focus,textarea:focus{border-color:var(--gold-line);outline:none;box-shadow:0 0 0 3px rgba(201,164,74,.3)}
+.tally .yes input{border-color:var(--ok)}
+.tally .no input{border-color:var(--bad)}
 
 .seg{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
 .seg .lbl{font-size:13px;font-weight:600;color:var(--muted)}
@@ -179,6 +186,26 @@ input:focus,textarea:focus{border-color:var(--gold-line);outline:none;box-shadow
 .dg-card ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.5}
 .dg-card li{margin:5px 0}
 .dg-card li::marker{color:var(--gold)}
+.panel{border:1px solid var(--gold-line);border-radius:10px;background:var(--script-bg);overflow:hidden}
+.panel summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:10px;padding:12px 14px}
+.panel summary::-webkit-details-marker{display:none}
+.panel summary::after{content:"▾";margin-left:auto;color:var(--gold);font-size:15px}
+.panel:not([open]) summary::after{transform:rotate(-90deg)}
+.pn{font:700 12px/1 var(--f-num);background:var(--purple);color:var(--solid);padding:5px 8px;border-radius:5px;flex:none}
+.pt{font:700 16.5px/1.3 var(--f-body);color:var(--blue)}
+.panel-b{padding:2px 14px 14px;display:flex;flex-direction:column;gap:12px}
+.panel .who{font:700 11px/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);display:flex;align-items:center;gap:7px}
+.dg-card{display:flex;flex-direction:column;gap:8px}
+.dg-card .dg-h{margin-bottom:0}
+.dg-body{display:flex;flex-direction:column;gap:10px;font-size:14px;line-height:1.5}
+.dg-card .diplo{border:0;padding:0;background:none}
+.dg-card .stat{grid-template-columns:1fr 96px}
+.grid2.tight{grid-template-columns:repeat(2,minmax(0,1fr))}
+.ck span{min-width:0}
+body.pdf-mode{background:#FFFFFF!important;background-image:none!important}
+body.pdf-mode::before,.pdf-mode .bar,.pdf-mode .toast,.pdf-mode .sgy-btn,.pdf-mode .edit-hint,.pdf-mode [data-unan],.pdf-mode .fallback,.pdf-mode .foot span:last-child{display:none!important}
+.pdf-mode .item{box-shadow:none;background:#FFFFFF;margin-block:14px}
+.pdf-mode .panel summary::after{display:none}
 .diplo{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 14px;border:1px solid var(--gold-line);border-radius:8px;background:var(--script-bg);font-size:14.5px;font-weight:500}
 .diplo input{width:72px!important;font-weight:700}
 .stat{display:grid;grid-template-columns:1fr 110px;gap:10px;align-items:center;font-size:14.5px}
@@ -224,6 +251,7 @@ input:focus,textarea:focus{border-color:var(--gold-line);outline:none;box-shadow
     </div>
     <div class="actions">
       <button class="btn primary" id="copyBtn" type="button">Αντιγραφή πρακτικών</button>
+      <button class="btn primary" id="pdfBtn" type="button">Λήψη PDF</button>
       <button class="btn" id="resetBtn" type="button">Επαναφορά</button>
     </div>
   </div>
@@ -267,6 +295,15 @@ const vote=(id,L,title,o={})=>`<div class="vote" data-vote="${id}" data-title="$
     ${o.action?seg(id+'-act',o.action):''}
   </div></div>`;
 
+const panel=(k,t,inner)=>`<details class="panel" open><summary><span class="pn">${k}</span><span class="pt">${t}</span></summary><div class="panel-b">${inner}</div></details>`;
+const card=(t,b)=>`<div class="dg-card"><div class="dg-h">${t}</div><div class="dg-body">${b}</div></div>`;
+const ATT=`<a class="inl att" contenteditable="false" href="https://drive.google.com/file/d/1mgV2n7Bpp3FinLYGCcWaULEOm_N4Arfy/view?usp=drivesdk" target="_blank" rel="noopener">${DOC}Επισυναπτόμενο 1</a>`;
+const DIG=[
+ ['Κεντρικό Μητρώο Μελών (χωρίς διπλότυπα)',[['Μοναδικός Αριθμός Μητρώου (Masonic ID)','Κάθε μέλος αποκτά ένα μοναδικό ψηφιακό αναγνωριστικό που συνδέεται με το ΑΦΜ ή τον αριθμό ταυτότητας/διαβατηρίου για την αποφυγή διπλοεγγραφών.'],['Αυτόματος Έλεγχος Διπλοτύπων','Κατά την καταχώριση νέων μελών ή τη μεταφορά/επανενεργοποίηση, το σύστημα εκτελεί αυτόματο έλεγχο ταυτοπροσωπίας με βάση τα προσωπικά στοιχεία.'],['Ιστορικό &amp; Κατάσταση Μέλους','Πλήρης ψηφιακός φάκελος με τη δραστηριότητα, τους βαθμούς, τις εισφορές και την τρέχουσα διοικητική κατάσταση κάθε μέλους.']]],
+ ['Ψηφιακή Δήλωση Εκπροσώπησης Μεγάλου Δασκάλου',[['Ηλεκτρονική Ανάθεση','Ο Μεγάλος Δάσκαλος ή η Γραμματεία μπορεί να ορίζει ψηφιακά εκπροσώπους (Επιθεωρητές/Αντιπροσώπους) για συγκεκριμένες συνεδρίες ή εκδηλώσεις Στοών.'],['Ειδοποιήσεις &amp; Αποδοχή','Αυτόματη αποστολή ειδοποίησης στον ορισθέντα εκπρόσωπο με όλες τις λεπτομέρειες της συνεδρίας και δυνατότητα επιβεβαίωσης αποδοχής.'],['Ψηφιακό Πρακτικό Επίσκεψης','Δυνατότητα υποβολής της αναφοράς/ανακεφαλαίωσης της επίσκεψης από τον εκπρόσωπο απευθείας στο σύστημα μετά το πέρας της συνεδρίας.']]],
+ ['Αυτοματοποιημένες Ευχές Ονομαστικών Εορτών',[['Ημερολόγιο Εορτολογίου','Διασύνδεση του μητρώου με ψηφιακό εορτολόγιο για την αυτόματη αναγνώριση των ονομαστικών εορτών των μελών της ΕΜΣΕ.'],['Προσωποποιημένα Μηνύματα','Αποστολή προσαρμοσμένων ευχητήριων μηνυμάτων (μέσω Email ή SMS/Viber) εξ ονόματος του Μεγάλου Δασκάλου.'],['Πρότυπα Επιστολών (Templates)','Δυνατότητα επιλογής ή προσαρμογής επίσημων εικαστικών και κειμένων ευχών από τη Μεγάλη Γραμματεία.']]],
+ ['Ηλεκτρονική Διακίνηση Διαταγμάτων &amp; Αποφάσεων',[['Ψηφιακή Υπογραφή','Έκδοση και ψηφιακή υπογραφή διαταγμάτων, εγκυκλίων και αποφάσεων της Ηγεσίας.'],['Άμεση Κοινοποίηση','Αυτόματη αποστολή στους Αξιωματικούς, στις Στοές ή στο σύνολο των μελών ανάλογα με το επίπεδο πρόσβασης και το θέμα του διατάγματος.'],['Ψηφιακό Αρχείο Διαταγμάτων','Κεντρική ψηφιακή βιβλιοθήκη με δυνατότητα αναζήτησης βάσει χρονολογίας, θεματικής κατηγορίας ή λέξεων-κλειδιών.']]],
+ ['Επιπλέον Λειτουργίες Ψηφιοποίησης',[['Ηλεκτρονικές Πληρωμές &amp; Οικονομικός Έλεγχος','Ψηφιακή εξόφληση δικαιωμάτων/συνδρομών με αυτόματη ενημέρωση της οικονομικής καρτέλας του μέλους και της Στοάς.'],['Ψηφιακές Αιτήσεις &amp; Πιστοποιητικά','Ηλεκτρονική υποβολή αιτημάτων (π.χ. πιστοποιητικά ιδιότητας, τεκτονικά διαβατήρια) και έγκρισή τους online.'],['Πρόσβαση μέσω Mobile App / Portal','Ειδική πύλη μελών (Member Portal) με προσωποποιημένη πρόσβαση σε ανακοινώσεις, ημερολόγιο συνεδριών και προσωπικά στοιχεία.']]]];
 const ITEMS=[
  {t:'Έναρξις Συνεδριάσεως',b:[`<div class="grid2">${`<label class="f" for="t1-start">Ώρα έναρξης<input type="time" id="t1-start" data-label="Ώρα έναρξης"></label>`}</div>`]},
  {t:'Διαπίστωσις Απαρτίας',b:[seg('t2-q','Διαπιστώθηκε απαρτία'),
@@ -306,36 +343,30 @@ const ITEMS=[
  {t:'Ανακοινώσεις Μεγάλου Καγκελαρίου',b:[doc('https://drive.google.com/file/d/1oYOQf0CWQApTr_5vMikzn6JE2HFWnjNC/view?usp=drive_link','Ανακοινώσεις'),area('t11-n','Σημειώσεις')]},
  {t:'Ανακοινώσεις Μεγάλου Γραμματέως Εκπαιδεύσεως',b:[area('t12-n','Σημειώσεις')]},
  {t:'Ανακοινώσεις Μεγάλου Γραμματέως',b:[
-   script([`<ul>
-     <li><b>Αίτηση 23 Διδασκάλων:</b> Λήψη αίτησης για χορήγηση Χάρτας Λειτουργίας Στοάς στον Πειραιά υπό την ονομασία «Άτλας» Νο 118 (30/06/26). Ακολουθεί το Διάταγμα 517.</li>
-     <li><b>Έκτακτη Επαρχιακή Μεγάλη Συνέλευση Πειραιώς:</b> 14/09/2026.</li>
-     <li><b>Έκτακτη Επαρχιακή Μεγάλη Συνέλευση Αθηνών:</b> 29/10/2026.</li>
-     <li><b>Παραίτηση Σεβασμίου Διδασκάλου:</b> Από Στοά «Κάσσανδρος» (23/10/2026). <a class="inl att" contenteditable="false" href="https://drive.google.com/file/d/1mgV2n7Bpp3FinLYGCcWaULEOm_N4Arfy/view?usp=drivesdk" target="_blank" rel="noopener">${DOC}Επισυναπτόμενο 1</a></li>
-     <li><b>Ημερίδα Ενημέρωσης Γραμματέων Στοών:</b> Παρασκευή 13 Νοεμβρίου, Τεκτονικό Μέγαρο Πειραιώς.</li>
-     <li><b>Επιστολή Σ.Σ. «Απολλώνιος ο Ρόδιος» Νο 80 (19/10/2026):</b> Επιστολή Σεβτ. Αδ. Ιωάννη Μπενετάτου προς τον Μ.Δ. για ονομασία του Τεκτονικού Μεγάρου Ρόδου ως «Τεκτονικό Μέγαρο Νικόλαος Σαββόπουλος».</li>
-     <li><b>Αιτήσεις Ενδιαφέροντος:</b> Βασίλειος Σταματέλος (11/10/2026) · Μητσόπουλος Στυλιανός (08/10/2026 – Στοά Καβάλας)</li></ul>`]),
-   `<div class="sub"><h3>Ενέργειες</h3>
-     <div class="grid2">
+   panel('13.1','Ανακοινώσεις',`<div class="who">${MIC}Εκφωνεί ο Γραμματέας<span class="edit-hint">✎ επεξεργάσιμο</span></div><div class="dg-grid">${[
+     ['a1','Αίτηση 23 Διδασκάλων','Λήψη αίτησης για χορήγηση Χάρτας Λειτουργίας Στοάς στον Πειραιά υπό την ονομασία «Άτλας» Νο 118 (30/06/26). Ακολουθεί το Διάταγμα 517.'],
+     ['a2','Έκτακτη Επαρχιακή Μεγάλη Συνέλευση Πειραιώς','14/09/2026'],
+     ['a3','Έκτακτη Επαρχιακή Μεγάλη Συνέλευση Αθηνών','29/10/2026'],
+     ['a4','Παραίτηση Σεβασμίου Διδασκάλου','Από Στοά «Κάσσανδρος» (23/10/2026). '+ATT],
+     ['a5','Ημερίδα Ενημέρωσης Γραμματέων Στοών','Παρασκευή 13 Νοεμβρίου, Τεκτονικό Μέγαρο Πειραιώς.'],
+     ['a6','Επιστολή Σ.Σ. «Απολλώνιος ο Ρόδιος» Νο 80 (19/10/2026)','Επιστολή Σεβτ. Αδ. Ιωάννη Μπενετάτου προς τον Μ.Δ. για ονομασία του Τεκτονικού Μεγάρου Ρόδου ως «Τεκτονικό Μέγαρο Νικόλαος Σαββόπουλος».'],
+     ['a7','Αιτήσεις Ενδιαφέροντος','Βασίλειος Σταματέλος (11/10/2026)<br>Μητσόπουλος Στυλιανός (08/10/2026 – Στοά Καβάλας)']
+   ].map(([id,t,x])=>card(t,`<div class="ed" contenteditable="true" spellcheck="true" data-edit="${id}">${x}</div>`)).join('')}</div>`),
+   panel('13.2','Ενέργειες',`<div class="dg-grid">
+     ${card('Ηλεκτρονική αλληλογραφία',`<div class="grid2 tight">
        <label class="f" for="t13-in">Εισερχόμενα email<input type="number" min="0" inputmode="numeric" id="t13-in" data-label="Εισερχόμενα email"></label>
-       <label class="f" for="t13-out">Εξερχόμενα email<input type="number" min="0" inputmode="numeric" id="t13-out" data-label="Εξερχόμενα email"></label>
-     </div>
-     <div class="checks">
-       <label class="ck"><input type="checkbox" id="t13-c1" data-label="Επιστολή για τη βελτιστοποίηση και τον διαχωρισμό της ηλεκτρονικής αλληλογραφίας της Μεγάλης Στοάς με το info@nglgreece.gr">Επιστολή για τη βελτιστοποίηση και τον διαχωρισμό της ηλεκτρονικής αλληλογραφίας της Μεγάλης Στοάς με το <b>info@nglgreece.gr</b></label>
-       <label class="ck"><input type="checkbox" id="t13-c2" data-label="Επιστολή ζήτησης επικαιροποίησης για τη Μηνιαία Αναφορά Πεπραγμένων Επαρχιών της ΕΜΣτΕ">Επιστολή ζήτησης επικαιροποίησης για τη Μηνιαία Αναφορά Πεπραγμένων Επαρχιών της ΕΜΣτΕ</label>
-     </div>
-     <div class="checks">
-     ${[['t13-s1','Επισκέψεων Μ.Δ.'],['t13-s2','εκπροσωπήσεων Μ.Α.Ξ. για Μ.Δ.'],['t13-s3','Διαταγμάτων']].map(([i,l])=>`<div class="stat"><label class="ck"><input type="checkbox" id="${i}-c" data-label="Στατιστικά · Αριθμός ${l} (ανακοινώθηκε)">Στατιστικά · Αριθμός ${l}</label><input type="number" min="0" inputmode="numeric" id="${i}" data-label="Αριθμός ${l}" aria-label="Αριθμός ${l}"></div>`).join('')}
-     </div>
-     <div class="diplo">Εκδόθηκαν
+       <label class="f" for="t13-out">Εξερχόμενα email<input type="number" min="0" inputmode="numeric" id="t13-out" data-label="Εξερχόμενα email"></label></div>`)}
+     ${card('Επιστολές',`<label class="ck"><input type="checkbox" id="t13-c1" data-label="Επιστολή για τη βελτιστοποίηση και τον διαχωρισμό της ηλεκτρονικής αλληλογραφίας της Μεγάλης Στοάς με το info@nglgreece.gr"><span>Βελτιστοποίηση και διαχωρισμός ηλεκτρονικής αλληλογραφίας της Μεγάλης Στοάς με το <b>info@nglgreece.gr</b></span></label>
+       <label class="ck"><input type="checkbox" id="t13-c2" data-label="Επιστολή ζήτησης επικαιροποίησης για τη Μηνιαία Αναφορά Πεπραγμένων Επαρχιών της ΕΜΣτΕ"><span>Ζήτηση επικαιροποίησης για τη Μηνιαία Αναφορά Πεπραγμένων Επαρχιών της ΕΜΣτΕ</span></label>`)}
+     ${card('Στατιστικά',[['t13-s1','Επισκέψεις Μ.Δ.'],['t13-s2','Εκπροσωπήσεις Μ.Α.Ξ. για Μ.Δ.'],['t13-s3','Διατάγματα']].map(([i,l])=>`<div class="stat"><label class="ck"><input type="checkbox" id="${i}-c" data-label="Στατιστικά · ${l} (ανακοινώθηκε)"><span>${l}</span></label><input type="number" min="0" inputmode="numeric" id="${i}" data-label="Αριθμός · ${l}" aria-label="Αριθμός · ${l}"></div>`).join(''))}
+     ${card('Διπλώματα',`<div class="diplo">Εκδόθηκαν
        <input type="number" min="0" inputmode="numeric" id="t13-dip" value="16" data-label="Διπλώματα Διδασκάλων Τεκτόνων" aria-label="Διπλώματα Διδασκάλων Τεκτόνων"> διπλώματα Διδασκάλων Τεκτόνων και
-       <input type="number" min="0" inputmode="numeric" id="t13-adopt" value="1" data-label="Διπλώματα Υιοθεσίας" aria-label="Διπλώματα Υιοθεσίας"> Υιοθεσίας</div>
-     </div>`,
-   `<div class="sub"><details class="dg" open><summary><h3>Ψηφιοποίηση Μεγάλης Γραμματείας</h3></summary>
-     <p class="dg-intro">Η ψηφιοποίηση της Μεγάλης Γραμματείας και των λειτουργιών της ενισχύει την αποτελεσματικότητα, τη διαφάνεια και την άμεση επικοινωνία εντός της Μεγάλης Στοάς.</p>
-     <div class="dg-grid"><div class="dg-card"><div class="dg-h"><span class="dg-n">1</span>Κεντρικό Μητρώο Μελών (χωρίς διπλότυπα)</div><ul><li><b>Μοναδικός Αριθμός Μητρώου (Masonic ID):</b> Κάθε μέλος αποκτά ένα μοναδικό ψηφιακό αναγνωριστικό που συνδέεται με το ΑΦΜ ή τον αριθμό ταυτότητας/διαβατηρίου για την αποφυγή διπλοεγγραφών.</li><li><b>Αυτόματος Έλεγχος Διπλοτύπων:</b> Κατά την καταχώριση νέων μελών ή τη μεταφορά/επανενεργοποίηση, το σύστημα εκτελεί αυτόματο έλεγχο ταυτοπροσωπίας με βάση τα προσωπικά στοιχεία.</li><li><b>Ιστορικό &amp; Κατάσταση Μέλους:</b> Πλήρης ψηφιακός φάκελος με τη δραστηριότητα, τους βαθμούς, τις εισφορές και την τρέχουσα διοικητική κατάσταση κάθε μέλους.</li></ul></div><div class="dg-card"><div class="dg-h"><span class="dg-n">2</span>Ψηφιακή Δήλωση Εκπροσώπησης Μεγάλου Δασκάλου</div><ul><li><b>Ηλεκτρονική Ανάθεση:</b> Ο Μεγάλος Δάσκαλος ή η Γραμματεία μπορεί να ορίζει ψηφιακά εκπροσώπους (Επιθεωρητές/Αντιπροσώπους) για συγκεκριμένες συνεδρίες ή εκδηλώσεις Στοών.</li><li><b>Ειδοποιήσεις &amp; Αποδοχή:</b> Αυτόματη αποστολή ειδοποίησης στον ορισθέντα εκπρόσωπο με όλες τις λεπτομέρειες της συνεδρίας και δυνατότητα επιβεβαίωσης αποδοχής.</li><li><b>Ψηφιακό Πρακτικό Επίσκεψης:</b> Δυνατότητα υποβολής της αναφοράς/ανακεφαλαίωσης της επίσκεψης από τον εκπρόσωπο απευθείας στο σύστημα μετά το πέρας της συνεδρίας.</li></ul></div><div class="dg-card"><div class="dg-h"><span class="dg-n">3</span>Αυτοματοποιημένες Ευχές Ονομαστικών Εορτών</div><ul><li><b>Ημερολόγιο Εορτολογίου:</b> Διασύνδεση του μητρώου με ψηφιακό εορτολόγιο για την αυτόματη αναγνώριση των ονομαστικών εορτών των μελών της ΕΜΣΕ.</li><li><b>Προσωποποιημένα Μηνύματα:</b> Αποστολή προσαρμοσμένων ευχητήριων μηνυμάτων (μέσω Email ή SMS/Viber) εξ ονόματος του Μεγάλου Δασκάλου.</li><li><b>Πρότυπα Επιστολών (Templates):</b> Δυνατότητα επιλογής ή προσαρμογής επίσημων εικαστικών και κειμένων ευχών από τη Μεγάλη Γραμματεία.</li></ul></div><div class="dg-card"><div class="dg-h"><span class="dg-n">4</span>Ηλεκτρονική Διακίνηση Διαταγμάτων &amp; Αποφάσεων</div><ul><li><b>Ψηφιακή Υπογραφή:</b> Έκδοση και ψηφιακή υπογραφή διαταγμάτων, εγκυκλίων και αποφάσεων της Ηγεσίας.</li><li><b>Άμεση Κοινοποίηση:</b> Αυτόματη αποστολή στους Αξιωματικούς, στις Στοές ή στο σύνολο των μελών ανάλογα με το επίπεδο πρόσβασης και το θέμα του διατάγματος.</li><li><b>Ψηφιακό Αρχείο Διαταγμάτων:</b> Κεντρική ψηφιακή βιβλιοθήκη με δυνατότητα αναζήτησης βάσει χρονολογίας, θεματικής κατηγορίας ή λέξεων-κλειδιών.</li></ul></div><div class="dg-card"><div class="dg-h"><span class="dg-n">5</span>Επιπλέον Λειτουργίες Ψηφιοποίησης</div><ul><li><b>Ηλεκτρονικές Πληρωμές &amp; Οικονομικός Έλεγχος:</b> Ψηφιακή εξόφληση δικαιωμάτων/συνδρομών με αυτόματη ενημέρωση της οικονομικής καρτέλας του μέλους και της Στοάς.</li><li><b>Ψηφιακές Αιτήσεις &amp; Πιστοποιητικά:</b> Ηλεκτρονική υποβολή αιτημάτων (π.χ. πιστοποιητικά ιδιότητας, τεκτονικά διαβατήρια) και έγκρισή τους online.</li><li><b>Πρόσβαση μέσω Mobile App / Portal:</b> Ειδική πύλη μελών (Member Portal) με προσωποποιημένη πρόσβαση σε ανακοινώσεις, ημερολόγιο συνεδριών και προσωπικά στοιχεία.</li></ul></div></div>
-     <label class="ck"><input type="checkbox" id="t13-dg" data-label="Παρουσιάστηκε η Ψηφιοποίηση Μεγάλης Γραμματείας">Παρουσιάστηκε στο Συμβούλιο</label>
-     <label class="f" for="t13-dg-n">Παρατηρήσεις Συμβουλίου<textarea id="t13-dg-n" data-label="Παρατηρήσεις για την Ψηφιοποίηση"></textarea></label>
-   </details></div>`]},
+       <input type="number" min="0" inputmode="numeric" id="t13-adopt" value="1" data-label="Διπλώματα Υιοθεσίας" aria-label="Διπλώματα Υιοθεσίας"> Υιοθεσίας</div>`)}
+   </div>`),
+   panel('13.3','Ψηφιοποίηση Μεγάλης Γραμματείας',`<p class="dg-intro">Η ψηφιοποίηση της Μεγάλης Γραμματείας και των λειτουργιών της ενισχύει την αποτελεσματικότητα, τη διαφάνεια και την άμεση επικοινωνία εντός της Μεγάλης Στοάς.</p><div class="dg-grid">${DIG.map(([t,items])=>card(t,`<ul>${items.map(([a,b])=>`<li><b>${a}:</b> ${b}</li>`).join('')}</ul>`)).join('')}</div>
+     <label class="ck"><input type="checkbox" id="t13-dg" data-label="Παρουσιάστηκε η Ψηφιοποίηση Μεγάλης Γραμματείας"><span>Παρουσιάστηκε στο Συμβούλιο</span></label>
+     <label class="f" for="t13-dg-n">Παρατηρήσεις Συμβουλίου<textarea id="t13-dg-n" data-label="Παρατηρήσεις για την Ψηφιοποίηση"></textarea></label>`)
+ ]},
  {t:'Ενημέρωσις υπό του Μεγάλου Θησαυροφύλακος',b:[note('<b>Επιβεβαίωση:</b> αν καλύφθηκε στο Θέμα 7.'),seg('t14-cov','Καλύφθηκε στο Θέμα 7'),area('t14-n','Σημειώσεις')]},
  {t:'Λήξις Συνεδριάσεως',b:[`<div class="grid2"><label class="f" for="t15-end">Ώρα λήξεως<input type="time" id="t15-end" data-label="Ώρα λήξεως"></label></div>`,
    `<label class="ck"><input type="checkbox" id="t15-sig" data-label="Ολοκλήρωση συνεδρίασης & υπογραφή πρακτικών">Ολοκλήρωση συνεδρίασης &amp; υπογραφή πρακτικών</label>`]}
@@ -414,6 +445,47 @@ rb.addEventListener('click',()=>{if(!armed){rb.textContent='Επιβεβαίωσ
   clearTimeout(armed);armed=null;rb.textContent='Επαναφορά';rb.classList.remove('warn');
   form.reset();eds().forEach(el=>el.innerHTML=DEF[el.dataset.edit]);try{localStorage.removeItem(KEY)}catch(e){}refresh();toast('Η φόρμα καθαρίστηκε')});
 
+/* PDF */
+let h2pP=null;
+function loadH2P(){if(window.html2pdf)return Promise.resolve();if(h2pP)return h2pP;
+  h2pP=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';sc.onload=res;sc.onerror=()=>{h2pP=null;rej(new Error('load'))};document.head.appendChild(sc)});return h2pP}
+const pdfBtn=document.getElementById('pdfBtn');
+pdfBtn.addEventListener('click',async()=>{
+  if(pdfBtn.disabled)return;pdfBtn.disabled=true;const lbl=pdfBtn.textContent;pdfBtn.textContent='Δημιουργία PDF…';
+  const root=document.documentElement,prev=root.getAttribute('data-theme'),restore=[],dets=[...document.querySelectorAll('details')].map(d=>[d,d.open]);
+  const fname='SGY_Roi_Synedriasis_021126_v12.pdf';let blob=null;
+  try{
+    await loadH2P();
+    form.querySelectorAll('input,textarea').forEach(el=>{
+      if(el.type==='checkbox'||el.type==='radio'){restore.push([el,'c',el.defaultChecked,el.checked]);el.defaultChecked=el.checked}
+      else{restore.push([el,'v',el.defaultValue,el.value]);el.defaultValue=el.value}});
+    dets.forEach(([d])=>d.open=true);
+    root.setAttribute('data-theme','light');document.body.classList.add('pdf-mode');
+    blob=await html2pdf().set({
+      margin:[10,8,12,8],filename:fname,image:{type:'jpeg',quality:0.92},
+      html2canvas:{scale:1.6,useCORS:true,backgroundColor:'#FFFFFF',windowWidth:900,scrollX:0,scrollY:0},
+      jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
+      pagebreak:{mode:['css','legacy'],avoid:['.vote','.dg-card','.script','.head','.note','.seg','.mast','.ck','.stat','.panel summary']}
+    }).from(document.body).toPdf().get('pdf').then(pdf=>{const n=pdf.internal.getNumberOfPages(),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight();
+      for(let i=1;i<=n;i++){pdf.setPage(i);pdf.setFontSize(8);pdf.setTextColor(130);pdf.text(i+' / '+n,w-8,h-5,{align:'right'})}}).outputPdf('blob');
+  }catch(e){toast('Δεν ήταν δυνατή η δημιουργία του PDF. Ελέγξτε τη σύνδεση και δοκιμάστε ξανά.')}
+  finally{
+    restore.forEach(([el,k,d,c])=>{if(k==='c'){el.defaultChecked=d;el.checked=c}else{el.defaultValue=d;el.value=c}});
+    dets.forEach(([d,o])=>d.open=o);document.body.classList.remove('pdf-mode');
+    if(prev===null)root.removeAttribute('data-theme');else root.setAttribute('data-theme',prev);
+  }
+  if(blob){
+    let dl=null;try{dl=window.claude&&window.claude.use?await window.claude.use('downloads'):null}catch(e){}
+    if(dl){try{await dl.save({filename:fname,data:blob});toast('Το PDF αποθηκεύτηκε')}
+      catch(e){toast(e&&e.code==='declined'?'Η αποθήκευση ακυρώθηκε':e&&e.code==='rate_limited'?'Υπάρχει ήδη ανοιχτό παράθυρο αποθήκευσης':'Η αποθήκευση PDF δεν είναι διαθέσιμη σε αυτή την προβολή')}}
+    else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),8000);toast('Το PDF δημιουργήθηκε')}
+  }
+  pdfBtn.disabled=false;pdfBtn.textContent=lbl;
+});
+
 load();refresh();
 })();
 </script>
+
+</body>
+</html>
