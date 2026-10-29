@@ -390,8 +390,9 @@ const ITEMS=[
      <label class="rep-date" for="t13-date"><span>Ημερομηνία</span><input type="date" id="t13-date" required data-label="Ημερομηνία αναφοράς"><em class="rep-ask">Επιλέξτε ημερομηνία</em></label><button type="button" class="btn primary rep-btn" id="repPdfBtn">PDF Αναφοράς ΜΓραμ</button></div>`,
    panel('13.1','Ανακοινώσεις',`<div class="who">${MIC}Εκφωνεί ο Γραμματέας<span class="edit-hint">✎ επεξεργάσιμο</span></div><div class="dg-grid">${[
      ['a1','Αίτηση 23 Διδασκάλων','Λήψη αίτησης για χορήγηση Χάρτας Λειτουργίας Στοάς στον Πειραιά υπό την ονομασία «Άτλας» Νο 118 (30/06/26). Ακολουθεί το Διάταγμα 517.'],
-     ['a2','Έκτακτη Επαρχιακή Μεγάλη Συνέλευση Πειραιώς','14/09/2026'],
-     ['a3','Έκτακτη Επαρχιακή Μεγάλη Συνέλευση Αθηνών','29/10/2026'],
+     ['a2','Έκτακτη Επαρχιακή Μεγάλη Συνέλευση Πειραιώς','14/09/2026<br>Εγκαταστάθηκε ο Πσεβ. Αδ. Βασίλειος Ζαχαριάς.'],
+     ['a8','Έκτακτη Περιφερειακή Μεγάλη Συνέλευση Κύπρου','19/09/2026<br>Εγκατάσταση νέου Περιφερειακού Μεγάλου Διδασκάλου, του Πσεβ. Αδ. Θεοδώρου Θεοδώρου.'],
+     ['a3','Έκτακτη Επαρχιακή Μεγάλη Συνέλευση Αθηνών','29/10/2026<br>Εγκαταστάθηκε ο Πσεβ. Αδ. Δημήτριος Παναγάκος.'],
      ['a4','Παραίτηση Σεβασμίου Διδασκάλου','Από Στοά «Κάσσανδρος» (23/10/2026). '+ATT],
      ['a5','Ημερίδα Ενημέρωσης Γραμματέων Στοών','Παρασκευή 13 Νοεμβρίου, Τεκτονικό Μέγαρο Πειραιώς.'],
      ['a6','Επιστολή Σ.Σ. «Απολλώνιος ο Ρόδιος» Νο 80 (19/10/2026)','Επιστολή Σεβτ. Αδ. Ιωάννη Μπενετάτου προς τον Μ.Δ. για ονομασία του Τεκτονικού Μεγάρου Ρόδου ως «Τεκτονικό Μέγαρο Νικόλαος Σαββόπουλος».'],
@@ -553,11 +554,11 @@ function reportPdf(btn){
   const dIn=document.getElementById('t13-date');
   if(!dIn.value){document.getElementById('item-13').scrollIntoView({block:'start'});setTimeout(()=>dIn.focus(),300);toast('Επιλέξτε πρώτα την ημερομηνία της αναφοράς');return}
   const [yy,mm,dd]=dIn.value.split('-');
-  makePdf(btn,'report','Anafora_MGram_SGY_'+dd+mm+yy.slice(2)+'_v17.pdf');
+  makePdf(btn,'report','Anafora_MGram_SGY_'+dd+mm+yy.slice(2)+'_v18.pdf');
 }
 PDF_BTNS[0].addEventListener('click',()=>reportPdf(PDF_BTNS[0]));
 PDF_BTNS[1].addEventListener('click',()=>reportPdf(PDF_BTNS[1]));
-PDF_BTNS[2].addEventListener('click',()=>makePdf(PDF_BTNS[2],'full','SGY_Synedriasi_021126_v17.pdf'));
+PDF_BTNS[2].addEventListener('click',()=>makePdf(PDF_BTNS[2],'full','SGY_Synedriasi_021126_v18.pdf'));
 
 /* Signature pad */
 const SIGKEY=KEY+'-sig',pad=document.getElementById('sigPad'),pctx=pad.getContext('2d');let sigData=null;
