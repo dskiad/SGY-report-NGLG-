@@ -386,7 +386,7 @@ const ITEMS=[
    panel('13.3','Ψηφιοποίηση Μεγάλης Γραμματείας',`<p class="dg-intro">Η ψηφιοποίηση της Μεγάλης Γραμματείας και των λειτουργιών της ενισχύει την αποτελεσματικότητα, τη διαφάνεια και την άμεση επικοινωνία εντός της Μεγάλης Στοάς.</p><div class="dg-grid">${DIG.map(([t,items])=>card(t,`<ul>${items.map(([a,b])=>`<li><b>${a}:</b> ${b}</li>`).join('')}</ul>`)).join('')}</div>
      <label class="ck"><input type="checkbox" id="t13-dg" data-label="Παρουσιάστηκε η Ψηφιοποίηση Μεγάλης Γραμματείας"><span>Παρουσιάστηκε στο Συμβούλιο</span></label>
      <label class="f" for="t13-dg-n">Παρατηρήσεις Συμβουλίου<textarea id="t13-dg-n" data-label="Παρατηρήσεις για την Ψηφιοποίηση"></textarea></label>`),
-   `<div class="rep-sign"><div class="rep-role ed" contenteditable="true" spellcheck="true" data-edit="sig1">Ο Μέγας Γραμματέας</div><div class="rep-line"></div><div class="rep-name ed" contenteditable="true" spellcheck="true" data-edit="sig2">Πανσεβ. Αδ. Δημήτριος Σκιαδόπουλος</div></div>`
+   `<div class="rep-sign"><div class="rep-role ed" contenteditable="true" spellcheck="true" data-edit="sig1">Ο Μέγας Γραμματέας</div><div class="rep-line"></div><div class="rep-name ed" contenteditable="true" spellcheck="true" data-edit="sig2">Πσεβ. Αδ. Δημήτριος Σκιαδόπουλος</div></div>`
  ]},
  {t:'Ενημέρωσις υπό του Μεγάλου Θησαυροφύλακος',b:[note('<b>Επιβεβαίωση:</b> αν καλύφθηκε στο Θέμα 7.'),seg('t14-cov','Καλύφθηκε στο Θέμα 7'),area('t14-n','Σημειώσεις')]},
  {t:'Λήξις Συνεδριάσεως',b:[`<div class="grid2"><label class="f" for="t15-end">Ώρα λήξεως<input type="time" id="t15-end" data-label="Ώρα λήξεως"></label></div>`,
@@ -477,7 +477,7 @@ pdfBtn.addEventListener('click',async()=>{
   if(!dIn.value){const det=document.getElementById('item-13');det.scrollIntoView({block:'start'});setTimeout(()=>dIn.focus(),300);toast('Επιλέξτε πρώτα την ημερομηνία της αναφοράς');return}
   pdfBtn.disabled=true;const lbl=pdfBtn.textContent;pdfBtn.textContent='Δημιουργία PDF…';
   const root=document.documentElement,prev=root.getAttribute('data-theme'),restore=[],dets=[...document.querySelectorAll('details')].map(d=>[d,d.open]);
-  const [yy,mm,dd]=dIn.value.split('-');const fname='Anafora_MGram_SGY_'+dd+mm+yy.slice(2)+'_v14.pdf';let blob=null;
+  const [yy,mm,dd]=dIn.value.split('-');const fname='Anafora_MGram_SGY_'+dd+mm+yy.slice(2)+'_v15.pdf';let blob=null;
   try{
     await loadH2P();
     form.querySelectorAll('input,textarea').forEach(el=>{
