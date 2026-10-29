@@ -295,6 +295,7 @@ body.pdf-mode::before,.pdf-mode .bar,.pdf-mode .toast,.pdf-mode .sgy-btn,.pdf-mo
       <button class="btn primary" id="copyBtn" type="button">Αντιγραφή πρακτικών</button>
       <button class="btn primary" id="pdfBtn" type="button" title="Λήψη PDF της Αναφοράς Μεγάλου Γραμματέως">Αναφορά ΜΓραμ</button>
       <button class="btn" id="resetBtn" type="button">Επαναφορά</button>
+      <button class="btn" id="authBtn" type="button" hidden>Σύνδεση Google</button>
     </div>
   </div>
 </div>
@@ -556,11 +557,11 @@ function reportPdf(btn){
   const dIn=document.getElementById('t13-date');
   if(!dIn.value){document.getElementById('item-13').scrollIntoView({block:'start'});setTimeout(()=>dIn.focus(),300);toast('Επιλέξτε πρώτα την ημερομηνία της αναφοράς');return}
   const [yy,mm,dd]=dIn.value.split('-');
-  makePdf(btn,'report','Anafora_MGram_SGY_'+dd+mm+yy.slice(2)+'_v19.pdf');
+  makePdf(btn,'report','Anafora_MGram_SGY_'+dd+mm+yy.slice(2)+'_v20.pdf');
 }
 PDF_BTNS[0].addEventListener('click',()=>reportPdf(PDF_BTNS[0]));
 PDF_BTNS[1].addEventListener('click',()=>reportPdf(PDF_BTNS[1]));
-PDF_BTNS[2].addEventListener('click',()=>makePdf(PDF_BTNS[2],'full','SGY_Synedriasi_021126_v19.pdf'));
+PDF_BTNS[2].addEventListener('click',()=>makePdf(PDF_BTNS[2],'full','SGY_Synedriasi_021126_v20.pdf'));
 
 /* Signature pad */
 const SIGKEY=KEY+'-sig',pad=document.getElementById('sigPad'),pctx=pad.getContext('2d');let sigData=null;
@@ -623,6 +624,7 @@ async function flush(){if(busy||!dirty.size||ro)return;busy=true;
   catch(e){const c=e&&e.code;
     if(c==='invalid_argument'&&stExists){try{await ST.set({v:{...synced,...patch}});Object.assign(synced,patch)}catch(e2){setRO()}}
     else if(c==='invalid_argument'||c==='revoked'||c==='not_granted')setRO();
+    else if(c==='permission-denied'||c==='unauthenticated')detach();
     else{Object.keys(patch).forEach(k=>{if(!dirty.has(k)){pend[k]=patch[k];dirty.add(k)}});toast('Η αποθήκευση καθυστερεί — νέα προσπάθεια…');setTimeout(flush,1500+Math.random()*1000)}}
   busy=false;if(dirty.size)flush()}
 function applyShared(v){
@@ -634,16 +636,11 @@ function applyShared(v){
     const nv=typeof v[k]==='string'?clean(v[k]):DEF[el.dataset.edit];if(el.innerHTML!==nv)el.innerHTML=nv});
   refresh();saveLocal()}
 async function pushSig(){if(!SG||ro)return;if(sigBusy){sigAgain=true;return}sigBusy=true;
-  try{await SG.set({png:sigData||null})}catch(e){if(e&&(e.code==='invalid_argument'||e.code==='revoked'))setRO()}
+  try{await SG.set({png:sigData||null})}catch(e){if(e&&(e.code==='invalid_argument'||e.code==='revoked'))setRO();else if(e&&e.code==='permission-denied')detach()}
   sigBusy=false;if(sigAgain){sigAgain=false;pushSig()}}
 function resetShared(){if(!ST||ro)return;clearTimeout(flushT);dirty.clear();synced={};
   ST.set({v:{}}).then(()=>{stExists=true}).catch(e=>{if(e&&e.code==='invalid_argument')setRO()});pushSig()}
-async function startShared(){
-  const db=window.claude&&window.claude.use?await window.claude.use('db').catch(()=>null):null;
-  if(!db)return;
-  const u=await window.claude.use('user').catch(()=>null);
-  if(u){try{if(await u.can('data.write')===false)setRO()}catch(e){}}
-  ST=db.doc('session/state');SG=db.doc('session/sig');
+function attach(st,sg){ST=st;SG=sg;
   if(!ro)syncNote.textContent='Κοινόχρηστο · οι καταχωρήσεις ενημερώνονται ζωντανά για όλους.';
   ST.onSnapshot(snap=>{stExists=snap.exists;
     if(!snap.exists){
@@ -651,12 +648,44 @@ async function startShared(){
       if(!snap.metadata.fromCache&&!seeded&&!ro){seeded=true;const d=collect();Object.keys(d).forEach(k=>{pend[k]=d[k];dirty.add(k)});flush()}
       return}
     const v=(snap.data()||{}).v||{};synced={...v};applyShared(v)},
-    e=>{syncNote.textContent='Η ζωντανή σύνδεση διακόπηκε — ανανεώστε τη σελίδα.'});
+    e=>{if(e&&e.code==='permission-denied')detach();else syncNote.textContent='Η ζωντανή σύνδεση διακόπηκε — ανανεώστε τη σελίδα.'});
   SG.onSnapshot(snap=>{if(drawing)return;const p=snap.exists?(snap.data()||{}).png||null:null;
     if(!snap.exists){if(!snap.metadata.fromCache&&sigData&&!ro)pushSig();return}
     if(typeof p==='string'&&!/^data:image\/png;base64,[A-Za-z0-9+/=]+$/.test(p))return;
     if(p!==sigData){sigData=p;try{p?localStorage.setItem(SIGKEY,p):localStorage.removeItem(SIGKEY)}catch(e){}
       pctx.clearRect(0,0,pad.width,pad.height);sizePad()}},()=>{});
+}
+/* signed-in account is not on the editors list: keep working on this device only */
+function detach(){ST=SG=null;dirty.clear();
+  syncNote.textContent='Ο λογαριασμός δεν έχει πρόσβαση στις κοινόχρηστες καταχωρήσεις · αποθηκεύονται μόνο σε αυτή τη συσκευή.'}
+async function startShared(){
+  if(window.claude&&window.claude.use){
+    const db=await window.claude.use('db').catch(()=>null);
+    if(!db)return;
+    const u=await window.claude.use('user').catch(()=>null);
+    if(u){try{if(await u.can('data.write')===false)setRO()}catch(e){}}
+    attach(db.doc('session/state'),db.doc('session/sig'));return}
+  if(FB_CONFIG)startFirebase();
+}
+
+/* Outside claude.ai (GitHub Pages): Firebase, Google sign-in, editors listed in firestore.rules */
+const FB_CONFIG=null; /* paste the Firebase web config here, e.g. {apiKey:'…',authDomain:'…',projectId:'…',appId:'…'} */
+const loadJs=src=>new Promise((res,rej)=>{const sc=document.createElement('script');sc.src=src;sc.onload=res;sc.onerror=rej;document.head.appendChild(sc)});
+const fbRef=r=>({set:d=>r.set(d),update:d=>r.set(d,{merge:true}),onSnapshot:(n,e)=>r.onSnapshot(n,e)});
+async function startFirebase(){
+  const V='https://cdn.jsdelivr.net/npm/firebase@10.12.2/';
+  try{await loadJs(V+'firebase-app-compat.js');await Promise.all([loadJs(V+'firebase-auth-compat.js'),loadJs(V+'firebase-firestore-compat.js')])}
+  catch(e){syncNote.textContent='Η κοινή χρήση δεν φορτώθηκε · οι καταχωρήσεις αποθηκεύονται μόνο σε αυτή τη συσκευή.';return}
+  firebase.initializeApp(FB_CONFIG);
+  const auth=firebase.auth(),fs=firebase.firestore(),ab=document.getElementById('authBtn');
+  ab.hidden=false;
+  ab.addEventListener('click',()=>{
+    if(auth.currentUser)auth.signOut().then(()=>location.reload());
+    else auth.signInWithPopup(new firebase.auth.GoogleAuthProvider()).catch(e=>{if(!e||e.code!=='auth/popup-closed-by-user')toast('Η σύνδεση απέτυχε')})});
+  auth.onAuthStateChanged(u=>{
+    if(!u){ab.textContent='Σύνδεση Google';ab.title='';syncNote.textContent='Συνδεθείτε με Google για κοινόχρηστες καταχωρήσεις · μέχρι τότε αποθηκεύονται μόνο σε αυτή τη συσκευή.';return}
+    ab.textContent='Αποσύνδεση';ab.title=u.email||'';
+    if(!ST)attach(fbRef(fs.doc('session/state')),fbRef(fs.doc('session/sig')))});
 }
 
 load();refresh();startShared();
