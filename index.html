@@ -220,6 +220,9 @@ body.pdf-mode::before,.pdf-mode .bar,.pdf-mode .toast,.pdf-mode .sgy-btn,.pdf-mo
 .rep-role{font:600 14.5px/1.4 var(--f-body);color:var(--ink)}
 .rep-line{width:100%;height:56px;border-bottom:1px solid var(--gold-line)}
 .rep-name{font:400 18px/1.4 var(--f-display);color:var(--blue)}
+.pdf-report #item-13{display:block;border:0;box-shadow:none;padding:0;margin:0;background:#FFFFFF}
+.pdf-report #item-13::before,.pdf-report #item-13>.n,.pdf-report #item-13 .head,.pdf-report #item-13 .panel .who{display:none!important}
+.pdf-report .rep-head{border-width:2px}
 .diplo{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 14px;border:1px solid var(--gold-line);border-radius:8px;background:var(--script-bg);font-size:14.5px;font-weight:500}
 .diplo input{width:72px!important;font-weight:700}
 .stat{display:grid;grid-template-columns:1fr 110px;gap:10px;align-items:center;font-size:14.5px}
@@ -265,7 +268,7 @@ body.pdf-mode::before,.pdf-mode .bar,.pdf-mode .toast,.pdf-mode .sgy-btn,.pdf-mo
     </div>
     <div class="actions">
       <button class="btn primary" id="copyBtn" type="button">Αντιγραφή πρακτικών</button>
-      <button class="btn primary" id="pdfBtn" type="button">Λήψη PDF</button>
+      <button class="btn primary" id="pdfBtn" type="button" title="Λήψη PDF της Αναφοράς Μεγάλου Γραμματέως">Αναφορά ΜΓραμ</button>
       <button class="btn" id="resetBtn" type="button">Επαναφορά</button>
     </div>
   </div>
@@ -469,27 +472,30 @@ function loadH2P(){if(window.html2pdf)return Promise.resolve();if(h2pP)return h2
   h2pP=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';sc.onload=res;sc.onerror=()=>{h2pP=null;rej(new Error('load'))};document.head.appendChild(sc)});return h2pP}
 const pdfBtn=document.getElementById('pdfBtn');
 pdfBtn.addEventListener('click',async()=>{
-  if(pdfBtn.disabled)return;pdfBtn.disabled=true;const lbl=pdfBtn.textContent;pdfBtn.textContent='Δημιουργία PDF…';
+  if(pdfBtn.disabled)return;
+  const dIn=document.getElementById('t13-date');
+  if(!dIn.value){const det=document.getElementById('item-13');det.scrollIntoView({block:'start'});setTimeout(()=>dIn.focus(),300);toast('Επιλέξτε πρώτα την ημερομηνία της αναφοράς');return}
+  pdfBtn.disabled=true;const lbl=pdfBtn.textContent;pdfBtn.textContent='Δημιουργία PDF…';
   const root=document.documentElement,prev=root.getAttribute('data-theme'),restore=[],dets=[...document.querySelectorAll('details')].map(d=>[d,d.open]);
-  const fname='SGY_Roi_Synedriasis_021126_v13.pdf';let blob=null;
+  const [yy,mm,dd]=dIn.value.split('-');const fname='Anafora_MGram_SGY_'+dd+mm+yy.slice(2)+'_v14.pdf';let blob=null;
   try{
     await loadH2P();
     form.querySelectorAll('input,textarea').forEach(el=>{
       if(el.type==='checkbox'||el.type==='radio'){restore.push([el,'c',el.defaultChecked,el.checked]);el.defaultChecked=el.checked}
       else{restore.push([el,'v',el.defaultValue,el.value]);el.defaultValue=el.value}});
     dets.forEach(([d])=>d.open=true);
-    root.setAttribute('data-theme','light');document.body.classList.add('pdf-mode');
+    root.setAttribute('data-theme','light');document.body.classList.add('pdf-mode','pdf-report');
     blob=await html2pdf().set({
       margin:[10,8,12,8],filename:fname,image:{type:'jpeg',quality:0.92},
       html2canvas:{scale:1.6,useCORS:true,backgroundColor:'#FFFFFF',windowWidth:900,scrollX:0,scrollY:0},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
       pagebreak:{mode:['css','legacy'],avoid:['.vote','.dg-card','.script','.head','.note','.seg','.mast','.ck','.stat','.panel summary']}
-    }).from(document.body).toPdf().get('pdf').then(pdf=>{const n=pdf.internal.getNumberOfPages(),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight();
+    }).from(document.getElementById('item-13')).toPdf().get('pdf').then(pdf=>{const n=pdf.internal.getNumberOfPages(),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight();
       for(let i=1;i<=n;i++){pdf.setPage(i);pdf.setFontSize(8);pdf.setTextColor(130);pdf.text(i+' / '+n,w-8,h-5,{align:'right'})}}).outputPdf('blob');
   }catch(e){toast('Δεν ήταν δυνατή η δημιουργία του PDF. Ελέγξτε τη σύνδεση και δοκιμάστε ξανά.')}
   finally{
     restore.forEach(([el,k,d,c])=>{if(k==='c'){el.defaultChecked=d;el.checked=c}else{el.defaultValue=d;el.value=c}});
-    dets.forEach(([d,o])=>d.open=o);document.body.classList.remove('pdf-mode');
+    dets.forEach(([d,o])=>d.open=o);document.body.classList.remove('pdf-mode','pdf-report');
     if(prev===null)root.removeAttribute('data-theme');else root.setAttribute('data-theme',prev);
   }
   if(blob){
