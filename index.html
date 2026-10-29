@@ -13,15 +13,15 @@
 <style>
 /* Layout: marble ground, each Θέμα a polished marble slab with a gilded top edge; onyx sticky bar with gold progress */
 :root{
-  --bg:#EFEBE3; --surface:rgba(255,255,253,.88); --solid:#FFFFFD; --ink:#1B1712; --muted:#5E5546; --line:#D8CFBD;
+  --bg:#FCFAF5; --surface:rgba(255,255,255,.94); --solid:#FFFFFF; --ink:#1B1712; --muted:#5E5546; --line:#E7DFCF;
   --gold:#94680F; --gold-line:#C9A44A; --gold-ink:#2A1C02;
   --gold-grad:linear-gradient(120deg,#6E4C0A 0%,#B8861E 18%,#F2D27A 38%,#FFF1BE 47%,#D7A93F 60%,#9B6E14 80%,#6E4C0A 100%);
-  --bar-bg:#14110C; --bar-ink:#F1E3BC; --bar-muted:#B5A57E; --bar-line:#3A3122;
-  --script-bg:#FBF6E8; --script-line:#E1C882;
+  --bar-bg:#FFFDF8; --bar-ink:#3A2A08; --bar-muted:#7A6A48; --bar-line:#E6D7B0;
+  --script-bg:#FFFBF1; --script-line:#EAD7A4;
   --note-bg:#FFF0C9; --note-ink:#6B4500; --note-line:#E6C266;
   --ok:#1B7A47; --ok-bg:#E1F2E7; --bad:#A12E26; --bad-bg:#F8E2DF;
   --field:#FFFFFF; --blue:#123C9C; --purple:#5B1AAE; --red:#C0211A; --red-ink:#FFFFFF;
-  --marble:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='v'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.0035 0.009' numOctaves='5' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.36 0 0 0 0 0.34 0 0 0 0 0.31 1 0 0 0 0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 .55 .12 0 0 0 0 0 0 0'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.006' numOctaves='4' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.55 0 0 0 0 0.52 0 0 0 0 0.47 0 0 0 .5 -.12'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3Crect width='100%25' height='100%25' filter='url(%23v)'/%3E%3C/svg%3E");
+  --marble:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='900' height='900'%3E%3Cfilter id='v'%3E%3CfeTurbulence type='turbulence' baseFrequency='0.0035 0.009' numOctaves='5' seed='11' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.62 0 0 0 0 0.58 0 0 0 0 0.50 1 0 0 0 0'/%3E%3CfeComponentTransfer%3E%3CfeFuncA type='table' tableValues='0 .16 .04 0 0 0 0 0 0 0'/%3E%3C/feComponentTransfer%3E%3C/filter%3E%3Cfilter id='c'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.006' numOctaves='4' seed='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.80 0 0 0 0 0.76 0 0 0 0 0.68 0 0 0 .22 -.06'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23c)'/%3E%3Crect width='100%25' height='100%25' filter='url(%23v)'/%3E%3C/svg%3E");
   --f-display:"GFS Didot","Noto Serif",Georgia,serif;
   --f-body:"Commissioner","Noto Sans","Segoe UI",system-ui,sans-serif;
   --f-num:"IBM Plex Mono",ui-monospace,Menlo,monospace;
@@ -72,7 +72,7 @@ h1{font:400 clamp(32px,6.4vw,48px)/1.1 var(--f-display);margin:18px 0 6px;text-w
 
 /* Sticky onyx bar */
 .bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bar-bg);border-bottom:2px solid var(--gold-line);
-  margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));box-shadow:0 6px 18px rgba(0,0,0,.18)}
+  margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));box-shadow:0 6px 18px rgba(120,90,20,.08);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
 .bar-in{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .prog{flex:1 1 300px;min-width:0}
 .prog-top{display:flex;justify-content:space-between;font-size:12.5px;color:var(--bar-muted);margin-bottom:6px;letter-spacing:.04em}
@@ -95,7 +95,7 @@ h1{font:400 clamp(32px,6.4vw,48px)/1.1 var(--f-display);margin:18px 0 6px;text-w
 /* Items: marble slabs */
 .item{position:relative;overflow:hidden;display:grid;grid-template-columns:56px 1fr;gap:0 18px;margin-block:20px;padding:28px 24px 26px 18px;
   background:var(--surface);border:1px solid var(--gold-line);border-radius:10px;scroll-margin-top:96px;
-  box-shadow:0 1px 0 rgba(255,255,255,.4) inset,0 8px 22px rgba(40,28,6,.08)}
+  box-shadow:0 1px 0 rgba(255,255,255,.6) inset,0 6px 20px rgba(120,90,20,.06)}
 .item::before{content:"";position:absolute;inset:0 0 auto;height:4px;background:var(--gold-grad)}
 .n{font:700 42px/1 var(--f-body);text-align:right;padding-top:2px;color:var(--purple);font-variant-numeric:tabular-nums}
 .body{min-width:0;display:flex;flex-direction:column;gap:14px}
