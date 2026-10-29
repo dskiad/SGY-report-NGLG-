@@ -206,6 +206,20 @@ body.pdf-mode{background:#FFFFFF!important;background-image:none!important}
 body.pdf-mode::before,.pdf-mode .bar,.pdf-mode .toast,.pdf-mode .sgy-btn,.pdf-mode .edit-hint,.pdf-mode [data-unan],.pdf-mode .fallback,.pdf-mode .foot span:last-child{display:none!important}
 .pdf-mode .item{box-shadow:none;background:#FFFFFF;margin-block:14px}
 .pdf-mode .panel summary::after{display:none}
+.rep-head{text-align:center;padding:18px 14px 16px;border:1px solid var(--gold-line);border-radius:10px;background:var(--solid);display:flex;flex-direction:column;align-items:center;gap:6px}
+.rep-org{font:700 12px/1.3 var(--f-body);letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.rep-title{font:400 clamp(21px,4vw,26px)/1.25 var(--f-display);color:var(--blue);text-wrap:balance}
+.rep-head::after{content:"";width:120px;height:2px;background:var(--gold-grad);margin-top:4px;order:2}
+.rep-date{order:3;display:flex;align-items:center;gap:10px;flex-wrap:wrap;justify-content:center;margin-top:6px;font-size:13px;font-weight:600;color:var(--muted)}
+.rep-date input{width:auto;min-width:170px;font-family:var(--f-num);text-align:center}
+.rep-ask{font-style:normal;font-size:12px;font-weight:700;color:var(--red)}
+.rep-date input:valid~.rep-ask{display:none}
+.rep-date input:invalid{border-color:var(--red)}
+.pdf-mode .rep-ask{display:none}
+.rep-sign{align-self:flex-end;text-align:center;width:min(320px,100%);margin-top:10px;display:flex;flex-direction:column;align-items:center;gap:4px}
+.rep-role{font:600 14.5px/1.4 var(--f-body);color:var(--ink)}
+.rep-line{width:100%;height:56px;border-bottom:1px solid var(--gold-line)}
+.rep-name{font:400 18px/1.4 var(--f-display);color:var(--blue)}
 .diplo{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 14px;border:1px solid var(--gold-line);border-radius:8px;background:var(--script-bg);font-size:14.5px;font-weight:500}
 .diplo input{width:72px!important;font-weight:700}
 .stat{display:grid;grid-template-columns:1fr 110px;gap:10px;align-items:center;font-size:14.5px}
@@ -343,6 +357,9 @@ const ITEMS=[
  {t:'Ανακοινώσεις Μεγάλου Καγκελαρίου',b:[doc('https://drive.google.com/file/d/1oYOQf0CWQApTr_5vMikzn6JE2HFWnjNC/view?usp=drive_link','Ανακοινώσεις'),area('t11-n','Σημειώσεις')]},
  {t:'Ανακοινώσεις Μεγάλου Γραμματέως Εκπαιδεύσεως',b:[area('t12-n','Σημειώσεις')]},
  {t:'Ανακοινώσεις Μεγάλου Γραμματέως',b:[
+   `<div class="rep-head"><div class="rep-org">Εθνική Μεγάλη Στοά της Ελλάδος</div>
+     <div class="rep-title">Αναφορά Μεγάλου Γραμματέως προς το ΣΓΥ</div>
+     <label class="rep-date" for="t13-date"><span>Ημερομηνία</span><input type="date" id="t13-date" required data-label="Ημερομηνία αναφοράς"><em class="rep-ask">Επιλέξτε ημερομηνία</em></label></div>`,
    panel('13.1','Ανακοινώσεις',`<div class="who">${MIC}Εκφωνεί ο Γραμματέας<span class="edit-hint">✎ επεξεργάσιμο</span></div><div class="dg-grid">${[
      ['a1','Αίτηση 23 Διδασκάλων','Λήψη αίτησης για χορήγηση Χάρτας Λειτουργίας Στοάς στον Πειραιά υπό την ονομασία «Άτλας» Νο 118 (30/06/26). Ακολουθεί το Διάταγμα 517.'],
      ['a2','Έκτακτη Επαρχιακή Μεγάλη Συνέλευση Πειραιώς','14/09/2026'],
@@ -365,7 +382,8 @@ const ITEMS=[
    </div>`),
    panel('13.3','Ψηφιοποίηση Μεγάλης Γραμματείας',`<p class="dg-intro">Η ψηφιοποίηση της Μεγάλης Γραμματείας και των λειτουργιών της ενισχύει την αποτελεσματικότητα, τη διαφάνεια και την άμεση επικοινωνία εντός της Μεγάλης Στοάς.</p><div class="dg-grid">${DIG.map(([t,items])=>card(t,`<ul>${items.map(([a,b])=>`<li><b>${a}:</b> ${b}</li>`).join('')}</ul>`)).join('')}</div>
      <label class="ck"><input type="checkbox" id="t13-dg" data-label="Παρουσιάστηκε η Ψηφιοποίηση Μεγάλης Γραμματείας"><span>Παρουσιάστηκε στο Συμβούλιο</span></label>
-     <label class="f" for="t13-dg-n">Παρατηρήσεις Συμβουλίου<textarea id="t13-dg-n" data-label="Παρατηρήσεις για την Ψηφιοποίηση"></textarea></label>`)
+     <label class="f" for="t13-dg-n">Παρατηρήσεις Συμβουλίου<textarea id="t13-dg-n" data-label="Παρατηρήσεις για την Ψηφιοποίηση"></textarea></label>`),
+   `<div class="rep-sign"><div class="rep-role ed" contenteditable="true" spellcheck="true" data-edit="sig1">Ο Μέγας Γραμματέας</div><div class="rep-line"></div><div class="rep-name ed" contenteditable="true" spellcheck="true" data-edit="sig2">Πανσεβ. Αδ. Δημήτριος Σκιαδόπουλος</div></div>`
  ]},
  {t:'Ενημέρωσις υπό του Μεγάλου Θησαυροφύλακος',b:[note('<b>Επιβεβαίωση:</b> αν καλύφθηκε στο Θέμα 7.'),seg('t14-cov','Καλύφθηκε στο Θέμα 7'),area('t14-n','Σημειώσεις')]},
  {t:'Λήξις Συνεδριάσεως',b:[`<div class="grid2"><label class="f" for="t15-end">Ώρα λήξεως<input type="time" id="t15-end" data-label="Ώρα λήξεως"></label></div>`,
@@ -453,7 +471,7 @@ const pdfBtn=document.getElementById('pdfBtn');
 pdfBtn.addEventListener('click',async()=>{
   if(pdfBtn.disabled)return;pdfBtn.disabled=true;const lbl=pdfBtn.textContent;pdfBtn.textContent='Δημιουργία PDF…';
   const root=document.documentElement,prev=root.getAttribute('data-theme'),restore=[],dets=[...document.querySelectorAll('details')].map(d=>[d,d.open]);
-  const fname='SGY_Roi_Synedriasis_021126_v12.pdf';let blob=null;
+  const fname='SGY_Roi_Synedriasis_021126_v13.pdf';let blob=null;
   try{
     await loadH2P();
     form.querySelectorAll('input,textarea').forEach(el=>{
