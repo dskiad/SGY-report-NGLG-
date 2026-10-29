@@ -87,6 +87,8 @@ h1{font:400 clamp(32px,6.4vw,48px)/1.1 var(--f-display);margin:18px 0 6px;text-w
 .btn{font:600 13px/1 var(--f-body);padding:9px 14px;border-radius:6px;border:1px solid var(--gold-line);background:var(--solid);color:var(--ink);cursor:pointer;white-space:nowrap}
 .bar .btn{background:transparent;color:var(--bar-ink)}
 .bar .btn.primary,.btn.primary{background:var(--gold-grad);border-color:transparent;color:var(--gold-ink);font-weight:700}
+.bar .btn.orange,.btn.orange{background:linear-gradient(135deg,#E8590C,#FF8A1F);border-color:transparent;color:#FFFFFF;font-weight:800;box-shadow:0 2px 8px rgba(232,89,12,.35)}
+.actions{flex-wrap:wrap}
 .bar .btn.warn,.btn.warn{border-color:var(--bad);color:var(--bad)}
 .btn:hover{filter:brightness(1.08)}
 
@@ -267,6 +269,7 @@ body.pdf-mode::before,.pdf-mode .bar,.pdf-mode .toast,.pdf-mode .sgy-btn,.pdf-mo
       <div class="dots" id="dots"></div>
     </div>
     <div class="actions">
+      <button class="btn orange" id="fullPdfBtn" type="button" title="Λήψη PDF ολόκληρης της συνεδρίασης ΣΓΥ">ΣΓΥ PDF</button>
       <button class="btn primary" id="copyBtn" type="button">Αντιγραφή πρακτικών</button>
       <button class="btn primary" id="pdfBtn" type="button" title="Λήψη PDF της Αναφοράς Μεγάλου Γραμματέως">Αναφορά ΜΓραμ</button>
       <button class="btn" id="resetBtn" type="button">Επαναφορά</button>
@@ -470,32 +473,30 @@ rb.addEventListener('click',()=>{if(!armed){rb.textContent='Επιβεβαίωσ
 let h2pP=null;
 function loadH2P(){if(window.html2pdf)return Promise.resolve();if(h2pP)return h2pP;
   h2pP=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';sc.onload=res;sc.onerror=()=>{h2pP=null;rej(new Error('load'))};document.head.appendChild(sc)});return h2pP}
-const pdfBtn=document.getElementById('pdfBtn');
-pdfBtn.addEventListener('click',async()=>{
-  if(pdfBtn.disabled)return;
-  const dIn=document.getElementById('t13-date');
-  if(!dIn.value){const det=document.getElementById('item-13');det.scrollIntoView({block:'start'});setTimeout(()=>dIn.focus(),300);toast('Επιλέξτε πρώτα την ημερομηνία της αναφοράς');return}
-  pdfBtn.disabled=true;const lbl=pdfBtn.textContent;pdfBtn.textContent='Δημιουργία PDF…';
+const pdfBtn=document.getElementById('pdfBtn'),fullBtn=document.getElementById('fullPdfBtn');
+async function makePdf(btn,target,extra,fname){
+  if(pdfBtn.disabled||fullBtn.disabled)return;
+  pdfBtn.disabled=fullBtn.disabled=true;const lbl=btn.textContent;btn.textContent='Δημιουργία PDF…';
   const root=document.documentElement,prev=root.getAttribute('data-theme'),restore=[],dets=[...document.querySelectorAll('details')].map(d=>[d,d.open]);
-  const [yy,mm,dd]=dIn.value.split('-');const fname='Anafora_MGram_SGY_'+dd+mm+yy.slice(2)+'_v15.pdf';let blob=null;
+  const cls=['pdf-mode'].concat(extra?[extra]:[]);let blob=null;
   try{
     await loadH2P();
     form.querySelectorAll('input,textarea').forEach(el=>{
       if(el.type==='checkbox'||el.type==='radio'){restore.push([el,'c',el.defaultChecked,el.checked]);el.defaultChecked=el.checked}
       else{restore.push([el,'v',el.defaultValue,el.value]);el.defaultValue=el.value}});
     dets.forEach(([d])=>d.open=true);
-    root.setAttribute('data-theme','light');document.body.classList.add('pdf-mode','pdf-report');
+    root.setAttribute('data-theme','light');document.body.classList.add(...cls);
     blob=await html2pdf().set({
       margin:[10,8,12,8],filename:fname,image:{type:'jpeg',quality:0.92},
       html2canvas:{scale:1.6,useCORS:true,backgroundColor:'#FFFFFF',windowWidth:900,scrollX:0,scrollY:0},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-      pagebreak:{mode:['css','legacy'],avoid:['.vote','.dg-card','.script','.head','.note','.seg','.mast','.ck','.stat','.panel summary']}
-    }).from(document.getElementById('item-13')).toPdf().get('pdf').then(pdf=>{const n=pdf.internal.getNumberOfPages(),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight();
+      pagebreak:{mode:['css','legacy'],avoid:['.vote','.dg-card','.script','.head','.note','.seg','.mast','.ck','.stat','.panel summary','.rep-head','.rep-sign']}
+    }).from(target()).toPdf().get('pdf').then(pdf=>{const n=pdf.internal.getNumberOfPages(),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight();
       for(let i=1;i<=n;i++){pdf.setPage(i);pdf.setFontSize(8);pdf.setTextColor(130);pdf.text(i+' / '+n,w-8,h-5,{align:'right'})}}).outputPdf('blob');
   }catch(e){toast('Δεν ήταν δυνατή η δημιουργία του PDF. Ελέγξτε τη σύνδεση και δοκιμάστε ξανά.')}
   finally{
     restore.forEach(([el,k,d,c])=>{if(k==='c'){el.defaultChecked=d;el.checked=c}else{el.defaultValue=d;el.value=c}});
-    dets.forEach(([d,o])=>d.open=o);document.body.classList.remove('pdf-mode','pdf-report');
+    dets.forEach(([d,o])=>d.open=o);document.body.classList.remove(...cls);
     if(prev===null)root.removeAttribute('data-theme');else root.setAttribute('data-theme',prev);
   }
   if(blob){
@@ -504,8 +505,15 @@ pdfBtn.addEventListener('click',async()=>{
       catch(e){toast(e&&e.code==='declined'?'Η αποθήκευση ακυρώθηκε':e&&e.code==='rate_limited'?'Υπάρχει ήδη ανοιχτό παράθυρο αποθήκευσης':'Η αποθήκευση PDF δεν είναι διαθέσιμη σε αυτή την προβολή')}}
     else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),8000);toast('Το PDF δημιουργήθηκε')}
   }
-  pdfBtn.disabled=false;pdfBtn.textContent=lbl;
+  pdfBtn.disabled=fullBtn.disabled=false;btn.textContent=lbl;
+}
+pdfBtn.addEventListener('click',()=>{
+  const dIn=document.getElementById('t13-date');
+  if(!dIn.value){document.getElementById('item-13').scrollIntoView({block:'start'});setTimeout(()=>dIn.focus(),300);toast('Επιλέξτε πρώτα την ημερομηνία της αναφοράς');return}
+  const [yy,mm,dd]=dIn.value.split('-');
+  makePdf(pdfBtn,()=>document.getElementById('item-13'),'pdf-report','Anafora_MGram_SGY_'+dd+mm+yy.slice(2)+'_v16.pdf');
 });
+fullBtn.addEventListener('click',()=>makePdf(fullBtn,()=>document.body,'','SGY_Synedriasi_021126_v16.pdf'));
 
 load();refresh();
 })();
