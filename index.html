@@ -165,6 +165,20 @@ input:focus,textarea:focus{border-color:var(--gold-line);outline:none;box-shadow
 .checks{display:flex;flex-direction:column;gap:8px}
 .ck{display:flex;align-items:center;gap:10px;font-size:14.5px;cursor:pointer}
 .ck input{width:17px;height:17px;accent-color:#B8861E;flex:none}
+.dg summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:8px}
+.dg summary::-webkit-details-marker{display:none}
+.dg summary::after{content:"▾";color:var(--gold);font-size:14px;transition:transform .15s}
+.dg:not([open]) summary::after{transform:rotate(-90deg)}
+.dg[open]{display:flex;flex-direction:column;gap:12px}
+.dg-intro{margin:0;font:400 17px/1.5 var(--f-display);max-width:65ch}
+.dg-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:12px}
+.dg-card{border:1px solid var(--line);border-radius:8px;background:var(--solid);padding:12px 14px;min-width:0}
+.dg-card:last-child:nth-child(odd){grid-column:1/-1}
+.dg-h{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14.5px;color:var(--blue);margin-bottom:6px}
+.dg-n{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--purple);color:var(--solid);font:700 12px/1 var(--f-num);flex:none}
+.dg-card ul{margin:0;padding-left:18px;font-size:13.5px;line-height:1.5}
+.dg-card li{margin:5px 0}
+.dg-card li::marker{color:var(--gold)}
 .diplo{display:flex;flex-wrap:wrap;align-items:center;gap:8px;padding:12px 14px;border:1px solid var(--gold-line);border-radius:8px;background:var(--script-bg);font-size:14.5px;font-weight:500}
 .diplo input{width:72px!important;font-weight:700}
 .stat{display:grid;grid-template-columns:1fr 110px;gap:10px;align-items:center;font-size:14.5px}
@@ -315,7 +329,13 @@ const ITEMS=[
      <div class="diplo">Εκδόθηκαν
        <input type="number" min="0" inputmode="numeric" id="t13-dip" value="16" data-label="Διπλώματα Διδασκάλων Τεκτόνων" aria-label="Διπλώματα Διδασκάλων Τεκτόνων"> διπλώματα Διδασκάλων Τεκτόνων και
        <input type="number" min="0" inputmode="numeric" id="t13-adopt" value="1" data-label="Διπλώματα Υιοθεσίας" aria-label="Διπλώματα Υιοθεσίας"> Υιοθεσίας</div>
-     </div>`]},
+     </div>`,
+   `<div class="sub"><details class="dg" open><summary><h3>Ψηφιοποίηση Μεγάλης Γραμματείας</h3></summary>
+     <p class="dg-intro">Η ψηφιοποίηση της Μεγάλης Γραμματείας και των λειτουργιών της ενισχύει την αποτελεσματικότητα, τη διαφάνεια και την άμεση επικοινωνία εντός της Μεγάλης Στοάς.</p>
+     <div class="dg-grid"><div class="dg-card"><div class="dg-h"><span class="dg-n">1</span>Κεντρικό Μητρώο Μελών (χωρίς διπλότυπα)</div><ul><li><b>Μοναδικός Αριθμός Μητρώου (Masonic ID):</b> Κάθε μέλος αποκτά ένα μοναδικό ψηφιακό αναγνωριστικό που συνδέεται με το ΑΦΜ ή τον αριθμό ταυτότητας/διαβατηρίου για την αποφυγή διπλοεγγραφών.</li><li><b>Αυτόματος Έλεγχος Διπλοτύπων:</b> Κατά την καταχώριση νέων μελών ή τη μεταφορά/επανενεργοποίηση, το σύστημα εκτελεί αυτόματο έλεγχο ταυτοπροσωπίας με βάση τα προσωπικά στοιχεία.</li><li><b>Ιστορικό &amp; Κατάσταση Μέλους:</b> Πλήρης ψηφιακός φάκελος με τη δραστηριότητα, τους βαθμούς, τις εισφορές και την τρέχουσα διοικητική κατάσταση κάθε μέλους.</li></ul></div><div class="dg-card"><div class="dg-h"><span class="dg-n">2</span>Ψηφιακή Δήλωση Εκπροσώπησης Μεγάλου Δασκάλου</div><ul><li><b>Ηλεκτρονική Ανάθεση:</b> Ο Μεγάλος Δάσκαλος ή η Γραμματεία μπορεί να ορίζει ψηφιακά εκπροσώπους (Επιθεωρητές/Αντιπροσώπους) για συγκεκριμένες συνεδρίες ή εκδηλώσεις Στοών.</li><li><b>Ειδοποιήσεις &amp; Αποδοχή:</b> Αυτόματη αποστολή ειδοποίησης στον ορισθέντα εκπρόσωπο με όλες τις λεπτομέρειες της συνεδρίας και δυνατότητα επιβεβαίωσης αποδοχής.</li><li><b>Ψηφιακό Πρακτικό Επίσκεψης:</b> Δυνατότητα υποβολής της αναφοράς/ανακεφαλαίωσης της επίσκεψης από τον εκπρόσωπο απευθείας στο σύστημα μετά το πέρας της συνεδρίας.</li></ul></div><div class="dg-card"><div class="dg-h"><span class="dg-n">3</span>Αυτοματοποιημένες Ευχές Ονομαστικών Εορτών</div><ul><li><b>Ημερολόγιο Εορτολογίου:</b> Διασύνδεση του μητρώου με ψηφιακό εορτολόγιο για την αυτόματη αναγνώριση των ονομαστικών εορτών των μελών της ΕΜΣΕ.</li><li><b>Προσωποποιημένα Μηνύματα:</b> Αποστολή προσαρμοσμένων ευχητήριων μηνυμάτων (μέσω Email ή SMS/Viber) εξ ονόματος του Μεγάλου Δασκάλου.</li><li><b>Πρότυπα Επιστολών (Templates):</b> Δυνατότητα επιλογής ή προσαρμογής επίσημων εικαστικών και κειμένων ευχών από τη Μεγάλη Γραμματεία.</li></ul></div><div class="dg-card"><div class="dg-h"><span class="dg-n">4</span>Ηλεκτρονική Διακίνηση Διαταγμάτων &amp; Αποφάσεων</div><ul><li><b>Ψηφιακή Υπογραφή:</b> Έκδοση και ψηφιακή υπογραφή διαταγμάτων, εγκυκλίων και αποφάσεων της Ηγεσίας.</li><li><b>Άμεση Κοινοποίηση:</b> Αυτόματη αποστολή στους Αξιωματικούς, στις Στοές ή στο σύνολο των μελών ανάλογα με το επίπεδο πρόσβασης και το θέμα του διατάγματος.</li><li><b>Ψηφιακό Αρχείο Διαταγμάτων:</b> Κεντρική ψηφιακή βιβλιοθήκη με δυνατότητα αναζήτησης βάσει χρονολογίας, θεματικής κατηγορίας ή λέξεων-κλειδιών.</li></ul></div><div class="dg-card"><div class="dg-h"><span class="dg-n">5</span>Επιπλέον Λειτουργίες Ψηφιοποίησης</div><ul><li><b>Ηλεκτρονικές Πληρωμές &amp; Οικονομικός Έλεγχος:</b> Ψηφιακή εξόφληση δικαιωμάτων/συνδρομών με αυτόματη ενημέρωση της οικονομικής καρτέλας του μέλους και της Στοάς.</li><li><b>Ψηφιακές Αιτήσεις &amp; Πιστοποιητικά:</b> Ηλεκτρονική υποβολή αιτημάτων (π.χ. πιστοποιητικά ιδιότητας, τεκτονικά διαβατήρια) και έγκρισή τους online.</li><li><b>Πρόσβαση μέσω Mobile App / Portal:</b> Ειδική πύλη μελών (Member Portal) με προσωποποιημένη πρόσβαση σε ανακοινώσεις, ημερολόγιο συνεδριών και προσωπικά στοιχεία.</li></ul></div></div>
+     <label class="ck"><input type="checkbox" id="t13-dg" data-label="Παρουσιάστηκε η Ψηφιοποίηση Μεγάλης Γραμματείας">Παρουσιάστηκε στο Συμβούλιο</label>
+     <label class="f" for="t13-dg-n">Παρατηρήσεις Συμβουλίου<textarea id="t13-dg-n" data-label="Παρατηρήσεις για την Ψηφιοποίηση"></textarea></label>
+   </details></div>`]},
  {t:'Ενημέρωσις υπό του Μεγάλου Θησαυροφύλακος',b:[note('<b>Επιβεβαίωση:</b> αν καλύφθηκε στο Θέμα 7.'),seg('t14-cov','Καλύφθηκε στο Θέμα 7'),area('t14-n','Σημειώσεις')]},
  {t:'Λήξις Συνεδριάσεως',b:[`<div class="grid2"><label class="f" for="t15-end">Ώρα λήξεως<input type="time" id="t15-end" data-label="Ώρα λήξεως"></label></div>`,
    `<label class="ck"><input type="checkbox" id="t15-sig" data-label="Ολοκλήρωση συνεδρίασης & υπογραφή πρακτικών">Ολοκλήρωση συνεδρίασης &amp; υπογραφή πρακτικών</label>`]}
