@@ -192,7 +192,7 @@ input:focus,textarea:focus{border-color:var(--gold-line);outline:none;box-shadow
 .em-status:empty{display:none}
 .em-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .em-sum{border-left:3px solid var(--gold-line);background:var(--script-bg);border-radius:6px;padding:10px 14px;font:400 15.5px/1.55 var(--f-display)}
-.em-sum p{margin:0}.em-sum p+p{margin-top:6px}
+.em-sum p{margin:0}.em-sum .em-t{margin-top:10px;font-family:var(--f-body)}.em-t td.num,.em-t th:not(:first-child){text-align:right}.em-t tr.em-tot td{font-weight:700;border-top:1.5px solid var(--gold-line)}.em-sum p+p{margin-top:6px}
 .pdf-mode .em-btn,.pdf-mode .em-status{display:none!important}
 .pdf-host .em-range{grid-template-columns:repeat(2,minmax(0,1fr))}
 .dg-card.dr-card{grid-column:1/-1}
@@ -461,6 +461,7 @@ const ITEMS=[
          <label class="f" for="t13-uout">Διαφορετικοί παραλήπτες<input type="number" min="0" inputmode="numeric" id="t13-uout" data-label="Διαφορετικές διευθύνσεις στις οποίες στείλαμε"></label>
          <label class="f" for="t13-inv">Προσκλήσεις που λάβαμε<input type="number" min="0" inputmode="numeric" id="t13-inv" data-label="Προσκλήσεις που λάβαμε"></label>
        </div>
+       <input type="hidden" id="t13-em-detail" data-label="Email · ανά διεύθυνση">
        <div class="em-sum" id="emSum" hidden></div>
      </div></div>
      ${card('Επιστολές',`<label class="ck"><input type="checkbox" id="t13-c1" data-label="Επιστολή για τη βελτιστοποίηση και τον διαχωρισμό της ηλεκτρονικής αλληλογραφίας της Μεγάλης Στοάς με το info@nglgreece.gr"><span>Βελτιστοποίηση και διαχωρισμός ηλεκτρονικής αλληλογραφίας της Μεγάλης Στοάς με το <b>info@nglgreece.gr</b></span></label>
@@ -699,7 +700,12 @@ function emSummary(){
     if(days)s+=`, κατά μέσο όρο ${((i+o)/days).toLocaleString('el-GR',{maximumFractionDigits:1})} την ημέρα (${nf(days)} ημέρες)`;
     if(i>0)s+=`· η Γραμματεία απάντησε ή απέστειλε ${Math.round(o/i*100)} μηνύματα ανά 100 εισερχόμενα`;ps.push(s+'.')}
   if(inv!==null)ps.push(inv?`Από τα εισερχόμενα, ${nf(inv)} ${inv===1?'ήταν πρόσκληση':'ήταν προσκλήσεις'} (θέμα με «πρόσκληση»)${i?` — ${(inv/i*100).toLocaleString('el-GR',{maximumFractionDigits:1})}% των εισερχομένων`:''}.`:'Δεν ελήφθησαν προσκλήσεις στο διάστημα αυτό.');
-  box.innerHTML=ps.map(x=>`<p>${esc(x)}</p>`).join('');box.hidden=false}
+  let tbl='';try{const D=JSON.parse($('t13-em-detail').value||'null');
+    if(D&&D.byAddress){const rows=Object.entries(D.byAddress).map(([a,x])=>{const c=v=>typeof v==='number'?nf(v):'—';return `<tr><td>${esc(a)}</td><td class="num">${c(x.in??x.incoming)}</td><td class="num">${c(x.out??x.outgoing)}</td><td class="num">${c(x.uin)}</td><td class="num">${c(x.uout)}</td><td class="num">${c(x.inv)}</td></tr>`});
+      rows.push(`<tr class="em-tot"><td>Σύνολο Γραμματείας</td><td class="num">${i===null?'—':nf(i)}</td><td class="num">${o===null?'—':nf(o)}</td><td class="num">${ui===null?'—':nf(ui)}</td><td class="num">${uo===null?'—':nf(uo)}</td><td class="num">${inv===null?'—':nf(inv)}</td></tr>`);
+      tbl=`<table class="dr-t em-t"><thead><tr><th>Διεύθυνση</th><th>Εισερχ.</th><th>Εξερχ.</th><th>Αποστολείς</th><th>Παραλήπτες</th><th>Προσκλ.</th></tr></thead><tbody>${rows.join('')}</tbody></table>`+
+        `<p class="dr-note">Ένα μήνυμα προς δύο διευθύνσεις μετρά σε καθεμία, αλλά μία φορά στο σύνολο.${D.other?` ${nf(D.other)} εισερχόμενα δεν είχαν καμία από τις δύο ως ρητό παραλήπτη (π.χ. κρυφή κοινοποίηση ή λίστα) και μετρούν μόνο στο σύνολο.`:''}</p>`}}catch(e){}
+  box.innerHTML=ps.map(x=>`<p>${esc(x)}</p>`).join('')+tbl;box.hidden=false}
 /* Archive statistics from the Grand Secretariat's Drive folder (Google Drive connector, owner only) */
 const DRIVE_FOLDER='1kKR7v86jjs5QJE9-K5uUebvS6nZd9J03';
 const DQ={
@@ -788,7 +794,7 @@ $('drCalc').addEventListener('click',async()=>{
   }finally{b.disabled=ro;b.textContent=lbl}});
 
 /* Counting through the viewer's Gmail connector (claude.ai): the mailbox of the Grand Secretariat */
-const OWN=['grandsecretary@nglgreece.gr','info@nglgreece.gr'];
+const OWN=['grand.secretary@nglgreece.gr','info@nglgreece.gr'];
 const normAddr=a=>{a=String(a||'').toLowerCase().trim();const m=a.match(/[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}/);if(!m)return'';const [l,d]=m[0].split('@');return l.replace(/\./g,'')+'@'+d};
 const OWN_N=OWN.map(normAddr);
 const plainTxt=t=>String(t||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
@@ -807,27 +813,39 @@ const mcpMsg=e=>{const c=e&&e.code;return{
   not_in_manifest:'Δεν δόθηκε άδεια για το Gmail σε αυτή τη σελίδα · πατήστε ξανά και επιλέξτε «Allow».',
   approval_required:'Χρειάζεται έγκριση για το Gmail · πατήστε ξανά και επιλέξτε «Allow».',
   blocked_by_policy:'Η χρήση του Gmail δεν επιτρέπεται από τις ρυθμίσεις του οργανισμού.'}[c]||('Η μέτρηση μέσω Gmail απέτυχε'+(c?` (${c})`:'')+'. Δοκιμάστε ξανά.')};
+/* The connector returns at most 50 threads per search and no next page, so the range is searched
+   one day at a time, sent and received separately; threads are processed once, messages filtered by time. */
 async function gmailStats(mcp,from,to,progress){
   const start=athensMidnight(from),end=athensMidnight(shiftDay(to,1));
-  const q=`after:${shiftDay(from,-1).replace(/-/g,'/')} before:${shiftDay(to,2).replace(/-/g,'/')}`;
   const call=async(tool,input)=>{try{return (await mcp.callTool('Gmail',tool,input)).payload||{}}
     catch(e){if(e&&e.retryable){await new Promise(r=>setTimeout(r,(e.retryAfterMs||1500)+Math.random()*800));return (await mcp.callTool('Gmail',tool,input)).payload||{}}throw e}};
-  const seen=new Set(),senders=new Set(),rcpts=new Set();let inc=0,out=0,inv=0,threads=0,token='',pages=0;
-  const take=m=>{if(!m||!m.id||seen.has(m.id))return;seen.add(m.id);
+  const mk=()=>({in:0,out:0,s:new Set(),r:new Set(),inv:0});
+  const tot=mk(),per={};OWN_N.forEach(a=>per[a]=mk());let other=0;
+  const seenM=new Set(),seenT=new Set();let full=0,days=0,complete=true;
+  const take=m=>{if(!m||!m.id||seenM.has(m.id))return;seenM.add(m.id);
     const t=idTime(m.id);if(!(t>=start&&t<end))return;
-    const snd=normAddr(m.sender);
-    if(OWN_N.includes(snd)){out++;[...(m.toRecipients||[]),...(m.ccRecipients||[]),...(m.bccRecipients||[])].map(normAddr).filter(a=>a&&!OWN_N.includes(a)).forEach(a=>rcpts.add(a))}
-    else{inc++;if(snd)senders.add(snd);if(INVITE.test(plainTxt(m.subject)))inv++}};
-  do{
-    const r=await call('search_threads',{query:q,pageSize:50,view:'THREAD_VIEW_MINIMAL',...(token?{pageToken:token}:{})});
-    for(const th of (r.threads||[])){threads++;
-      const ms=th.messages||[];
-      if((th.messageCount||ms.length)>ms.length){const full=await call('get_thread',{threadId:th.id,messageFormat:'MINIMAL'});(full.messages||[]).forEach(take)}
-      else ms.forEach(take)}
-    token=r.nextPageToken||'';pages++;progress(threads);
-  }while(token&&pages<200);
-  return{incoming:inc,outgoing:out,uniqueSenders:senders.size,uniqueRecipients:rcpts.size,invitations:inv,messagesScanned:seen.size,complete:!token}}
+    const snd=normAddr(m.sender),rc=[...(m.toRecipients||[]),...(m.ccRecipients||[]),...(m.bccRecipients||[])].map(normAddr).filter(Boolean);
+    const ext=rc.filter(a=>!OWN_N.includes(a));
+    if(OWN_N.includes(snd)){tot.out++;ext.forEach(a=>tot.r.add(a));per[snd].out++;ext.forEach(a=>per[snd].r.add(a));return}
+    const inv=INVITE.test(plainTxt(m.subject));
+    tot.in++;if(snd)tot.s.add(snd);if(inv)tot.inv++;
+    const to=OWN_N.filter(a=>rc.includes(a));if(!to.length)other++;
+    to.forEach(a=>{per[a].in++;if(snd)per[a].s.add(snd);if(inv)per[a].inv++})};
+  const nDays=Math.round((Date.parse(to)-Date.parse(from))/864e5)+3;
+  for(let i=0;i<nDays;i++){const d=shiftDay(from,i-1),q=`after:${d.replace(/-/g,'/')} before:${shiftDay(d,1).replace(/-/g,'/')}`;
+    for(const part of ['in:sent','-in:sent']){
+      const r=await call('search_threads',{query:q+' '+part,pageSize:50,view:'THREAD_VIEW_MINIMAL'});
+      const ths=r.threads||[];if(ths.length>=50)complete=false;
+      for(const th of ths){if(seenT.has(th.id))continue;seenT.add(th.id);const ms=th.messages||[];
+        if((th.messageCount||ms.length)>ms.length){full++;const f=await call('get_thread',{threadId:th.id,messageFormat:'MINIMAL'});(f.messages||[]).forEach(take)}
+        else ms.forEach(take)}}
+    days++;progress(days,nDays)}
+  const pack=x=>({in:x.in,out:x.out,uin:x.s.size,uout:x.r.size,inv:x.inv});
+  const byAddress={};OWN.forEach((a,i)=>byAddress[a]=pack(per[OWN_N[i]]));
+  return{incoming:tot.in,outgoing:tot.out,uniqueSenders:tot.s.size,uniqueRecipients:tot.r.size,invitations:tot.inv,
+    byAddress,otherIncoming:other,messagesScanned:seenM.size,complete}}
 function applyStats(r){
+  $('t13-em-detail').value=r.byAddress?JSON.stringify({byAddress:r.byAddress,other:r.otherIncoming||0}):'';
   [['t13-in','incoming'],['t13-out','outgoing'],['t13-uin','uniqueSenders'],['t13-uout','uniqueRecipients'],['t13-inv','invitations']].forEach(([id,k])=>{if(typeof r[k]==='number')$(id).value=r[k]});
   refresh();save()}
 $('emCalc').addEventListener('click',async()=>{
@@ -835,7 +853,7 @@ $('emCalc').addEventListener('click',async()=>{
   if(!f||!t){toast('Επιλέξτε ημερομηνίες «Από» και «Έως»');return}
   if(f>t){toast('Η ημερομηνία «Από» είναι μετά την «Έως»');return}
   const lbl=b.textContent;b.disabled=true;b.textContent='Υπολογισμός…';
-  const done=(r,via)=>{applyStats(r);st.textContent=(r.complete===false?'Μερική μέτρηση — πατήστε ξανά για πλήρη. ':'')+'Ενημερώθηκε '+new Date().toLocaleString('el-GR',{dateStyle:'short',timeStyle:'short'})+` · ${nf(r.messagesScanned||0)} μηνύματα ελέγχθηκαν (${via}).`};
+  const done=(r,via)=>{applyStats(r);st.textContent=(r.complete===false?'Προσοχή: κάποια ημέρα είχε πάνω από 50 συνομιλίες, η μέτρηση ίσως είναι ελαφρώς μειωμένη. ':'')+'Ενημερώθηκε '+new Date().toLocaleString('el-GR',{dateStyle:'short',timeStyle:'short'})+` · ${nf(r.messagesScanned||0)} μηνύματα ελέγχθηκαν (${via}).`};
   try{
     const mcp=window.claude&&window.claude.use?await window.claude.use('mcp').catch(()=>null):null;
     if(mcp){
@@ -843,7 +861,7 @@ $('emCalc').addEventListener('click',async()=>{
       const owner=u?await u.isOwner().catch(()=>true):true;
       if(!owner){st.textContent='Τα στατιστικά υπολογίζονται από τον Μεγάλο Γραμματέα, με το γραμματοκιβώτιο της Γραμματείας. Οι αριθμοί εμφανίζονται εδώ μόλις υπολογιστούν.'}
       else{st.textContent='Μέτρηση στο Gmail της Γραμματείας…';
-        try{done(await gmailStats(mcp,f,t,n=>{st.textContent=`Μέτρηση στο Gmail της Γραμματείας… ${nf(n)} συνομιλίες`}),'Gmail')}
+        try{done(await gmailStats(mcp,f,t,(d,n)=>{st.textContent=`Μέτρηση στο Gmail της Γραμματείας… ημέρα ${nf(d)} από ${nf(n)}`}),'Gmail')}
         catch(e){st.textContent=mcpMsg(e)}}
     }else if(EMAIL_API){
       st.textContent='Μέτρηση στο γραμματοκιβώτιο — μπορεί να χρειαστεί 1–3 λεπτά.';
