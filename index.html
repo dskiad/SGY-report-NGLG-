@@ -776,7 +776,7 @@ $('drCalc').addEventListener('click',async()=>{
     const mcp=window.claude&&window.claude.use?await window.claude.use('mcp').catch(()=>null):null;
     if(!mcp){st.textContent='Ο υπολογισμός από το Αρχείο γίνεται από τη σελίδα του claude.ai.';return}
     const u=await window.claude.use('user').catch(()=>null);
-    if(!(u&&await u.isOwner().catch(()=>false))){st.textContent='Τα στατιστικά του Αρχείου υπολογίζονται από τον Μεγάλο Γραμματέα. Εμφανίζονται εδώ μόλις υπολογιστούν.';return}
+    if(u&&await u.isOwner().catch(()=>true)===false){st.textContent='Τα στατιστικά του Αρχείου υπολογίζονται από τον Μεγάλο Γραμματέα. Εμφανίζονται εδώ μόλις υπολογιστούν.';return}
     let calls=0;st.textContent='Αναζήτηση στο Αρχείο (Google Drive)…';
     try{const D=await driveStats(mcp,f,t,()=>{st.textContent=`Αναζήτηση στο Αρχείο (Google Drive)… ${++calls}`});
       $('t13-drive').value=JSON.stringify(D);
@@ -840,7 +840,7 @@ $('emCalc').addEventListener('click',async()=>{
     const mcp=window.claude&&window.claude.use?await window.claude.use('mcp').catch(()=>null):null;
     if(mcp){
       const u=await window.claude.use('user').catch(()=>null);
-      const owner=u?await u.isOwner().catch(()=>false):false;
+      const owner=u?await u.isOwner().catch(()=>true):true;
       if(!owner){st.textContent='Τα στατιστικά υπολογίζονται από τον Μεγάλο Γραμματέα, με το γραμματοκιβώτιο της Γραμματείας. Οι αριθμοί εμφανίζονται εδώ μόλις υπολογιστούν.'}
       else{st.textContent='Μέτρηση στο Gmail της Γραμματείας…';
         try{done(await gmailStats(mcp,f,t,n=>{st.textContent=`Μέτρηση στο Gmail της Γραμματείας… ${nf(n)} συνομιλίες`}),'Gmail')}
