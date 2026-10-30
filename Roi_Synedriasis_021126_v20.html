@@ -9,7 +9,7 @@
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Commissioner:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=GFS+Didot&family=Noto+Serif:ital,wght@0,400;0,700;1,400&family=Commissioner:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500&display=swap">
 <style>
 /* Layout: marble ground, each Θέμα a polished marble slab with a gilded top edge; onyx sticky bar with gold progress */
 :root{
@@ -281,6 +281,85 @@ input:focus,textarea:focus{border-color:var(--gold-line);outline:none;box-shadow
 .st-ok{font-weight:700;color:var(--ok)}.st-no{font-weight:700;color:var(--bad)}
 .est{color:var(--muted);margin-left:2px}
 .pdf-report .rep-doc{gap:10px}
+/* ===== US-government memorandum style for the report (overrides) ===== */
+.rep13{--ink:#111;--muted:#3E3E3E;--line:#B8B8B8;--solid:#FFFFFF;--surface:#FFFFFF;--field:#FFFFFF;--navy:#111;--navy-soft:#E6E6E6;--rule:#111;--f-gov:"Noto Serif","GFS Didot",Georgia,"Times New Roman",serif;
+  background:#FFFFFF!important;color:#111;border-color:#111!important}
+.rep13::before{background:#111!important;height:2px!important}
+.rep13 .body{font-family:var(--f-gov)}
+.rep13 .rep-class{font:700 11px/1 var(--f-gov);letter-spacing:.2em;color:#111;border:0;padding:4px 0}
+.rep13 .rep-head{border:0!important;padding:4px 0 0!important;background:#FFFFFF!important;gap:6px!important}
+.rep13 .rep-lh{flex-direction:column;align-items:center;text-align:center;gap:6px;border-bottom:0;padding-bottom:0}
+.rep13 .seal-mini{width:78px;height:78px}
+.rep13 .rep-org{font:700 15px/1.3 var(--f-gov)!important;letter-spacing:.12em!important;color:#111!important}
+.rep13 .rep-org-sub{font:700 12px/1.3 var(--f-gov);letter-spacing:.16em;color:#111}
+.rep13 .rep-lh::after{content:"";display:block;width:100%;border-top:2px solid #111;border-bottom:.8px solid #111;height:3px;margin-top:6px}
+.rep13 .rep-title{font:700 17px/1.3 var(--f-gov)!important;letter-spacing:.06em!important;color:#111!important;padding:6px 0 2px!important}
+.rep13 .rep-title::before{content:"ΥΠΗΡΕΣΙΑΚΟ ΣΗΜΕΙΩΜΑ";display:block;font:700 13px/1.2 var(--f-gov);letter-spacing:.3em;margin-bottom:6px}
+.rep13 .memo{font:400 14px/1.45 var(--f-gov)}
+.rep13 .memo th{width:132px;font:700 13px/1.3 var(--f-gov);letter-spacing:.04em;color:#111;border:0;padding:3px 8px 3px 0}
+.rep13 .memo th::after{content:":"}
+.rep13 .memo td{border:0;padding:3px 0}
+.rep13 .memo tr:last-child th,.rep13 .memo tr:last-child td{border-bottom:1px solid #111;padding-bottom:8px}
+.rep13 .toc{border:0;padding:4px 0;background:none}
+.rep13 .toc-h{font:700 12.5px/1 var(--f-gov);letter-spacing:.12em;color:#111}
+.rep13 .toc ol{font:400 13.5px/1.5 var(--f-gov)}
+.rep13 .toc li span{font:700 13px/1 var(--f-gov);color:#111}
+.rep13 .panel{background:#FFFFFF!important;border:0!important;border-top:0!important}
+.rep13 .panel summary{padding:12px 0 4px!important;border-bottom:1px solid #111}
+.rep13 .panel .pn,.rep13 .sig-sec .pn{font:700 14.5px/1 var(--f-gov)!important;color:#111!important}
+.rep13 .panel .pt,.rep13 .sig-sec .pt{font:700 14.5px/1.3 var(--f-gov)!important;letter-spacing:.08em!important;color:#111!important}
+.rep13 .panel-b{padding:8px 0 10px!important}
+.rep13 .sig-sec{border-top:0;border-bottom:1px solid #111;padding:12px 0 4px}
+.rep13 .sn{font:700 13.5px/1 var(--f-gov);color:#111;min-width:34px}
+.rep13 .dg-grid{gap:8px}
+.rep13 .dg-card{border:0!important;background:none!important;padding:4px 0!important}
+.rep13 .dg-h{font:700 14px/1.35 var(--f-gov)!important;color:#111!important}
+.rep13 .dg-body,.rep13 .dg-body .ed,.rep13 .dg-card ul{font:400 14px/1.55 var(--f-gov)}
+.rep13 .dg-card .dg-body{padding-left:40px}
+.rep13 .who,.rep13 .edit-hint{color:var(--muted)}
+.rep13 .sec-intro,.rep13 .dg-intro,.rep13 .sum-txt p,.rep13 .dr-lead{font:400 14px/1.6 var(--f-gov)!important;color:#111}
+.rep13 .em-sum{border-left:0;background:none;padding:6px 0;font:400 14px/1.6 var(--f-gov)}
+.rep13 .tcap{font:700 12.5px/1.3 var(--f-gov);color:#111;margin-top:12px}
+.rep13 .dr-t{border:1px solid #111!important;font:400 12.5px/1.4 var(--f-gov)}
+.rep13 .dr-t th{background:#E6E6E6!important;color:#111!important;border:1px solid #111!important;font:700 11px/1.25 var(--f-gov)!important;letter-spacing:.02em;text-transform:none}
+.rep13 .dr-t td{border:1px solid #111!important;background:#FFFFFF!important}
+.rep13 .dr-t td.num{font-family:var(--f-gov)}
+.rep13 .dr-t tr.em-tot td{font-weight:700;background:#F2F2F2!important}
+.rep13 .dr-note,.rep13 .sec-empty{font:italic 400 12px/1.45 var(--f-gov);color:#3E3E3E}
+.rep13 .dr-kpis{gap:0;border:1px solid #111}
+.rep13 .dr-kpi{border:0!important;border-right:1px solid #111!important;border-bottom:1px solid #111!important;border-radius:0!important;background:#FFFFFF}
+.rep13 .sum-kpis .dr-kpi:nth-child(4n),.rep13 .dr-kpis>.dr-kpi:nth-child(4n){border-right:0!important}
+.rep13 .dr-kpis{margin-bottom:-1px}
+.rep13 .dr-kpi b{font:700 22px/1.1 var(--f-gov)!important;color:#111!important}
+.rep13 .dr-kpi span{font:400 11.5px/1.3 var(--f-gov);color:#111}
+.rep13 .dr-sec h4{font:700 13px/1.3 var(--f-gov);color:#111}
+.rep13 .dr-sec h4 .dr-n{background:none!important;color:#111!important;border:1px solid #111;border-radius:2px}
+.rep13 .sub-h{font:700 13.5px/1.3 var(--f-gov);color:#111}
+.rep13 .sub-h em{font-family:var(--f-gov);color:#3E3E3E}
+.rep13 .dg-live,.rep13 .dg-goal{background:#FFFFFF;border:1px solid #111;border-left:4px solid #111;border-radius:0;font-family:var(--f-gov)}
+.rep13 .dg-live-b{background:#111;border-radius:0}
+.rep13 .dg-live-h,.rep13 .dg-goal-h{color:#111;font-family:var(--f-gov)}
+.rep13 .st-ok,.rep13 .st-no{font-family:var(--f-gov)}
+.rep13 .rep-name{font:700 16px/1.4 var(--f-gov);color:#111}
+.rep13 .rep-role,.rep13 .rep-org2{font-family:var(--f-gov);color:#111}
+.rep13 .rep-line{border-bottom-color:#111}
+.rep13 .eyebrow,.rep13 h2{color:#111}
+.rep13 .n{color:#111}
+.pdf-host .rep13 .pv,.pdf-report .pv{border:0;padding:0 2px;background:none;min-height:0;font-family:var(--f-gov,serif)}
+.pdf-host .rep13 .em-grid .pv{border-bottom:1px solid #111;text-align:left}
+.pdf-host .rep13 .ck input{accent-color:#111}
+.ann-card .dg-h{display:flex;align-items:baseline;gap:4px}
+.ann-t{flex:1;min-width:0;border-radius:2px;outline:1px dashed transparent}
+.ann-x{min-height:1.4em;border-radius:2px;outline:1px dashed transparent}
+.ann-t:hover,.ann-t:focus,.ann-x:hover,.ann-x:focus{outline-color:var(--line)}
+.ann-t:empty::before,.ann-x:empty::before{content:attr(data-ph);color:var(--muted);font-style:italic;font-weight:400}
+.ann-del{flex:none;margin-left:auto;border:1px solid var(--line);background:var(--solid);color:var(--muted);border-radius:4px;font:600 12px/1 var(--f-body);padding:4px 7px;cursor:pointer}
+.ann-del:hover,.ann-del.arm{border-color:var(--bad);color:var(--bad)}
+.ann-add{margin-top:10px}
+.pdf-mode .ann-del,.pdf-mode .ann-add{display:none!important}
+.pdf-mode .ann-t:empty::before,.pdf-mode .ann-x:empty::before{content:""}
+.pdf-mode .rep-class{display:none!important}
+.rep13 .doc{color:#111;border-color:#111;border-radius:0;font-family:var(--f-gov)}
 .dg-live{border:1px solid var(--ok);border-left:4px solid var(--ok);border-radius:8px;background:var(--ok-bg);padding:12px 16px;display:flex;flex-direction:column;gap:8px}
 .dg-live p{margin:0;font-size:14px;line-height:1.5;max-width:70ch}
 .dg-live-h{display:flex;align-items:center;flex-wrap:wrap;gap:9px;font-weight:700;font-size:14.5px;color:var(--blue)}
@@ -481,6 +560,16 @@ const DIG=[
  ['Προσωπική Πύλη Μελών','Προσωπική πρόσβαση κάθε Αδελφού στα στοιχεία του, στις ανακοινώσεις, στις εκδηλώσεις και στις ηλεκτρονικές αιτήσεις.'],
  ['Ψηφιακή Διαχείριση Στοών','Ηλεκτρονική καρτέλα κάθε Στοάς με τα μέλη, τους Αξιωματικούς, τις συνεδριάσεις και τις αναφορές προς τη Μεγάλη Γραμματεία.'],
  ['Ασφαλής Πρόσβαση','Διαφορετικά δικαιώματα πρόσβασης ανάλογα με την ιδιότητα και τις αρμοδιότητες κάθε χρήστη, με προστασία των προσωπικών δεδομένων.']];
+/* default announcements (section 2); the live list is kept in #t13-ann and can be edited, removed or extended */
+const ANN_DEF=[
+     ['a1','Αίτηση 23 Διδασκάλων','Λήψη αίτησης για χορήγηση Χάρτας Λειτουργίας Στοάς στον Πειραιά υπό την ονομασία «Άτλας» Νο 118 (30/06/26). Ακολουθεί το Διάταγμα 517.'],
+     ['a2','Έκτακτη Επαρχιακή Μεγάλη Συνέλευση Πειραιώς','14/09/2026<br>Εγκαταστάθηκε ο Πσεβ. Αδ. Βασίλειος Ζαχαριάς.'],
+     ['a8','Έκτακτη Περιφερειακή Μεγάλη Συνέλευση Κύπρου','19/09/2026<br>Εγκατάσταση νέου Περιφερειακού Μεγάλου Διδασκάλου, του Πσεβ. Αδ. Θεοδώρου Θεοδώρου.'],
+     ['a3','Έκτακτη Επαρχιακή Μεγάλη Συνέλευση Αθηνών','29/10/2026<br>Εγκαταστάθηκε ο Πσεβ. Αδ. Δημήτριος Παναγάκος.'],
+     ['a4','Παραίτηση Σεβασμίου Διδασκάλου','Από Στοά «Κάσσανδρος» (23/10/2026). '+ATT],
+     ['a5','Ημερίδα Ενημέρωσης Γραμματέων Στοών','Παρασκευή 13 Νοεμβρίου, Τεκτονικό Μέγαρο Πειραιώς.'],
+     ['a7','Αιτήσεις Ενδιαφέροντος','Βασίλειος Σταματέλος (11/10/2026)<br>Μητσόπουλος Στυλιανός (08/10/2026 – Στοά Καβάλας)']
+].map(([id,t,x])=>({t,x}));
 const ITEMS=[
  {t:'Έναρξις Συνεδριάσεως',b:[`<div class="grid2">${`<label class="f" for="t1-start">Ώρα έναρξης<input type="time" id="t1-start" data-label="Ώρα έναρξης"></label>`}</div>`]},
  {t:'Διαπίστωσις Απαρτίας',b:[seg('t2-q','Διαπιστώθηκε απαρτία'),
@@ -543,16 +632,9 @@ const ITEMS=[
    </div>`,
    panel('1','Σύνοψη',`<div id="sumOut" class="sum-out"></div>`),
 
-   panel('2','Ανακοινώσεις',`<div class="who">${MIC}Εκφωνεί ο Γραμματέας<span class="edit-hint">✎ επεξεργάσιμο</span></div><div class="dg-grid">${[
-     ['a1','Αίτηση 23 Διδασκάλων','Λήψη αίτησης για χορήγηση Χάρτας Λειτουργίας Στοάς στον Πειραιά υπό την ονομασία «Άτλας» Νο 118 (30/06/26). Ακολουθεί το Διάταγμα 517.'],
-     ['a2','Έκτακτη Επαρχιακή Μεγάλη Συνέλευση Πειραιώς','14/09/2026<br>Εγκαταστάθηκε ο Πσεβ. Αδ. Βασίλειος Ζαχαριάς.'],
-     ['a8','Έκτακτη Περιφερειακή Μεγάλη Συνέλευση Κύπρου','19/09/2026<br>Εγκατάσταση νέου Περιφερειακού Μεγάλου Διδασκάλου, του Πσεβ. Αδ. Θεοδώρου Θεοδώρου.'],
-     ['a3','Έκτακτη Επαρχιακή Μεγάλη Συνέλευση Αθηνών','29/10/2026<br>Εγκαταστάθηκε ο Πσεβ. Αδ. Δημήτριος Παναγάκος.'],
-     ['a4','Παραίτηση Σεβασμίου Διδασκάλου','Από Στοά «Κάσσανδρος» (23/10/2026). '+ATT],
-     ['a5','Ημερίδα Ενημέρωσης Γραμματέων Στοών','Παρασκευή 13 Νοεμβρίου, Τεκτονικό Μέγαρο Πειραιώς.'],
-     ['a6','Επιστολή Σ.Σ. «Απολλώνιος ο Ρόδιος» Νο 80 (19/10/2026)','Επιστολή Σεβτ. Αδ. Ιωάννη Μπενετάτου προς τον Μ.Δ. για ονομασία του Τεκτονικού Μεγάρου Ρόδου ως «Τεκτονικό Μέγαρο Νικόλαος Σαββόπουλος».'],
-     ['a7','Αιτήσεις Ενδιαφέροντος','Βασίλειος Σταματέλος (11/10/2026)<br>Μητσόπουλος Στυλιανός (08/10/2026 – Στοά Καβάλας)']
-   ].map(([id,t,x],n)=>card(`<span class="sn">2.${n+1}</span>${t}`,`<div class="ed" contenteditable="true" spellcheck="true" data-edit="${id}">${x}</div>`)).join('')}</div>`),
+   panel('2','Ανακοινώσεις',`<div class="who">${MIC}Εκφωνεί ο Γραμματέας<span class="edit-hint">✎ επεξεργάσιμο · ✕ διαγραφή · + προσθήκη</span></div>
+     <input type="hidden" id="t13-ann" data-label="Ανακοινώσεις"><div class="dg-grid" id="annList"></div>
+     <button type="button" class="btn ann-add" id="annAdd">+ Προσθήκη ανακοίνωσης</button>`),
    panel('3','Ηλεκτρονική Αλληλογραφία',`<div class="dg-grid">
      <div class="dg-card em-card"><div class="dg-h"><span class="sn">3.1</span>Κίνηση ηλεκτρονικού ταχυδρομείου</div><div class="dg-body">
        <div class="em-range">
@@ -640,7 +722,7 @@ function refresh(){
     document.getElementById('item-'+n).classList.toggle('is-done',on);
     dots.children[i].classList.toggle('done',on)});
   document.getElementById('pc').textContent=c;
-  emSummary();driveRender();renderMail();repSummary();numberTables();
+  renderAnn();emSummary();driveRender();renderMail();repSummary();numberTables();
   form.querySelectorAll('[data-vote]').forEach(v=>{const id=v.dataset.vote,r=document.getElementById(id+'-res');
     const g=k=>document.getElementById(id+'-'+k).value, y=g('y'),k=g('k');
     if(y===''&&k===''){r.textContent='Εκκρεμεί';r.className='res';return}
@@ -697,7 +779,7 @@ let h2pP=null;
 function loadH2P(){if(window.html2pdf)return Promise.resolve();if(h2pP)return h2pP;
   h2pP=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';sc.onload=res;sc.onerror=()=>{h2pP=null;rej(new Error('load'))};document.head.appendChild(sc)});return h2pP}
 const PDF_BTNS=['pdfBtn','repPdfBtn','fullPdfBtn'].map(i=>document.getElementById(i));
-const RW=733; /* A4 inner width in px at 8 mm side margins */
+const RW=703; /* A4 inner width in px at 12 mm side margins */
 function cloneFor(src){
   const c=src.cloneNode(true);
   const sc=src.querySelectorAll('canvas'),cc=c.querySelectorAll('canvas');
@@ -716,10 +798,12 @@ function cloneFor(src){
   return c;
 }
 const BAND_W=733,BAND_H=16,BAND_RATIO=BAND_W/BAND_H;
-function pdfBand(left,right,rule){const k=3,c=document.createElement('canvas');c.width=BAND_W*k;c.height=BAND_H*k;const x=c.getContext('2d');x.scale(k,k);
-  x.fillStyle='#FFFFFF';x.fillRect(0,0,BAND_W,BAND_H);x.strokeStyle='#14284B';x.lineWidth=0.8;x.beginPath();const y=rule==='bottom'?BAND_H-0.5:0.5;x.moveTo(0,y);x.lineTo(BAND_W,y);x.stroke();
-  x.fillStyle='#14284B';x.textBaseline='middle';x.font='700 8.5px Commissioner, "Noto Sans", sans-serif';x.textAlign='left';x.fillText(left,0,BAND_H/2);
-  x.font='600 8.5px Commissioner, "Noto Sans", sans-serif';x.textAlign='right';x.fillText(right,BAND_W,BAND_H/2);return c.toDataURL('image/png')}
+function pdfBand(left,right,rule,center){const k=3,c=document.createElement('canvas');c.width=BAND_W*k;c.height=BAND_H*k;const x=c.getContext('2d');x.scale(k,k);
+  x.fillStyle='#FFFFFF';x.fillRect(0,0,BAND_W,BAND_H);x.strokeStyle='#111111';x.lineWidth=0.7;
+  if(rule){x.beginPath();const y=rule==='bottom'?BAND_H-0.5:0.5;x.moveTo(0,y);x.lineTo(BAND_W,y);x.stroke()}
+  x.fillStyle='#111111';x.textBaseline='middle';const F='"Noto Serif", "GFS Didot", Georgia, serif';
+  if(center){x.font='700 9.5px '+F;x.textAlign='center';x.fillText(center,BAND_W/2,BAND_H/2)}
+  x.font='400 8px '+F;x.textAlign='left';if(left)x.fillText(left,0,BAND_H/2);x.textAlign='right';if(right)x.fillText(right,BAND_W,BAND_H/2);return c.toDataURL('image/png')}
 async function makePdf(btn,kind,fname){
   if(PDF_BTNS.some(b=>b.disabled))return;
   PDF_BTNS.forEach(b=>b.disabled=true);const lbl=btn.textContent;btn.textContent='Δημιουργία PDF…';
@@ -733,16 +817,19 @@ async function makePdf(btn,kind,fname){
     root.setAttribute('data-theme','light');
     await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
     blob=await html2pdf().set({
-      margin:[16,8,15,8],filename:fname,image:{type:'jpeg',quality:0.94},
+      margin:[13,12,17,12],filename:fname,image:{type:'jpeg',quality:0.94},
       html2canvas:{scale:2,useCORS:true,backgroundColor:'#FFFFFF',scrollX:0,scrollY:0},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-      pagebreak:{mode:['css','legacy'],avoid:['.tblock','.rep-head','.toc','.sub-h','.tcap','.memo','.sum-kpis','.sig-sec','.inv-h','.dr-kpis','.dr-t tr','.dr-sec h4','.em-sum>p','.em-grid','.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
+      pagebreak:{mode:['css','legacy'],avoid:['.tblock','.tblock-long .sub-h','.tblock-long .tcap','.rep-head','.toc','.sub-h','.tcap','.memo','.sum-kpis','.sig-sec','.inv-h','.dr-kpis','.dr-t tr','.dr-sec h4','.em-sum>p','.em-grid','.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
     }).from(host).toPdf().get('pdf').then(pdf=>{const n=pdf.internal.getNumberOfPages(),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight();
       const dIn=document.getElementById('t13-date').value,dd=dIn?fmtD(dIn):'02/11/2026';
       const right=kind==='report'?'Αναφορά Μεγάλου Γραμματέως προς το ΣΓΥ · '+dd:'Ροή Τακτικής Συνεδριάσεως ΣΓΥ · 02/11/2026';
-      const head=pdfBand('ΕΘΝΙΚΗ ΜΕΓΑΛΗ ΣΤΟΑ ΤΗΣ ΕΛΛΑΔΟΣ · ΜΕΓΑΛΗ ΓΡΑΜΜΑΤΕΙΑ',right,'bottom');
-      for(let i=1;i<=n;i++){pdf.setPage(i);pdf.addImage(head,'PNG',8,6,w-16,(w-16)/BAND_RATIO);
-        pdf.addImage(pdfBand('ΕΣΩΤΕΡΙΚΟ ΕΓΓΡΑΦΟ · ΓΙΑ ΤΑ ΜΕΛΗ ΤΟΥ ΣΓΥ','Σελίδα '+i+' από '+n,'top'),'PNG',8,h-10,w-16,(w-16)/BAND_RATIO)}}).outputPdf('blob');
+      const proto=(document.getElementById('t13-proto')||{}).value||'';
+      const head=pdfBand('','', '', 'ΕΣΩΤΕΡΙΚΟ ΕΓΓΡΑΦΟ');
+      const ref='ΕΜΣτΕ · Μεγάλη Γραμματεία · '+right+(kind==='report'&&proto?' · Αρ. Πρωτ. '+proto:'');
+      for(let i=1;i<=n;i++){pdf.setPage(i);pdf.addImage(head,'PNG',8,5,w-16,(w-16)/BAND_RATIO);
+        pdf.addImage(pdfBand(ref,'Σελίδα '+i+' από '+n,'top'),'PNG',8,h-11,w-16,(w-16)/BAND_RATIO);
+        pdf.addImage(pdfBand('','','', 'ΕΣΩΤΕΡΙΚΟ ΕΓΓΡΑΦΟ'),'PNG',8,h-7,w-16,(w-16)/BAND_RATIO)}}).outputPdf('blob');
   }catch(e){toast('Δεν ήταν δυνατή η δημιουργία του PDF. Ελέγξτε τη σύνδεση και δοκιμάστε ξανά.')}
   finally{
     if(prev===null)root.removeAttribute('data-theme');else root.setAttribute('data-theme',prev);
@@ -852,14 +939,15 @@ function visitDateOf(title){const t=stripExt(title);let m=t.match(/(?:την|τ�
   m=t.match(/\((\d{1,2})\.(\d{1,2})\.(\d{4})\)/);if(m)return m[1].padStart(2,'0')+'/'+m[2].padStart(2,'0')+'/'+m[3];
   m=t.match(/την\s+(\d{1,2}\s+\S+\s+\d{2,4})/);return m?m[1]:''}
 function decreeSubject(title){let t=stripExt(title).replace(/^\s*\d{2}\.?\d{3}(_\d{4})?\s*-?\s*/,'');
-  t=t.replace(/^(ΔΙΑΤΑΓΜΑ|Διάταγμα|Διαταγμα)[\s\-_]*(\d{3}|ΧΧΧ)?([\-_ ]\d{4})?[\s\-_]*/i,'');return t.replace(/_/g,' ').replace(/\s{2,}/g,' ').trim()}
+  t=t.normalize('NFC').replace(/^(ΔΙΑΤΑΓΜΑ|Διάταγμα|Διαταγμα|Διάταγμα)[\s\-_]*(\d{3}|ΧΧΧ)?([\-_ ]\d{4})?[\s\-_]*/i,'');
+  if(/^δια.?ταγμα/i.test(plainTxt(t)))t=t.replace(/^\S+?[\s\-_]*\d{3}([\-_ ]\d{4})?[\s\-_]*/,'');return t.replace(/_/g,' ').replace(/\s{2,}/g,' ').trim()}
 /* one entry per document: .docx and .pdf copies and twin protocol numbers collapse together */
 function groupFiles(files,keysOf){const groups=[],idx=new Map();
   files.forEach(f=>{const ks=keysOf(f).filter(Boolean);let g=null;ks.forEach(k=>{if(!g&&idx.has(k))g=idx.get(k)});
     if(!g){g={files:[]};groups.push(g)}g.files.push(f);ks.forEach(k=>idx.set(k,g))});
   return groups.map(g=>{const best=g.files.find(f=>/\.pdf$/i.test(f.title)&&!/\(\d+\)/.test(f.title))||g.files.find(f=>/\.pdf$/i.test(f.title))||g.files[0];
     return{f:best,date:Math.min(...g.files.map(fileDate))}})}
-const decNo=t=>{const m=String(t).match(/(?:ΔΙΑΤΑΓΜΑ|Διάταγμα|Διαταγμα)[\s\-_]*(\d{3})/i);return m?m[1]:''};
+const decNo=t=>{const m=plainTxt(t).match(/διαταγμα[\s\-_]*(\d{3})/);return m?m[1]:''};
 async function driveStats(mcp,from,to,progress){
   const start=athensMidnight(from),end=athensMidnight(shiftDay(to,1));
   const list=async q=>{const out=[];let tok='',n=0;
@@ -931,19 +1019,21 @@ function workDate(subj,recv){const t=String(subj).normalize('NFD').replace(/[̀-
   if(m)return pad2(m[1])+'/'+pad2(INV_MONTHS[m[2]])+'/'+(m[3]||ry);
   for(const k of t.matchAll(/(?<![\d\/.])(\d{1,2})\s*[\/.]\s*(\d{1,2})(?![\d\/.])/g))if(+k[2]>=1&&+k[2]<=12&&+k[1]>=1&&+k[1]<=31)return pad2(k[1])+'/'+pad2(k[2])+'/'+ry;
   return ''}
-const INV_NUMRE=String.raw`(?:υπ\s*[\x60'’]?\s*(?:αρ(?:ιθ(?:μ)?)?\.?|\.)|n\.|no\.?|αρ\.)\s*(\d{1,3})`;
+const INV_NUMRE=String.raw`(?:υπ\.?\s*[\x60'’]?\s*(?:αρ(?:ιθ(?:μ)?)?\.?)?|n\.|no\.?|αρ\.)\s*(\d{1,3})`;
 const INV_STOP=/^(της|του|των|τας|στις|σε|και|για|με)$/i;
 const invClean=x=>x.replace(/\s+n$/i,'').replace(/\s+/g,' ').replace(/^[\s.\-–:]+|[\s.\-–:,]+$/g,'').trim();
 function invLodge(subj){let s=String(subj).replace(/^\s*((fw|fwd|wg|tr|πρθ)\s*:\s*)+/i,'').trim();let m;
   const out=(n,k)=>{n=invClean(n);if(!n||INV_STOP.test(n.split(' ')[0]))return '';return k?n+' '+k:n};
   m=s.match(new RegExp(String.raw`["“«]([^"”»]{2,40})["”»]\s*(?:`+INV_NUMRE+')?','i'));if(m)return out(m[1],m[2]);
-  m=s.match(new RegExp(String.raw`(?:^|[\s(])(?:Σ\.?\s*Στ|ΣΣ|Σ\s+Στ)\s*[.∴]?\s*(?:∴\s*)?([Α-ΩA-ZΆ-Ώ][Α-Ωα-ωA-Za-zΆ-ώ.' ]{1,30}?)\s*(?:`+INV_NUMRE+String.raw`|\s*[:\-–]|$)`,'i'));if(m)return out(m[1],m[2]);
+  m=s.match(new RegExp(String.raw`(?:^|[\s(])(?:Σ\.?\s*Στ|ΣΣ|Σ\s+Στ|Σ\.\s?Σ)\s*[.∴]?\s*(?:∴\s*)?([Α-ΩA-ZΆ-Ώ][Α-Ωα-ωA-Za-zΆ-ώ.' ]{1,30}?)\s*(?:`+INV_NUMRE+String.raw`|\s*[:\-–]|$)`,'i'));if(m)return out(m[1],m[2]);
   m=s.match(new RegExp(String.raw`Στο[άα]ς?\s+([Α-ΩA-ZΆ-Ώ][Α-Ωα-ωA-Za-zΆ-ώ. ]{1,30}?)\s*(?:`+INV_NUMRE+String.raw`|(\d{1,3}))`));if(m)return out(m[1],m[2]||m[3]);
-  m=s.match(new RegExp(String.raw`^([Α-ΩA-ZΆ-Ώ][Α-ΩA-ZΆ-Ώ. ]{2,40}?)\s*(?:`+INV_NUMRE+String.raw`|ΥΠ\.?\s*(\d{1,3})|(\d{1,3}))?\s*(?:[-–|]+\s*|\s+)ΠΡΟΣΚΛ`,'i'));if(m&&!/προσκλ|ορθη|επισημη/i.test(m[1]))return out(m[1],m[2]||m[3]||m[4]);
+  m=s.match(new RegExp(String.raw`^([Α-ΩA-ZΆ-Ώ][Α-ΩA-ZΆ-Ώ. ]{2,40}?)\s*(?:`+INV_NUMRE+String.raw`|ΥΠ\.?\s*(\d{1,3})|(\d{1,3}))?\s*(?:[-–|]+\s*|\s+)ΠΡΟΣΚΛ`,'i'));if(m&&!/προσκλ|ορθη|επισημη|πρωτη|πρώτη|νεα|νέα/i.test(m[1]))return out(m[1],m[2]||m[3]||m[4]);
   m=s.match(new RegExp(String.raw`^([Α-ΩA-ZΆ-Ώ][Α-ΩA-ZΆ-Ώ. ]{2,40}?)\s+`+INV_NUMRE));if(m&&!/προσκλ/i.test(m[1]))return out(m[1],m[2]);
   m=s.match(/εργασι[ωώ]ν\s+(?:της\s+Σ\.?\s*Σ\.?\s*)?["«]?([Α-ΩA-ZΆ-Ώ][α-ωά-ώΑ-ΩA-Za-z.]+(?:\s+[Α-ΩA-ZΆ-Ώ][α-ωά-ώΑ-ΩA-Za-z.]+)?)["»]?\s*(?:υπ\s*[`'’]?\s*αρ(?:ιθ)?\.?\s*)?(\d{1,3})(?![\d\/.\-]|ης)/i);if(m)return out(m[1],m[2]);
   m=s.match(/(?:\/|\s)([A-Z][A-Za-z.]+(?:\s?[A-Z][A-Za-z]+)?)\s*n\.\s*(\d+)/);if(m)return out(m[1],m[2]);
   m=s.match(/^([Α-ΩA-ZΆ-Ώ][^:]{2,40}?)\s*:\s*Πρ[οό]σκλ/i);if(m)return out(m[1]);
+  m=s.match(/συνεδρ[ιί][αά]ς\s+([Α-ΩA-ZΆ-Ώ][^\d]{2,30}?)\s+(?:αρ\.?\s*)?(\d{1,3})(?![\d\/.])/i);if(m)return out(m[1],m[2]);
+  m=s.match(/^([Α-ΩA-ZΆ-Ώ][Α-ΩA-ZΆ-Ώ ]{2,30}?)\s+\d{4}\s+ΥΠ\s*[`'’]?\s*ΑΡ\.?\s*(\d{1,3})/i);if(m)return out(m[1],m[2]);
   return ''}
 
 /* Provincial reports and website messages (section 5 and 6) */
@@ -959,7 +1049,9 @@ function reportMonth(subj,recv){const t=plainTxt(subj);
   let m=t.match(/(\d{4})\s*[-–\/]\s*(\d{2,4})/);if(m)return{m:'Έτος '+m[1]+'–'+m[2],e:false};
   m=t.match(/(?<!\d)(\d{1,2})\s*[\/.\-]\s*(\d{4})(?!\d)/);if(m&&+m[1]>=1&&+m[1]<=12)return{m:MONTHS_GEN[+m[1]-1][1]+' '+m[2],e:false};
   const d=new Date(recv);d.setDate(1);d.setMonth(d.getMonth()-1);return{m:MONTHS_GEN[d.getMonth()][1]+' '+d.getFullYear(),e:true}}
-function provinceFor(addr,subj){const p=provinceOf(addr);if(!/^Απευθείας/.test(p))return p;const t=plainTxt(subj);for(const [re,n] of PROV_SUBJ)if(re.test(t))return n;return p}
+function provinceFor(addr,subj,rc){const p=provinceOf(addr);if(!/^Απευθείας/.test(p))return p;
+  for(const a of rc||[]){const q=provinceOf(a);if(!/^Απευθείας/.test(q))return q}
+  const t=plainTxt(subj);for(const [re,n] of PROV_SUBJ)if(re.test(t))return n;return p}
 const isReport=(subj,from)=>{const t=plainTxt(subj),f=String(from||'').toLowerCase();if(!REPORT.test(t)||REPLY.test(t)||AUTO2.test(f))return false;
   return !/^Απευθείας/.test(provinceOf(f))||REPORT_PROV.test(t)};
 const isWeb=(subj,from)=>{const t=plainTxt(subj),f=String(from||'').toLowerCase();return WEB.test(t)&&!REPLY.test(t)&&!SPAM.test(t)&&!AUTO2.test(f)&&!AUTO.test(f)};
@@ -975,7 +1067,9 @@ const INVITE=/προσκλ|invitation|invite/;
 const REPLY=/^\s*((fw|fwd|wg|tr|πρθ)\s*(\[\d+\])?\s*:\s*)*(re|aw|απ|σχετ)\s*(\[\d+\])?\s*:/;
 const NOTICE=/^\s*(accepted|declined|tentative|tentatively accepted|updated invitation|share request|αποδεκτ|αποδοχη|απορρ|δοκιμαστικ)/;
 const AUTO=/(^|[^a-z])(no-?reply|calendar-notification|drive-shares[^@]*)@/;
-const isInvite=(subj,from)=>{const t=plainTxt(subj);return INVITE.test(t)&&!REPLY.test(t)&&!NOTICE.test(t)&&!AUTO.test(String(from||'').toLowerCase())};
+/* the Council's own meeting invitation echoing back is not a lodge invitation */
+const OWN_INV=/(^|[^α-ω])σ\.?\s?γ\.?\s?υ(?![α-ω])|επισυναπτομενο πρακτικο/;
+const isInvite=(subj,from)=>{const t=plainTxt(subj);return INVITE.test(t)&&!REPLY.test(t)&&!NOTICE.test(t)&&!OWN_INV.test(t)&&!AUTO.test(String(from||'').toLowerCase())};
 const ymd=d=>d.toISOString().slice(0,10);
 const shiftDay=(v,n)=>{const d=new Date(v+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return ymd(d)};
 function athensMidnight(v){const [y,m,d]=v.split('-').map(Number);let off=2;
@@ -1006,7 +1100,7 @@ async function gmailStats(mcp,from,to,progress){
     if(OWN_N.includes(snd)){tot.out++;ext.forEach(a=>tot.r.add(a));per[snd].out++;ext.forEach(a=>per[snd].r.add(a));return}
     const inv=isInvite(m.subject,m.sender);
     tot.in++;if(snd)tot.s.add(snd);if(inv){tot.inv++;invs.push({r:t,s:String(m.subject||''),f:snd})}
-    if(isReport(m.subject,snd))reps.push({r:t,s:String(m.subject||''),f:snd});
+    if(isReport(m.subject,snd))reps.push({r:t,s:String(m.subject||''),f:snd,rc:rc.filter(a=>!OWN_N.includes(a))});
     if(isWeb(m.subject,snd))webs.push({r:t,s:String(m.subject||''),f:snd});
     const to=OWN_N.filter(a=>rc.includes(a));if(!to.length)other++;
     to.forEach(a=>{per[a].in++;if(snd)per[a].s.add(snd);if(inv)per[a].inv++})};
@@ -1026,7 +1120,7 @@ async function gmailStats(mcp,from,to,progress){
     .filter(x=>{const k=x.l&&x.w?x.p+'|'+plainTxt(x.l)+'|'+x.w:plainTxt(x.s);if(seenI.has(k))return false;seenI.add(k);return true})
     .sort((a,b)=>{const pa=order.indexOf(a.p),pb=order.indexOf(b.p);return (pa<0?99:pa)-(pb<0?99:pb)||a.r-b.r});
   const strip=x=>x.replace(/^\s*((fw|fwd|wg|tr|πρθ)\s*:\s*)+/i,'').slice(0,120);
-  const seenR=new Set(),reports=reps.sort((a,b)=>a.r-b.r).map(x=>{const mm=reportMonth(x.s,x.r);return{p:provinceFor(x.f,x.s),m:mm.m,e:mm.e,l:invLodge(x.s),r:x.r,s:strip(x.s)}})
+  const seenR=new Set(),reports=reps.sort((a,b)=>a.r-b.r).map(x=>{const mm=reportMonth(x.s,x.r);return{p:provinceFor(x.f,x.s,x.rc),m:mm.m,e:mm.e,l:invLodge(x.s),r:x.r,s:strip(x.s)}})
     .filter(x=>{const k=x.p+'|'+plainTxt(x.s);if(seenR.has(k))return false;seenR.add(k);return true});
   const seenW=new Set(),web=webs.sort((a,b)=>a.r-b.r).map(x=>({p:provinceFor(x.f,x.s),l:invLodge(x.s),r:x.r,s:strip(x.s),f:x.f}))
     .filter(x=>{const k=plainTxt(x.s);if(seenW.has(k))return false;seenW.add(k);return true});
@@ -1079,12 +1173,32 @@ function repSummary(){
   const pl=(n,one,many)=>n===1?one:many.replace('#',nf(n));
   if(A)ps.push(`${pl(A.dec.length,'Εκδόθηκε 1 Διάταγμα','Εκδόθηκαν # Διατάγματα')}, ${pl(A.off.length,'ορίστηκε 1 Επίσημη Επίσκεψη','ορίστηκαν # Επίσημες Επισκέψεις')} και ${pl(A.rep.length,'1 Εκπροσώπηση','# Εκπροσωπήσεις')} του Μεγάλου Διδασκάλου, και ${pl(A.kan.length,'εγκρίθηκε 1 Εσωτερικός Κανονισμός','εγκρίθηκαν # Εσωτερικοί Κανονισμοί')}.`);
   box.innerHTML=(k.length?`<div class="dr-kpis sum-kpis">${k.join('')}</div>`:'')+`<div class="sum-txt">${ps.map(x=>`<p>${esc(x)}</p>`).join('')}</div>`}
-function numberTables(){document.querySelectorAll('#item-13 .tcap').forEach((c,n)=>{c.textContent=`Πίνακας ${n+1}. ${c.dataset.t||''}`;
-  const t=c.nextElementSibling;if(t&&t.tagName==='TABLE'&&!c.parentElement.classList.contains('tblock')){const w=document.createElement('div');w.className='tblock';c.before(w);w.append(c,t)}})}
+function numberTables(){document.querySelectorAll('#item-13 .tcap').forEach((c,n)=>{c.textContent=`Πίνακας ${n+1}. ${c.dataset.t||''}`;if(c.parentElement.classList.contains('tblock')||c.parentElement.classList.contains('tblock-long'))return;
+  const t=c.nextElementSibling;if(t&&t.tagName==='TABLE'&&!c.parentElement.classList.contains('tblock')){const w=document.createElement('div');
+    /* small tables stay whole with their heading; long ones may continue on the next page row by row */
+    w.className=t.rows.length<=14?'tblock':'tblock-long';const h=c.previousElementSibling;c.before(w);if(h&&h.classList.contains('sub-h'))w.append(h);w.append(c,t)}})}
 document.getElementById('item-13').addEventListener('focusout',e=>{const el=e.target.closest&&e.target.closest('.ecell');if(!el)return;
   const D=mailDetail();const L=D&&D[el.dataset.list];if(!L)return;const i=+el.dataset.i,k=el.dataset.k,v=el.textContent.replace(/\s+/g,' ').trim();
   if(!L[i]||(L[i][k]||'')===v)return;L[i][k]=v;if(k==='m')L[i].e=false;$('t13-em-detail').value=JSON.stringify(D);save();setTimeout(refresh,0)});
 document.getElementById('item-13').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.closest&&e.target.closest('.ecell')){e.preventDefault();e.target.blur()}});
+
+/* Section 2: editable list of announcements */
+function annData(){try{const v=JSON.parse($('t13-ann').value||'null');if(Array.isArray(v))return v}catch(e){}return ANN_DEF.map(a=>({...a}))}
+function annStore(L){$('t13-ann').value=JSON.stringify(L);save()}
+function renderAnn(){const box=$('annList');if(box.contains(document.activeElement))return;const L=annData(),ce=ro?'false':'true';
+  box.innerHTML=L.length?L.map((a,i)=>`<div class="dg-card ann-card"><div class="dg-h"><span class="sn">2.${i+1}</span><span class="ann-t" contenteditable="${ce}" spellcheck="true" data-ai="${i}" data-ak="t" data-ph="Τίτλος ανακοίνωσης">${esc(a.t||'')}</span>${ro?'':`<button type="button" class="ann-del" data-del="${i}" title="Διαγραφή ανακοίνωσης" aria-label="Διαγραφή ανακοίνωσης ${i+1}">✕</button>`}</div><div class="dg-body"><div class="ann-x" contenteditable="${ce}" spellcheck="true" data-ai="${i}" data-ak="x" data-ph="Κείμενο ανακοίνωσης">${clean(a.x||'')}</div></div></div>`).join(''):'<p class="sec-empty">Δεν υπάρχουν ανακοινώσεις.</p>';
+  $('annAdd').hidden=ro}
+$('annList').addEventListener('focusout',e=>{const el=e.target.closest&&e.target.closest('[data-ai]');if(!el)return;
+  const L=annData(),i=+el.dataset.ai,k=el.dataset.ak;if(!L[i])return;
+  const v=k==='t'?el.textContent.replace(/\s+/g,' ').trim():clean(el.innerHTML).trim();if((L[i][k]||'')===v)return;
+  L[i][k]=v;annStore(L);setTimeout(refresh,0)});
+$('annList').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.classList&&e.target.classList.contains('ann-t')){e.preventDefault();e.target.blur()}});
+let annArm=null;
+$('annList').addEventListener('click',e=>{const b=e.target.closest('[data-del]');if(!b||ro)return;
+  if(annArm!==b){if(annArm)annArm.textContent='✕';annArm=b;b.textContent='Διαγραφή;';b.classList.add('arm');setTimeout(()=>{if(annArm===b){annArm=null;b.textContent='✕';b.classList.remove('arm')}},4000);return}
+  annArm=null;const L=annData();L.splice(+b.dataset.del,1);annStore(L);refresh();toast('Η ανακοίνωση διαγράφηκε')});
+$('annAdd').addEventListener('click',()=>{if(ro)return;const L=annData();L.push({t:'',x:''});annStore(L);refresh();
+  const t=$('annList').querySelector(`[data-ai="${L.length-1}"][data-ak="t"]`);if(t){t.scrollIntoView({block:'center'});t.focus()}});
 $('emCalc').addEventListener('click',async()=>{
   const f=$('t13-em-from').value,t=$('t13-em-to').value,st=$('emStatus'),b=$('emCalc');
   if(!f||!t){toast('Επιλέξτε ημερομηνίες «Από» και «Έως»');return}
