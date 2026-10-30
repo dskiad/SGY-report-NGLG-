@@ -184,6 +184,17 @@ input:focus,textarea:focus{border-color:var(--gold-line);outline:none;box-shadow
 .dg-card{border:1px solid var(--line);border-radius:8px;background:var(--solid);padding:12px 14px;min-width:0}
 .dg-card:last-child:nth-child(odd){grid-column:1/-1}
 .dg-h{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14.5px;color:var(--blue);margin-bottom:6px}
+.dg-card.em-card{grid-column:1/-1}
+.em-range{display:grid;grid-template-columns:repeat(2,minmax(0,1fr)) auto;gap:10px;align-items:end}
+@media (max-width:560px){.em-range{grid-template-columns:repeat(2,minmax(0,1fr))}.em-range .em-btn{grid-column:1/-1}}
+.em-btn{height:40px}
+.em-status{font-size:12.5px;color:var(--muted);min-height:0}
+.em-status:empty{display:none}
+.em-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+.em-sum{border-left:3px solid var(--gold-line);background:var(--script-bg);border-radius:6px;padding:10px 14px;font:400 15.5px/1.55 var(--f-display)}
+.em-sum p{margin:0}.em-sum p+p{margin-top:6px}
+.pdf-mode .em-btn,.pdf-mode .em-status{display:none!important}
+.pdf-host .em-range{grid-template-columns:repeat(2,minmax(0,1fr))}
 .dg-live{border:1px solid var(--ok);border-left:4px solid var(--ok);border-radius:8px;background:var(--ok-bg);padding:12px 16px;display:flex;flex-direction:column;gap:8px}
 .dg-live p{margin:0;font-size:14px;line-height:1.5;max-width:70ch}
 .dg-live-h{display:flex;align-items:center;flex-wrap:wrap;gap:9px;font-weight:700;font-size:14.5px;color:var(--blue)}
@@ -418,9 +429,22 @@ const ITEMS=[
      ['a7','Αιτήσεις Ενδιαφέροντος','Βασίλειος Σταματέλος (11/10/2026)<br>Μητσόπουλος Στυλιανός (08/10/2026 – Στοά Καβάλας)']
    ].map(([id,t,x])=>card(t,`<div class="ed" contenteditable="true" spellcheck="true" data-edit="${id}">${x}</div>`)).join('')}</div>`),
    panel('13.2','Ενέργειες',`<div class="dg-grid">
-     ${card('Ηλεκτρονική αλληλογραφία',`<div class="grid2 tight">
-       <label class="f" for="t13-in">Εισερχόμενα email<input type="number" min="0" inputmode="numeric" id="t13-in" data-label="Εισερχόμενα email"></label>
-       <label class="f" for="t13-out">Εξερχόμενα email<input type="number" min="0" inputmode="numeric" id="t13-out" data-label="Εξερχόμενα email"></label></div>`)}
+     <div class="dg-card em-card"><div class="dg-h">Ηλεκτρονική αλληλογραφία Γραμματείας</div><div class="dg-body">
+       <div class="em-range">
+         <label class="f" for="t13-em-from">Από<input type="date" id="t13-em-from" value="2026-09-14" data-label="Στατιστικά email · Από"></label>
+         <label class="f" for="t13-em-to">Έως<input type="date" id="t13-em-to" data-label="Στατιστικά email · Έως"></label>
+         <button type="button" class="btn primary em-btn" id="emCalc">Υπολογισμός στατιστικών</button>
+       </div>
+       <div class="em-status" id="emStatus" aria-live="polite"></div>
+       <div class="em-grid">
+         <label class="f" for="t13-in">Εισερχόμενα email<input type="number" min="0" inputmode="numeric" id="t13-in" data-label="Εισερχόμενα email"></label>
+         <label class="f" for="t13-out">Εξερχόμενα email<input type="number" min="0" inputmode="numeric" id="t13-out" data-label="Εξερχόμενα email"></label>
+         <label class="f" for="t13-uin">Διαφορετικοί αποστολείς<input type="number" min="0" inputmode="numeric" id="t13-uin" data-label="Διαφορετικές διευθύνσεις που μας έστειλαν"></label>
+         <label class="f" for="t13-uout">Διαφορετικοί παραλήπτες<input type="number" min="0" inputmode="numeric" id="t13-uout" data-label="Διαφορετικές διευθύνσεις στις οποίες στείλαμε"></label>
+         <label class="f" for="t13-inv">Προσκλήσεις που λάβαμε<input type="number" min="0" inputmode="numeric" id="t13-inv" data-label="Προσκλήσεις που λάβαμε"></label>
+       </div>
+       <div class="em-sum" id="emSum" hidden></div>
+     </div></div>
      ${card('Επιστολές',`<label class="ck"><input type="checkbox" id="t13-c1" data-label="Επιστολή για τη βελτιστοποίηση και τον διαχωρισμό της ηλεκτρονικής αλληλογραφίας της Μεγάλης Στοάς με το info@nglgreece.gr"><span>Βελτιστοποίηση και διαχωρισμός ηλεκτρονικής αλληλογραφίας της Μεγάλης Στοάς με το <b>info@nglgreece.gr</b></span></label>
        <label class="ck"><input type="checkbox" id="t13-c2" data-label="Επιστολή ζήτησης επικαιροποίησης για τη Μηνιαία Αναφορά Πεπραγμένων Επαρχιών της ΕΜΣτΕ"><span>Ζήτηση επικαιροποίησης για τη Μηνιαία Αναφορά Πεπραγμένων Επαρχιών της ΕΜΣτΕ</span></label>`)}
      ${card('Στατιστικά',[['t13-s1','Επισκέψεις Μ.Δ.'],['t13-s2','Εκπροσωπήσεις Μ.Α.Ξ. για Μ.Δ.'],['t13-s3','Διατάγματα','5']].map(([i,l,v])=>`<div class="stat"><label class="ck"><input type="checkbox" id="${i}-c" data-label="Στατιστικά · ${l} (ανακοινώθηκε)"><span>${l}</span></label><input type="number" min="0" inputmode="numeric" id="${i}" data-label="Αριθμός · ${l}" aria-label="Αριθμός · ${l}"${v?` value="${v}"`:''}></div>`).join('')+`<label class="f" for="t13-s3-list">Αριθμοί Διαταγμάτων<input type="text" id="t13-s3-list" data-label="Αριθμοί Διαταγμάτων" value="513, 514, 515, 516, 517"></label>`)}
@@ -473,6 +497,7 @@ function refresh(){
     document.getElementById('item-'+n).classList.toggle('is-done',on);
     dots.children[i].classList.toggle('done',on)});
   document.getElementById('pc').textContent=c;
+  emSummary();
   form.querySelectorAll('[data-vote]').forEach(v=>{const id=v.dataset.vote,r=document.getElementById(id+'-res');
     const g=k=>document.getElementById(id+'-'+k).value, y=g('y'),k=g('k');
     if(y===''&&k===''){r.textContent='Εκκρεμεί';r.className='res';return}
@@ -499,7 +524,7 @@ function summary(){
     out.push(`ΘΕΜΑ ${n}: ${it.t.toUpperCase()}${document.getElementById('done-'+n).checked?'  [ΟΛΟΚΛΗΡΩΘΗΚΕ]':''}`);
     const lines=[];
     sec.querySelectorAll('[data-seg]').forEach(s=>{if(s.closest('[data-vote]'))return;const c=s.querySelector('input:checked');if(c)lines.push(`  ${s.dataset.label}: ${c.value==='yes'?'ΝΑΙ':'ΟΧΙ'}`)});
-    sec.querySelectorAll('input[type=text],input[type=number],input[type=time],textarea,input[type=checkbox]:not([data-done])').forEach(el=>{
+    sec.querySelectorAll('input[type=text],input[type=number],input[type=time],input[type=date],textarea,input[type=checkbox]:not([data-done])').forEach(el=>{
       if(el.closest('[data-vote]'))return;
       if(el.type==='checkbox'){if(el.checked)lines.push('  ✓ '+el.dataset.label);return}
       if(el.value.trim())lines.push(`  ${el.dataset.label}: ${el.value.trim()}`)});
@@ -560,7 +585,7 @@ async function makePdf(btn,kind,fname){
       margin:[10,8,12,8],filename:fname,image:{type:'jpeg',quality:0.94},
       html2canvas:{scale:2,useCORS:true,backgroundColor:'#FFFFFF',scrollX:0,scrollY:0},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-      pagebreak:{mode:['css','legacy'],avoid:['.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
+      pagebreak:{mode:['css','legacy'],avoid:['.em-sum','.em-grid','.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
     }).from(host).toPdf().get('pdf').then(pdf=>{const n=pdf.internal.getNumberOfPages(),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight();
       for(let i=1;i<=n;i++){pdf.setPage(i);pdf.setFontSize(8);pdf.setTextColor(130);pdf.text(i+' / '+n,w-8,h-5,{align:'right'})}}).outputPdf('blob');
   }catch(e){toast('Δεν ήταν δυνατή η δημιουργία του PDF. Ελέγξτε τη σύνδεση και δοκιμάστε ξανά.')}
@@ -625,6 +650,42 @@ async function drawSeal(){
 }
 drawSeal();
 
+/* Email statistics (Apps Script web app: apps-script/email_stats_SGY_301026_v2.gs) */
+const EMAIL_API=''; /* η διεύθυνση …/exec του Web App */
+const $=id=>document.getElementById(id);
+const fmtD=v=>{if(!v)return'';const [y,m,d]=v.split('-');return d+'/'+m+'/'+y};
+const num=id=>{const v=$(id).value.trim();return v===''?null:+v};
+const nf=n=>n.toLocaleString('el-GR');
+function emSummary(){
+  const box=$('emSum'),i=num('t13-in'),o=num('t13-out'),ui=num('t13-uin'),uo=num('t13-uout'),inv=num('t13-inv');
+  if(i===null&&o===null){box.hidden=true;box.textContent='';return}
+  const f=$('t13-em-from').value,t=$('t13-em-to').value,ps=[];
+  let days=0;if(f&&t&&f<=t)days=Math.round((Date.parse(t)-Date.parse(f))/864e5)+1;
+  let p1=(f&&t?`Από ${fmtD(f)} έως ${fmtD(t)}`:'Κατά την περίοδο αναφοράς')+' η Μεγάλη Γραμματεία';
+  const parts=[];
+  if(i!==null)parts.push(`έλαβε ${nf(i)} email`+(ui!==null?` από ${nf(ui)} διαφορετικές διευθύνσεις`:''));
+  if(o!==null)parts.push(`απέστειλε ${nf(o)} email`+(uo!==null?` προς ${nf(uo)} διαφορετικούς παραλήπτες`:''));
+  ps.push(p1+' '+parts.join(' και ')+'.');
+  if(i!==null&&o!==null&&i+o>0){let s=`Συνολικά διακινήθηκαν ${nf(i+o)} μηνύματα`;
+    if(days)s+=`, κατά μέσο όρο ${((i+o)/days).toLocaleString('el-GR',{maximumFractionDigits:1})} την ημέρα (${nf(days)} ημέρες)`;
+    if(i>0)s+=`· η Γραμματεία απάντησε ή απέστειλε ${Math.round(o/i*100)} μηνύματα ανά 100 εισερχόμενα`;ps.push(s+'.')}
+  if(inv!==null)ps.push(inv?`Από τα εισερχόμενα, ${nf(inv)} ${inv===1?'ήταν πρόσκληση':'ήταν προσκλήσεις'} (θέμα με «πρόσκληση»)${i?` — ${(inv/i*100).toLocaleString('el-GR',{maximumFractionDigits:1})}% των εισερχομένων`:''}.`:'Δεν ελήφθησαν προσκλήσεις στο διάστημα αυτό.');
+  box.innerHTML=ps.map(x=>`<p>${esc(x)}</p>`).join('');box.hidden=false}
+$('emCalc').addEventListener('click',async()=>{
+  const f=$('t13-em-from').value,t=$('t13-em-to').value,st=$('emStatus'),b=$('emCalc');
+  if(!f||!t){toast('Επιλέξτε ημερομηνίες «Από» και «Έως»');return}
+  if(f>t){toast('Η ημερομηνία «Από» είναι μετά την «Έως»');return}
+  if(!EMAIL_API){st.textContent='Η σύνδεση με το γραμματοκιβώτιο δεν έχει ρυθμιστεί ακόμα · συμπληρώστε τους αριθμούς χειροκίνητα.';return}
+  b.disabled=true;const lbl=b.textContent;b.textContent='Υπολογισμός…';st.textContent='Μέτρηση στο γραμματοκιβώτιο — μπορεί να χρειαστεί 1–3 λεπτά.';
+  try{
+    const r=await fetch(EMAIL_API+'?from='+encodeURIComponent(f)+'&to='+encodeURIComponent(t)).then(x=>{if(!x.ok)throw new Error('http');return x.json()});
+    if(r.error)throw new Error(r.error);
+    [['t13-in','incoming'],['t13-out','outgoing'],['t13-uin','uniqueSenders'],['t13-uout','uniqueRecipients'],['t13-inv','invitations']].forEach(([id,k])=>{if(typeof r[k]==='number')$(id).value=r[k]});
+    refresh();save();
+    st.textContent=(r.complete===false?'Μερική μέτρηση (έληξε ο χρόνος) — πατήστε ξανά για πλήρη. ':'')+'Ενημερώθηκε '+new Date().toLocaleString('el-GR',{dateStyle:'short',timeStyle:'short'})+` · ${nf(r.messagesScanned||0)} μηνύματα ελέγχθηκαν.`;
+  }catch(e){st.textContent='Η σύνδεση με το γραμματοκιβώτιο απέτυχε'+(e&&e.message&&e.message!=='http'&&e.message!=='Failed to fetch'?` (${e.message})`:'')+'. Δοκιμάστε ξανά ή συμπληρώστε τους αριθμούς χειροκίνητα.'}
+  b.disabled=ro;b.textContent=lbl});
+
 /* Shared state: every entry syncs live to all viewers through the artifact's db */
 const syncNote=document.getElementById('syncNote');
 let ST=null,SG=null,synced={},stExists=false,seeded=false,ro=false;
@@ -635,7 +696,7 @@ const clean=h=>{const t=document.createElement('template');t.innerHTML=String(h)
 function setRO(){if(ro)return;ro=true;
   fields().forEach(el=>el.disabled=true);eds().forEach(el=>el.setAttribute('contenteditable','false'));
   form.querySelectorAll('[data-unan]').forEach(b=>b.disabled=true);
-  ['resetBtn','sigClear'].forEach(i=>document.getElementById(i).disabled=true);pad.style.pointerEvents='none';
+  ['resetBtn','sigClear','emCalc'].forEach(i=>document.getElementById(i).disabled=true);pad.style.pointerEvents='none';
   syncNote.textContent='Μόνο ανάγνωση · ζωντανή προβολή των κοινόχρηστων καταχωρήσεων.'}
 function queueSync(d){if(!ST||ro)return;
   Object.keys({...d,...synced}).forEach(k=>{const v=k in d?d[k]:null;if(v!==(k in synced?synced[k]:null)||dirty.has(k)){pend[k]=v;dirty.add(k)}});
