@@ -8,7 +8,7 @@
  *  - Εισερχόμενα / εξερχόμενα, διαφορετικοί αποστολείς που μας έστειλαν,
  *    διαφορετικοί παραλήπτες στους οποίους στείλαμε, και εισερχόμενες
  *    προσκλήσεις (θέμα με «πρόσκληση», «πρόσκλησης», «προσκλήσεις» κ.λπ.,
- *    με ή χωρίς τόνους, κεφαλαία ή πεζά· μόνο αρχικά μηνύματα, όχι Re:/Fwd:/ΑΠ:/ΠΡΘ:).
+ *    με ή χωρίς τόνους, κεφαλαία ή πεζά· αρχικά και προωθημένα· όχι απαντήσεις Re:/ΑΠ: ούτε αυτόματες ειδοποιήσεις).
  *  - Web App (JSON) για τη σελίδα του ΣΓΥ:
  *      GET <url>?from=2026-09-14&to=2026-10-30   → στατιστικά διαστήματος
  *      GET <url>                                 → από START_DATE έως σήμερα
@@ -29,7 +29,9 @@ const CONFIG = {
   MAX_RUNTIME_MS: 5 * 60 * 1000, // όριο ασφαλείας (το Apps Script κόβει στα 6 λεπτά)
   CACHE_SECONDS: 15 * 60,       // ίδιο διάστημα μέσα σε 15' → απάντηση από την προσωρινή μνήμη
   INVITATION: /προσκλ|invitation|invite/, // στο θέμα, μετά την αφαίρεση τόνων
-  REPLY: /^\s*(re|fw|fwd|aw|wg|tr|απ|πρθ|σχετ)\s*(\[\d+\])?\s*:/ // απαντήσεις/προωθήσεις δεν μετρούν
+  REPLY: /^\s*((fw|fwd|wg|tr|πρθ)\s*(\[\d+\])?\s*:\s*)*(re|aw|απ|σχετ)\s*(\[\d+\])?\s*:/, // απαντήσεις δεν μετρούν (οι προωθήσεις μετρούν)
+  NOTICE: /^\s*(accepted|declined|tentative|tentatively accepted|updated invitation|share request|αποδεκτ|αποδοχη|απορρ|δοκιμαστικ)/,
+  AUTO: /(^|[^a-z])(no-?reply|calendar-notification|drive-shares[^@]*)@/
 };
 
 /* ───────────────────────── Κύρια μέτρηση ───────────────────────── */
@@ -97,7 +99,8 @@ function computeStats(fromStr, toStr) {
         daily[day].incoming++;
         from.filter(a => !isOwn(a)).forEach(a => senders.add(a));
         const subj = plain_(m.getSubject());
-        if (CONFIG.INVITATION.test(subj) && !CONFIG.REPLY.test(subj)) invitations++;
+        if (CONFIG.INVITATION.test(subj) && !CONFIG.REPLY.test(subj) && !CONFIG.NOTICE.test(subj) &&
+            !CONFIG.AUTO.test(String(m.getFrom()).toLowerCase())) invitations++;
       }
     }));
 

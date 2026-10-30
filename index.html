@@ -720,7 +720,7 @@ function emSummary(){
   if(i!==null&&o!==null&&i+o>0){let s=`Συνολικά διακινήθηκαν ${nf(i+o)} μηνύματα`;
     if(days)s+=`, κατά μέσο όρο ${((i+o)/days).toLocaleString('el-GR',{maximumFractionDigits:1})} την ημέρα (${nf(days)} ημέρες)`;
     if(i>0)s+=`· η Γραμματεία απάντησε ή απέστειλε ${Math.round(o/i*100)} μηνύματα ανά 100 εισερχόμενα`;ps.push(s+'.')}
-  if(inv!==null)ps.push(inv?`Από τα εισερχόμενα, ${nf(inv)} ${inv===1?'ήταν πρόσκληση':'ήταν προσκλήσεις'} (αρχικά μηνύματα με «πρόσκληση» στο θέμα, χωρίς απαντήσεις και προωθήσεις)${i?` — ${(inv/i*100).toLocaleString('el-GR',{maximumFractionDigits:1})}% των εισερχομένων`:''}.`:'Δεν ελήφθησαν προσκλήσεις στο διάστημα αυτό.');
+  if(inv!==null)ps.push(inv?`Από τα εισερχόμενα, ${nf(inv)} ${inv===1?'ήταν πρόσκληση':'ήταν προσκλήσεις'} (αρχικά και προωθημένα μηνύματα με «πρόσκληση» στο θέμα, χωρίς απαντήσεις και αυτόματες ειδοποιήσεις)${i?` — ${(inv/i*100).toLocaleString('el-GR',{maximumFractionDigits:1})}% των εισερχομένων`:''}.`:'Δεν ελήφθησαν προσκλήσεις στο διάστημα αυτό.');
   let tbl='';try{const D=JSON.parse($('t13-em-detail').value||'null');
     if(D&&D.byAddress){const rows=Object.entries(D.byAddress).map(([a,x])=>{const c=v=>typeof v==='number'?nf(v):'—';return `<tr><td>${esc(a)}</td><td class="num">${c(x.in??x.incoming)}</td><td class="num">${c(x.out??x.outgoing)}</td><td class="num">${c(x.uin)}</td><td class="num">${c(x.uout)}</td><td class="num">${c(x.inv)}</td></tr>`});
       rows.push(`<tr class="em-tot"><td>Σύνολο Γραμματείας</td><td class="num">${i===null?'—':nf(i)}</td><td class="num">${o===null?'—':nf(o)}</td><td class="num">${ui===null?'—':nf(ui)}</td><td class="num">${uo===null?'—':nf(uo)}</td><td class="num">${inv===null?'—':nf(inv)}</td></tr>`);
@@ -820,9 +820,12 @@ const normAddr=a=>{a=String(a||'').toLowerCase().trim();const m=a.match(/[a-z0-9
 const OWN_N=OWN.map(normAddr);
 const plainTxt=t=>String(t||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
 const INVITE=/προσκλ|invitation|invite/;
-/* replies and forwards (Re:, Fw:, Fwd:, ΑΠ:, ΠΡΘ:, Σχετ:, AW:, WG:, TR:) are not counted as invitations */
-const REPLY=/^\s*(re|fw|fwd|aw|wg|tr|απ|πρθ|σχετ)\s*(\[\d+\])?\s*:/;
-const isInvite=subj=>{const t=plainTxt(subj);return INVITE.test(t)&&!REPLY.test(t)};
+/* originals and forwards count (lodge invitations reach the Secretariat forwarded by the Provincial Secretaries);
+   replies, calendar responses and automatic Google notices do not */
+const REPLY=/^\s*((fw|fwd|wg|tr|πρθ)\s*(\[\d+\])?\s*:\s*)*(re|aw|απ|σχετ)\s*(\[\d+\])?\s*:/;
+const NOTICE=/^\s*(accepted|declined|tentative|tentatively accepted|updated invitation|share request|αποδεκτ|αποδοχη|απορρ|δοκιμαστικ)/;
+const AUTO=/(^|[^a-z])(no-?reply|calendar-notification|drive-shares[^@]*)@/;
+const isInvite=(subj,from)=>{const t=plainTxt(subj);return INVITE.test(t)&&!REPLY.test(t)&&!NOTICE.test(t)&&!AUTO.test(String(from||'').toLowerCase())};
 const ymd=d=>d.toISOString().slice(0,10);
 const shiftDay=(v,n)=>{const d=new Date(v+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return ymd(d)};
 function athensMidnight(v){const [y,m,d]=v.split('-').map(Number);let off=2;
@@ -851,7 +854,7 @@ async function gmailStats(mcp,from,to,progress){
     const snd=normAddr(m.sender),rc=[...(m.toRecipients||[]),...(m.ccRecipients||[]),...(m.bccRecipients||[])].map(normAddr).filter(Boolean);
     const ext=rc.filter(a=>!OWN_N.includes(a));
     if(OWN_N.includes(snd)){tot.out++;ext.forEach(a=>tot.r.add(a));per[snd].out++;ext.forEach(a=>per[snd].r.add(a));return}
-    const inv=isInvite(m.subject);
+    const inv=isInvite(m.subject,m.sender);
     tot.in++;if(snd)tot.s.add(snd);if(inv)tot.inv++;
     const to=OWN_N.filter(a=>rc.includes(a));if(!to.length)other++;
     to.forEach(a=>{per[a].in++;if(snd)per[a].s.add(snd);if(inv)per[a].inv++})};
