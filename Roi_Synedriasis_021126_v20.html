@@ -192,6 +192,14 @@ input:focus,textarea:focus{border-color:var(--gold-line);outline:none;box-shadow
 .em-status:empty{display:none}
 .em-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
 .em-sum{border-left:3px solid var(--gold-line);background:var(--script-bg);border-radius:6px;padding:10px 14px;font:400 15.5px/1.55 var(--f-display)}
+.inv-h{margin:14px 0 6px;font:700 13px/1.3 var(--f-body);color:var(--blue);display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.inv-h span{font-weight:600;font-size:12px;color:var(--muted)}
+.em-sum .dr-sec{margin-top:8px;font-family:var(--f-body)}
+.inv-l{display:inline-block;min-width:120px;border-radius:3px;outline:1px dashed transparent;padding:0 2px}
+.inv-l:hover,.inv-l:focus{outline-color:var(--gold-line)}
+.inv-l.inv-empty:empty::before{content:attr(data-ph);color:var(--muted);font-style:italic}
+.pdf-mode .inv-l{outline:none}
+.pdf-mode .inv-hint{display:none}
 .em-sum p{margin:0}.em-sum .em-t{margin-top:10px;font-family:var(--f-body)}.em-t td.num,.em-t th:not(:first-child){text-align:right}.em-t tr.em-tot td{font-weight:700;border-top:1.5px solid var(--gold-line)}.em-sum p+p{margin-top:6px}
 .pdf-mode .em-btn,.pdf-mode .em-status{display:none!important}
 .pdf-host .em-range{grid-template-columns:repeat(2,minmax(0,1fr))}
@@ -636,7 +644,7 @@ async function makePdf(btn,kind,fname){
       margin:[10,8,12,8],filename:fname,image:{type:'jpeg',quality:0.94},
       html2canvas:{scale:2,useCORS:true,backgroundColor:'#FFFFFF',scrollX:0,scrollY:0},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-      pagebreak:{mode:['css','legacy'],avoid:['.dr-kpis','.dr-t tr','.dr-sec h4','.em-sum','.em-grid','.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
+      pagebreak:{mode:['css','legacy'],avoid:['.inv-h','.dr-kpis','.dr-t tr','.dr-sec h4','.em-sum>p','.em-grid','.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
     }).from(host).toPdf().get('pdf').then(pdf=>{const n=pdf.internal.getNumberOfPages(),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight();
       for(let i=1;i<=n;i++){pdf.setPage(i);pdf.setFontSize(8);pdf.setTextColor(130);pdf.text(i+' / '+n,w-8,h-5,{align:'right'})}}).outputPdf('blob');
   }catch(e){toast('Δεν ήταν δυνατή η δημιουργία του PDF. Ελέγξτε τη σύνδεση και δοκιμάστε ξανά.')}
@@ -708,6 +716,7 @@ const fmtD=v=>{if(!v)return'';const [y,m,d]=v.split('-');return d+'/'+m+'/'+y};
 const num=id=>{const v=$(id).value.trim();return v===''?null:+v};
 const nf=n=>n.toLocaleString('el-GR');
 function emSummary(){
+  if($('emSum').contains(document.activeElement))return;
   const box=$('emSum'),i=num('t13-in'),o=num('t13-out'),ui=num('t13-uin'),uo=num('t13-uout'),inv=num('t13-inv');
   if(i===null&&o===null){box.hidden=true;box.textContent='';return}
   const f=$('t13-em-from').value,t=$('t13-em-to').value,ps=[];
@@ -726,7 +735,14 @@ function emSummary(){
       rows.push(`<tr class="em-tot"><td>Σύνολο Γραμματείας</td><td class="num">${i===null?'—':nf(i)}</td><td class="num">${o===null?'—':nf(o)}</td><td class="num">${ui===null?'—':nf(ui)}</td><td class="num">${uo===null?'—':nf(uo)}</td><td class="num">${inv===null?'—':nf(inv)}</td></tr>`);
       tbl=`<table class="dr-t em-t"><thead><tr><th>Διεύθυνση</th><th>Εισερχ.</th><th>Εξερχ.</th><th>Αποστολείς</th><th>Παραλήπτες</th><th>Προσκλ.</th></tr></thead><tbody>${rows.join('')}</tbody></table>`+
         `<p class="dr-note">Ένα μήνυμα προς δύο διευθύνσεις μετρά σε καθεμία, αλλά μία φορά στο σύνολο.${D.other?` ${nf(D.other)} εισερχόμενα δεν είχαν καμία από τις δύο ως ρητό παραλήπτη (π.χ. κρυφή κοινοποίηση ή λίστα) και μετρούν μόνο στο σύνολο.`:''}</p>`}}catch(e){}
-  box.innerHTML=ps.map(x=>`<p>${esc(x)}</p>`).join('')+tbl;box.hidden=false}
+  let invT='';try{const D=JSON.parse($('t13-em-detail').value||'null');const L=D&&D.invites;
+    if(L&&L.length){const groups={};L.forEach((x,i)=>{(groups[x.p]=groups[x.p]||[]).push([x,i])});
+      const dmyShort=ms=>new Date(ms).toLocaleDateString('el-GR',{timeZone:'Europe/Athens',day:'2-digit',month:'2-digit'});
+      invT=`<div class="inv-h">Προσκλήσεις Στοών ανά Επαρχία <span>${nf(L.length)} μοναδικές προσκλήσεις</span></div>`+
+        Object.entries(groups).map(([p,rows])=>`<div class="dr-sec"><h4><span class="dr-n">${nf(rows.length)}</span>${esc(p)}</h4><table class="dr-t inv-t"><thead><tr><th>Στοά</th><th>Ημ/νία εργασιών</th><th>Παραλήφθηκε</th></tr></thead><tbody>${
+          rows.map(([x,i])=>`<tr><td><span class="inv-l${x.l?'':' inv-empty'}" contenteditable="${ro?'false':'true'}" spellcheck="false" data-inv="${i}" data-ph="${esc(x.s)}">${esc(x.l||'')}</span></td><td class="num">${esc(x.w||'—')}</td><td class="num">${esc(dmyShort(x.r))}</td></tr>`).join('')}</tbody></table></div>`).join('')+
+        `<p class="dr-note">Επαρχία από τον αποστολέα, Στοά και ημερομηνία εργασιών από το θέμα του μηνύματος.<span class="inv-hint"> Όπου δεν φαίνεται η Στοά, εμφανίζεται το θέμα · πατήστε πάνω του για να τη συμπληρώσετε.</span></p>`}}catch(e){}
+  box.innerHTML=ps.map(x=>`<p>${esc(x)}</p>`).join('')+tbl+invT;box.hidden=false}
 /* Archive statistics from the Grand Secretariat's Drive folder (Google Drive connector, owner only) */
 const DRIVE_FOLDER='1kKR7v86jjs5QJE9-K5uUebvS6nZd9J03';
 const DQ={
@@ -814,6 +830,33 @@ $('drCalc').addEventListener('click',async()=>{
     catch(e){st.textContent=mcpMsg(e).replace(/Gmail/g,'Google Drive')}
   }finally{b.disabled=ro;b.textContent=lbl}});
 
+/* Invitations: province from the sender, lodge and work date from the subject */
+const PROVINCES=[[/^athens/,'Επαρχία Αθηνών'],[/^piraeus/,'Επαρχία Πειραιώς & Νήσων'],[/^ionian/,'Επαρχία Ιονίων Νήσων'],
+  [/prpwg/,'Επαρχία Πελοποννήσου & Δυτ. Ελλάδος'],[/provcentnorth|centnorth/,'Επαρχία Κεντρικής & Βόρειας Ελλάδος'],[/cyprus|kypros/,'Περιφέρεια Κύπρου']];
+const provinceOf=addr=>{const l=String(addr||'').toLowerCase().split('@')[0].replace(/\./g,'');for(const [re,n] of PROVINCES)if(re.test(l))return n;return 'Απευθείας από Στοές / λοιποί'};
+const INV_MONTHS={ιαν:1,φεβ:2,μαρ:3,απρ:4,μαι:5,ιουν:6,ιουλ:7,αυγ:8,σεπ:9,οκτ:10,νοε:11,δεκ:12};
+const pad2=n=>String(n).padStart(2,'0');
+function workDate(subj,recv){const t=String(subj).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();const ry=new Date(recv).getFullYear();
+  for(const m of t.matchAll(/(?<!\d)(\d{1,2})\s*[\/.\-]\s*(\d{1,2})\s*[\/.\-]\s*(\d{4}|\d{2})(?!\d)/g)){let y=+m[3];if(y<100)y+=2000;if(+m[2]>=1&&+m[2]<=12&&+m[1]>=1&&+m[1]<=31)return pad2(m[1])+'/'+pad2(m[2])+'/'+y}
+  let m=t.match(/(?<!\d)(\d{1,2})\s*(?:ης|η)?\s+(ιαν|φεβ|μαρ|απρ|μαι|ιουν|ιουλ|αυγ|σεπ|οκτ|νοε|δεκ)[α-ω]*\s*(\d{4})?/);
+  if(m)return pad2(m[1])+'/'+pad2(INV_MONTHS[m[2]])+'/'+(m[3]||ry);
+  for(const k of t.matchAll(/(?<![\d\/.])(\d{1,2})\s*[\/.]\s*(\d{1,2})(?![\d\/.])/g))if(+k[2]>=1&&+k[2]<=12&&+k[1]>=1&&+k[1]<=31)return pad2(k[1])+'/'+pad2(k[2])+'/'+ry;
+  return ''}
+const INV_NUMRE=String.raw`(?:υπ\s*[\x60'’]?\s*(?:αρ(?:ιθ(?:μ)?)?\.?|\.)|n\.|no\.?|αρ\.)\s*(\d{1,3})`;
+const INV_STOP=/^(της|του|των|τας|στις|σε|και|για|με)$/i;
+const invClean=x=>x.replace(/\s+n$/i,'').replace(/\s+/g,' ').replace(/^[\s.\-–:]+|[\s.\-–:,]+$/g,'').trim();
+function invLodge(subj){let s=String(subj).replace(/^\s*((fw|fwd|wg|tr|πρθ)\s*:\s*)+/i,'').trim();let m;
+  const out=(n,k)=>{n=invClean(n);if(!n||INV_STOP.test(n.split(' ')[0]))return '';return k?n+' '+k:n};
+  m=s.match(new RegExp(String.raw`["“«]([^"”»]{2,40})["”»]\s*(?:`+INV_NUMRE+')?','i'));if(m)return out(m[1],m[2]);
+  m=s.match(new RegExp(String.raw`(?:^|[\s(])(?:Σ\.?\s*Στ|ΣΣ|Σ\s+Στ)\s*[.∴]?\s*(?:∴\s*)?([Α-ΩA-ZΆ-Ώ][Α-Ωα-ωA-Za-zΆ-ώ.' ]{1,30}?)\s*(?:`+INV_NUMRE+String.raw`|\s*[:\-–]|$)`,'i'));if(m)return out(m[1],m[2]);
+  m=s.match(new RegExp(String.raw`Στο[άα]ς?\s+([Α-ΩA-ZΆ-Ώ][Α-Ωα-ωA-Za-zΆ-ώ. ]{1,30}?)\s*(?:`+INV_NUMRE+String.raw`|(\d{1,3}))`));if(m)return out(m[1],m[2]||m[3]);
+  m=s.match(new RegExp(String.raw`^([Α-ΩA-ZΆ-Ώ][Α-ΩA-ZΆ-Ώ. ]{2,40}?)\s*(?:`+INV_NUMRE+String.raw`|ΥΠ\.?\s*(\d{1,3})|(\d{1,3}))?\s*(?:[-–|]+\s*|\s+)ΠΡΟΣΚΛ`,'i'));if(m&&!/προσκλ|ορθη|επισημη/i.test(m[1]))return out(m[1],m[2]||m[3]||m[4]);
+  m=s.match(new RegExp(String.raw`^([Α-ΩA-ZΆ-Ώ][Α-ΩA-ZΆ-Ώ. ]{2,40}?)\s+`+INV_NUMRE));if(m&&!/προσκλ/i.test(m[1]))return out(m[1],m[2]);
+  m=s.match(/εργασι[ωώ]ν\s+(?:της\s+Σ\.?\s*Σ\.?\s*)?["«]?([Α-ΩA-ZΆ-Ώ][α-ωά-ώΑ-ΩA-Za-z.]+(?:\s+[Α-ΩA-ZΆ-Ώ][α-ωά-ώΑ-ΩA-Za-z.]+)?)["»]?\s*(?:υπ\s*[`'’]?\s*αρ(?:ιθ)?\.?\s*)?(\d{1,3})(?![\d\/.\-]|ης)/i);if(m)return out(m[1],m[2]);
+  m=s.match(/(?:\/|\s)([A-Z][A-Za-z.]+(?:\s?[A-Z][A-Za-z]+)?)\s*n\.\s*(\d+)/);if(m)return out(m[1],m[2]);
+  m=s.match(/^([Α-ΩA-ZΆ-Ώ][^:]{2,40}?)\s*:\s*Πρ[οό]σκλ/i);if(m)return out(m[1]);
+  return ''}
+
 /* Counting through the viewer's Gmail connector (claude.ai): the mailbox of the Grand Secretariat */
 const OWN=['grand.secretary@nglgreece.gr','info@nglgreece.gr'];
 const normAddr=a=>{a=String(a||'').toLowerCase().trim();const m=a.match(/[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}/);if(!m)return'';const [l,d]=m[0].split('@');return l.replace(/\./g,'')+'@'+d};
@@ -848,14 +891,14 @@ async function gmailStats(mcp,from,to,progress){
     catch(e){if(e&&e.retryable){await new Promise(r=>setTimeout(r,(e.retryAfterMs||1500)+Math.random()*800));return (await mcp.callTool('Gmail',tool,input)).payload||{}}throw e}};
   const mk=()=>({in:0,out:0,s:new Set(),r:new Set(),inv:0});
   const tot=mk(),per={};OWN_N.forEach(a=>per[a]=mk());let other=0;
-  const seenM=new Set(),seenT=new Set();let full=0,days=0,complete=true;
+  const seenM=new Set(),seenT=new Set(),invs=[];let full=0,days=0,complete=true;
   const take=m=>{if(!m||!m.id||seenM.has(m.id))return;seenM.add(m.id);
     const t=idTime(m.id);if(!(t>=start&&t<end))return;
     const snd=normAddr(m.sender),rc=[...(m.toRecipients||[]),...(m.ccRecipients||[]),...(m.bccRecipients||[])].map(normAddr).filter(Boolean);
     const ext=rc.filter(a=>!OWN_N.includes(a));
     if(OWN_N.includes(snd)){tot.out++;ext.forEach(a=>tot.r.add(a));per[snd].out++;ext.forEach(a=>per[snd].r.add(a));return}
     const inv=isInvite(m.subject,m.sender);
-    tot.in++;if(snd)tot.s.add(snd);if(inv)tot.inv++;
+    tot.in++;if(snd)tot.s.add(snd);if(inv){tot.inv++;invs.push({r:t,s:String(m.subject||''),f:snd})}
     const to=OWN_N.filter(a=>rc.includes(a));if(!to.length)other++;
     to.forEach(a=>{per[a].in++;if(snd)per[a].s.add(snd);if(inv)per[a].inv++})};
   const nDays=Math.round((Date.parse(to)-Date.parse(from))/864e5)+3;
@@ -869,12 +912,21 @@ async function gmailStats(mcp,from,to,progress){
     days++;progress(days,nDays)}
   const pack=x=>({in:x.in,out:x.out,uin:x.s.size,uout:x.r.size,inv:x.inv});
   const byAddress={};OWN.forEach((a,i)=>byAddress[a]=pack(per[OWN_N[i]]));
+  const seenI=new Set(),order=PROVINCES.map(x=>x[1]);
+  const invites=invs.sort((a,b)=>a.r-b.r).map(x=>({p:provinceOf(x.f),l:invLodge(x.s),w:workDate(x.s,x.r),r:x.r,s:x.s.replace(/^\s*((fw|fwd|wg|tr|πρθ)\s*:\s*)+/i,'').slice(0,110)}))
+    .filter(x=>{const k=x.l&&x.w?x.p+'|'+plainTxt(x.l)+'|'+x.w:plainTxt(x.s);if(seenI.has(k))return false;seenI.add(k);return true})
+    .sort((a,b)=>{const pa=order.indexOf(a.p),pb=order.indexOf(b.p);return (pa<0?99:pa)-(pb<0?99:pb)||a.r-b.r});
   return{incoming:tot.in,outgoing:tot.out,uniqueSenders:tot.s.size,uniqueRecipients:tot.r.size,invitations:tot.inv,
-    byAddress,otherIncoming:other,messagesScanned:seenM.size,complete}}
+    byAddress,invites,otherIncoming:other,messagesScanned:seenM.size,complete}}
 function applyStats(r){
-  $('t13-em-detail').value=r.byAddress?JSON.stringify({byAddress:r.byAddress,other:r.otherIncoming||0}):'';
+  $('t13-em-detail').value=r.byAddress?JSON.stringify({byAddress:r.byAddress,other:r.otherIncoming||0,invites:r.invites||[]}):'';
   [['t13-in','incoming'],['t13-out','outgoing'],['t13-uin','uniqueSenders'],['t13-uout','uniqueRecipients'],['t13-inv','invitations']].forEach(([id,k])=>{if(typeof r[k]==='number')$(id).value=r[k]});
   refresh();save()}
+$('emSum').addEventListener('focusout',e=>{const el=e.target.closest&&e.target.closest('[data-inv]');if(!el)return;
+  let D=null;try{D=JSON.parse($('t13-em-detail').value||'null')}catch(err){}if(!D||!D.invites)return;
+  const i=+el.dataset.inv,v=el.textContent.replace(/\s+/g,' ').trim();if(!D.invites[i]||D.invites[i].l===v)return;
+  D.invites[i].l=v;$('t13-em-detail').value=JSON.stringify(D);save();setTimeout(emSummary,0)});
+$('emSum').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.closest('[data-inv]')){e.preventDefault();e.target.blur()}});
 $('emCalc').addEventListener('click',async()=>{
   const f=$('t13-em-from').value,t=$('t13-em-to').value,st=$('emStatus'),b=$('emCalc');
   if(!f||!t){toast('Επιλέξτε ημερομηνίες «Από» και «Έως»');return}
