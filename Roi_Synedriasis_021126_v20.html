@@ -671,20 +671,71 @@ function emSummary(){
     if(i>0)s+=`· η Γραμματεία απάντησε ή απέστειλε ${Math.round(o/i*100)} μηνύματα ανά 100 εισερχόμενα`;ps.push(s+'.')}
   if(inv!==null)ps.push(inv?`Από τα εισερχόμενα, ${nf(inv)} ${inv===1?'ήταν πρόσκληση':'ήταν προσκλήσεις'} (θέμα με «πρόσκληση»)${i?` — ${(inv/i*100).toLocaleString('el-GR',{maximumFractionDigits:1})}% των εισερχομένων`:''}.`:'Δεν ελήφθησαν προσκλήσεις στο διάστημα αυτό.');
   box.innerHTML=ps.map(x=>`<p>${esc(x)}</p>`).join('');box.hidden=false}
+/* Counting through the viewer's Gmail connector (claude.ai): the mailbox of the Grand Secretariat */
+const OWN=['grandsecretary@nglgreece.gr','info@nglgreece.gr'];
+const normAddr=a=>{a=String(a||'').toLowerCase().trim();const m=a.match(/[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}/);if(!m)return'';const [l,d]=m[0].split('@');return l.replace(/\./g,'')+'@'+d};
+const OWN_N=OWN.map(normAddr);
+const plainTxt=t=>String(t||'').normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();
+const INVITE=/προσκλ|invitation|invite/;
+const ymd=d=>d.toISOString().slice(0,10);
+const shiftDay=(v,n)=>{const d=new Date(v+'T12:00:00Z');d.setUTCDate(d.getUTCDate()+n);return ymd(d)};
+function athensMidnight(v){const [y,m,d]=v.split('-').map(Number);let off=2;
+  try{const n=new Intl.DateTimeFormat('en-US',{timeZone:'Europe/Athens',timeZoneName:'shortOffset'}).formatToParts(new Date(Date.UTC(y,m-1,d,12))).find(x=>x.type==='timeZoneName').value;off=+(n.match(/[+-]\d+/)||[2])[0]}catch(e){}
+  return Date.UTC(y,m-1,d)-off*36e5}
+/* Gmail message ids carry their timestamp: id >> 20 = ms since epoch (±30 s) */
+const idTime=id=>{try{return Number(BigInt('0x'+id)>>20n)}catch(e){return NaN}};
+const mcpMsg=e=>{const c=e&&e.code;return{
+  server_not_connected:'Το Gmail δεν είναι συνδεδεμένο στο claude.ai · προσθέστε το στο Settings → Connectors.',
+  needs_reauth:'Η σύνδεση του Gmail έληξε · επανασυνδέστε το στο claude.ai Settings → Connectors.',
+  selection_required:'Υπάρχουν δύο λογαριασμοί Gmail · επιλέξτε τον λογαριασμό της Γραμματείας όταν ζητηθεί.',
+  not_in_manifest:'Δεν δόθηκε άδεια για το Gmail σε αυτή τη σελίδα · πατήστε ξανά και επιλέξτε «Allow».',
+  approval_required:'Χρειάζεται έγκριση για το Gmail · πατήστε ξανά και επιλέξτε «Allow».',
+  blocked_by_policy:'Η χρήση του Gmail δεν επιτρέπεται από τις ρυθμίσεις του οργανισμού.'}[c]||('Η μέτρηση μέσω Gmail απέτυχε'+(c?` (${c})`:'')+'. Δοκιμάστε ξανά.')};
+async function gmailStats(mcp,from,to,progress){
+  const start=athensMidnight(from),end=athensMidnight(shiftDay(to,1));
+  const q=`after:${shiftDay(from,-1).replace(/-/g,'/')} before:${shiftDay(to,2).replace(/-/g,'/')}`;
+  const call=async(tool,input)=>{try{return (await mcp.callTool('Gmail',tool,input)).payload||{}}
+    catch(e){if(e&&e.retryable){await new Promise(r=>setTimeout(r,(e.retryAfterMs||1500)+Math.random()*800));return (await mcp.callTool('Gmail',tool,input)).payload||{}}throw e}};
+  const seen=new Set(),senders=new Set(),rcpts=new Set();let inc=0,out=0,inv=0,threads=0,token='',pages=0;
+  const take=m=>{if(!m||!m.id||seen.has(m.id))return;seen.add(m.id);
+    const t=idTime(m.id);if(!(t>=start&&t<end))return;
+    const snd=normAddr(m.sender);
+    if(OWN_N.includes(snd)){out++;[...(m.toRecipients||[]),...(m.ccRecipients||[]),...(m.bccRecipients||[])].map(normAddr).filter(a=>a&&!OWN_N.includes(a)).forEach(a=>rcpts.add(a))}
+    else{inc++;if(snd)senders.add(snd);if(INVITE.test(plainTxt(m.subject)))inv++}};
+  do{
+    const r=await call('search_threads',{query:q,pageSize:50,view:'THREAD_VIEW_MINIMAL',...(token?{pageToken:token}:{})});
+    for(const th of (r.threads||[])){threads++;
+      const ms=th.messages||[];
+      if((th.messageCount||ms.length)>ms.length){const full=await call('get_thread',{threadId:th.id,messageFormat:'MINIMAL'});(full.messages||[]).forEach(take)}
+      else ms.forEach(take)}
+    token=r.nextPageToken||'';pages++;progress(threads);
+  }while(token&&pages<200);
+  return{incoming:inc,outgoing:out,uniqueSenders:senders.size,uniqueRecipients:rcpts.size,invitations:inv,messagesScanned:seen.size,complete:!token}}
+function applyStats(r){
+  [['t13-in','incoming'],['t13-out','outgoing'],['t13-uin','uniqueSenders'],['t13-uout','uniqueRecipients'],['t13-inv','invitations']].forEach(([id,k])=>{if(typeof r[k]==='number')$(id).value=r[k]});
+  refresh();save()}
 $('emCalc').addEventListener('click',async()=>{
   const f=$('t13-em-from').value,t=$('t13-em-to').value,st=$('emStatus'),b=$('emCalc');
   if(!f||!t){toast('Επιλέξτε ημερομηνίες «Από» και «Έως»');return}
   if(f>t){toast('Η ημερομηνία «Από» είναι μετά την «Έως»');return}
-  if(!EMAIL_API){st.textContent='Η σύνδεση με το γραμματοκιβώτιο δεν έχει ρυθμιστεί ακόμα · συμπληρώστε τους αριθμούς χειροκίνητα.';return}
-  b.disabled=true;const lbl=b.textContent;b.textContent='Υπολογισμός…';st.textContent='Μέτρηση στο γραμματοκιβώτιο — μπορεί να χρειαστεί 1–3 λεπτά.';
+  const lbl=b.textContent;b.disabled=true;b.textContent='Υπολογισμός…';
+  const done=(r,via)=>{applyStats(r);st.textContent=(r.complete===false?'Μερική μέτρηση — πατήστε ξανά για πλήρη. ':'')+'Ενημερώθηκε '+new Date().toLocaleString('el-GR',{dateStyle:'short',timeStyle:'short'})+` · ${nf(r.messagesScanned||0)} μηνύματα ελέγχθηκαν (${via}).`};
   try{
-    const r=await fetch(EMAIL_API+'?from='+encodeURIComponent(f)+'&to='+encodeURIComponent(t)).then(x=>{if(!x.ok)throw new Error('http');return x.json()});
-    if(r.error)throw new Error(r.error);
-    [['t13-in','incoming'],['t13-out','outgoing'],['t13-uin','uniqueSenders'],['t13-uout','uniqueRecipients'],['t13-inv','invitations']].forEach(([id,k])=>{if(typeof r[k]==='number')$(id).value=r[k]});
-    refresh();save();
-    st.textContent=(r.complete===false?'Μερική μέτρηση (έληξε ο χρόνος) — πατήστε ξανά για πλήρη. ':'')+'Ενημερώθηκε '+new Date().toLocaleString('el-GR',{dateStyle:'short',timeStyle:'short'})+` · ${nf(r.messagesScanned||0)} μηνύματα ελέγχθηκαν.`;
-  }catch(e){st.textContent='Η σύνδεση με το γραμματοκιβώτιο απέτυχε'+(e&&e.message&&e.message!=='http'&&e.message!=='Failed to fetch'?` (${e.message})`:'')+'. Δοκιμάστε ξανά ή συμπληρώστε τους αριθμούς χειροκίνητα.'}
-  b.disabled=ro;b.textContent=lbl});
+    const mcp=window.claude&&window.claude.use?await window.claude.use('mcp').catch(()=>null):null;
+    if(mcp){
+      const u=await window.claude.use('user').catch(()=>null);
+      const owner=u?await u.isOwner().catch(()=>false):false;
+      if(!owner){st.textContent='Τα στατιστικά υπολογίζονται από τον Μεγάλο Γραμματέα, με το γραμματοκιβώτιο της Γραμματείας. Οι αριθμοί εμφανίζονται εδώ μόλις υπολογιστούν.'}
+      else{st.textContent='Μέτρηση στο Gmail της Γραμματείας…';
+        try{done(await gmailStats(mcp,f,t,n=>{st.textContent=`Μέτρηση στο Gmail της Γραμματείας… ${nf(n)} συνομιλίες`}),'Gmail')}
+        catch(e){st.textContent=mcpMsg(e)}}
+    }else if(EMAIL_API){
+      st.textContent='Μέτρηση στο γραμματοκιβώτιο — μπορεί να χρειαστεί 1–3 λεπτά.';
+      try{const r=await fetch(EMAIL_API+'?from='+encodeURIComponent(f)+'&to='+encodeURIComponent(t)).then(x=>{if(!x.ok)throw new Error('http');return x.json()});
+        if(r.error)throw new Error(r.error);done(r,'Apps Script')}
+      catch(e){st.textContent='Η σύνδεση με το γραμματοκιβώτιο απέτυχε'+(e&&e.message&&e.message!=='http'&&e.message!=='Failed to fetch'?` (${e.message})`:'')+'. Δοκιμάστε ξανά ή συμπληρώστε τους αριθμούς χειροκίνητα.'}
+    }else st.textContent='Ο αυτόματος υπολογισμός γίνεται από τη σελίδα του claude.ai · εδώ συμπληρώστε τους αριθμούς χειροκίνητα.';
+  }finally{b.disabled=ro;b.textContent=lbl}});
 
 /* Shared state: every entry syncs live to all viewers through the artifact's db */
 const syncNote=document.getElementById('syncNote');
