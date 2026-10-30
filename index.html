@@ -184,6 +184,10 @@ input:focus,textarea:focus{border-color:var(--gold-line);outline:none;box-shadow
 .dg-card{border:1px solid var(--line);border-radius:8px;background:var(--solid);padding:12px 14px;min-width:0}
 .dg-card:last-child:nth-child(odd){grid-column:1/-1}
 .dg-h{display:flex;align-items:center;gap:9px;font-weight:700;font-size:14.5px;color:var(--blue);margin-bottom:6px}
+.dg-live{border:1px solid var(--ok);border-left:4px solid var(--ok);border-radius:8px;background:var(--ok-bg);padding:12px 16px;display:flex;flex-direction:column;gap:8px}
+.dg-live p{margin:0;font-size:14px;line-height:1.5;max-width:70ch}
+.dg-live-h{display:flex;align-items:center;flex-wrap:wrap;gap:9px;font-weight:700;font-size:14.5px;color:var(--blue)}
+.dg-live-b{font:700 10.5px/1 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--solid);background:var(--ok);padding:5px 8px;border-radius:999px}
 .dg-goal{border:1px solid var(--gold-line);border-left:4px solid var(--gold-line);border-radius:8px;background:var(--solid);padding:12px 16px;font:400 16.5px/1.5 var(--f-display)}
 .dg-goal p{margin:0;max-width:65ch}.dg-goal p+p{margin-top:6px}
 .dg-goal-h{font:700 11px/1 var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--gold);margin-bottom:8px}
@@ -425,6 +429,7 @@ const ITEMS=[
        <input type="number" min="0" inputmode="numeric" id="t13-adopt" value="1" data-label="Διπλώματα Υιοθεσίας" aria-label="Διπλώματα Υιοθεσίας"> Υιοθεσίας</div>`)}
    </div>`),
    panel('13.3','Ψηφιακή Οργάνωση και Αναβάθμιση της Μεγάλης Γραμματείας',`<p class="dg-intro">Στο πλαίσιο της προσπάθειας εκσυγχρονισμού της Μεγάλης Γραμματείας της ΕΜΣτΕ, παρουσιάζονται οι ακόλουθες ψηφιακές λειτουργίες, με στόχο την καλύτερη οργάνωση, την ταχύτερη επικοινωνία και την απλούστευση των καθημερινών εργασιών.</p><div class="dg-grid">${DIG.map(([t,x],i)=>card(`<span class="dg-n">${i+1}</span>${t}`,x)).join('')}</div>
+     <div class="dg-live"><div class="dg-live-h"><span class="dg-live-b">Σε λειτουργία</span>Ψηφιακή Αίτηση Εισδοχής και Υιοθεσίας</div><p>Η ψηφιακή Αίτηση Εισδοχής και Υιοθεσίας έχει ήδη υλοποιηθεί και συνδεθεί με την επίσημη ιστοσελίδα της ΕΜΣτΕ. Βρίσκεται στο κάτω μέρος κάθε σελίδας, με τον τίτλο «Αίτηση Εισδοχής».</p><a class="doc" href="https://dskiad.github.io/NGLG-AITHSH/" target="_blank" rel="noopener">${DOC}Αίτηση Εισδοχής</a></div>
      <div class="dg-goal"><div class="dg-goal-h">Σκοπός</div><p>Η δημιουργία μιας ενιαίας Ψηφιακής Μεγάλης Γραμματείας, που θα συνδέει τη Μεγάλη Διοίκηση, τις Επαρχίες, τις Στοές και τους Αδελφούς.</p><p>Στόχος μας είναι λιγότερη γραφειοκρατία, ταχύτερη επικοινωνία, καλύτερη οργάνωση και αποτελεσματικότερη λειτουργία της ΕΜΣτΕ.</p></div>
      <label class="ck"><input type="checkbox" id="t13-dg" data-label="Παρουσιάστηκε η Ψηφιακή Οργάνωση της Μεγάλης Γραμματείας"><span>Παρουσιάστηκε στο Συμβούλιο</span></label>
      <label class="f" for="t13-dg-n">Παρατηρήσεις Συμβουλίου<textarea id="t13-dg-n" data-label="Παρατηρήσεις για την Ψηφιακή Οργάνωση"></textarea></label>`),
@@ -555,7 +560,7 @@ async function makePdf(btn,kind,fname){
       margin:[10,8,12,8],filename:fname,image:{type:'jpeg',quality:0.94},
       html2canvas:{scale:2,useCORS:true,backgroundColor:'#FFFFFF',scrollX:0,scrollY:0},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-      pagebreak:{mode:['css','legacy'],avoid:['.vote','.dg-goal','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
+      pagebreak:{mode:['css','legacy'],avoid:['.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
     }).from(host).toPdf().get('pdf').then(pdf=>{const n=pdf.internal.getNumberOfPages(),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight();
       for(let i=1;i<=n;i++){pdf.setPage(i);pdf.setFontSize(8);pdf.setTextColor(130);pdf.text(i+' / '+n,w-8,h-5,{align:'right'})}}).outputPdf('blob');
   }catch(e){toast('Δεν ήταν δυνατή η δημιουργία του PDF. Ελέγξτε τη σύνδεση και δοκιμάστε ξανά.')}
