@@ -195,6 +195,24 @@ input:focus,textarea:focus{border-color:var(--gold-line);outline:none;box-shadow
 .em-sum p{margin:0}.em-sum p+p{margin-top:6px}
 .pdf-mode .em-btn,.pdf-mode .em-status{display:none!important}
 .pdf-host .em-range{grid-template-columns:repeat(2,minmax(0,1fr))}
+.dg-card.dr-card{grid-column:1/-1}
+.dr-out{display:flex;flex-direction:column;gap:14px}
+.dr-kpis{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px}
+@media (max-width:560px){.dr-kpis{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.dr-kpi{border:1px solid var(--gold-line);border-radius:8px;background:var(--solid);padding:10px 8px;text-align:center}
+.dr-kpi b{display:block;font:700 26px/1.1 var(--f-num);color:var(--purple)}
+.dr-kpi span{display:block;margin-top:4px;font:600 11.5px/1.3 var(--f-body);color:var(--muted)}
+.dr-lead{margin:0;font:400 15px/1.55 var(--f-display)}
+.dr-sec h4{margin:0 0 6px;font:700 13px/1.3 var(--f-body);color:var(--blue);display:flex;align-items:center;gap:8px}
+.dr-sec h4 .dr-n{display:inline-grid;place-items:center;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:var(--purple);color:var(--solid);font:700 11.5px/1 var(--f-num)}
+.dr-t{width:100%;border-collapse:collapse;font-size:12.5px;line-height:1.4}
+.dr-t th{text-align:left;font:700 10.5px/1.2 var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--gold);padding:5px 8px;border-bottom:1.5px solid var(--gold-line)}
+.dr-t td{padding:5px 8px;border-bottom:1px solid var(--line);vertical-align:top}
+.dr-t tr:nth-child(even) td{background:var(--script-bg)}
+.dr-t td.num{font-family:var(--f-num);white-space:nowrap}
+.dr-empty{font-size:12.5px;color:var(--muted);margin:0}
+.dr-note{font-size:11px;color:var(--muted);margin:0}
+.pdf-host .dr-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
 .dg-live{border:1px solid var(--ok);border-left:4px solid var(--ok);border-radius:8px;background:var(--ok-bg);padding:12px 16px;display:flex;flex-direction:column;gap:8px}
 .dg-live p{margin:0;font-size:14px;line-height:1.5;max-width:70ch}
 .dg-live-h{display:flex;align-items:center;flex-wrap:wrap;gap:9px;font-weight:700;font-size:14.5px;color:var(--blue)}
@@ -451,6 +469,16 @@ const ITEMS=[
      ${card('Διπλώματα',`<div class="diplo">Εκδόθηκαν
        <input type="number" min="0" inputmode="numeric" id="t13-dip" value="16" data-label="Διπλώματα Διδασκάλων Τεκτόνων" aria-label="Διπλώματα Διδασκάλων Τεκτόνων"> διπλώματα Διδασκάλων Τεκτόνων και
        <input type="number" min="0" inputmode="numeric" id="t13-adopt" value="1" data-label="Διπλώματα Υιοθεσίας" aria-label="Διπλώματα Υιοθεσίας"> Υιοθεσίας</div>`)}
+     <div class="dg-card dr-card"><div class="dg-h">Αρχείο Μεγάλης Γραμματείας · Διατάγματα, Επισκέψεις, Κανονισμοί</div><div class="dg-body">
+       <div class="em-range">
+         <label class="f" for="t13-dr-from">Από<input type="date" id="t13-dr-from" value="2026-09-14" data-label="Αρχείο · Από"></label>
+         <label class="f" for="t13-dr-to">Έως<input type="date" id="t13-dr-to" data-label="Αρχείο · Έως"></label>
+         <button type="button" class="btn primary em-btn" id="drCalc">Υπολογισμός από το Αρχείο</button>
+       </div>
+       <div class="em-status" id="drStatus" aria-live="polite"></div>
+       <input type="hidden" id="t13-drive" data-label="Αρχείο · δεδομένα">
+       <div class="dr-out" id="drOut" hidden></div>
+     </div></div>
    </div>`),
    panel('13.3','Ψηφιακή Οργάνωση και Αναβάθμιση της Μεγάλης Γραμματείας',`<p class="dg-intro">Στο πλαίσιο της προσπάθειας εκσυγχρονισμού της Μεγάλης Γραμματείας της ΕΜΣτΕ, παρουσιάζονται οι ακόλουθες ψηφιακές λειτουργίες, με στόχο την καλύτερη οργάνωση, την ταχύτερη επικοινωνία και την απλούστευση των καθημερινών εργασιών.</p><div class="dg-grid">${DIG.map(([t,x],i)=>card(`<span class="dg-n">${i+1}</span>${t}`,x)).join('')}</div>
      <div class="dg-live"><div class="dg-live-h"><span class="dg-live-b">Σε λειτουργία</span>Ψηφιακή Αίτηση Εισδοχής και Υιοθεσίας</div><p>Η ψηφιακή Αίτηση Εισδοχής και Υιοθεσίας έχει ήδη υλοποιηθεί και συνδεθεί με την επίσημη ιστοσελίδα της ΕΜΣτΕ. Βρίσκεται στο κάτω μέρος κάθε σελίδας, με τον τίτλο «Αίτηση Εισδοχής».</p><a class="doc" href="https://dskiad.github.io/NGLG-AITHSH/" target="_blank" rel="noopener">${DOC}Αίτηση Εισδοχής</a></div>
@@ -497,7 +525,7 @@ function refresh(){
     document.getElementById('item-'+n).classList.toggle('is-done',on);
     dots.children[i].classList.toggle('done',on)});
   document.getElementById('pc').textContent=c;
-  emSummary();
+  emSummary();driveRender();
   form.querySelectorAll('[data-vote]').forEach(v=>{const id=v.dataset.vote,r=document.getElementById(id+'-res');
     const g=k=>document.getElementById(id+'-'+k).value, y=g('y'),k=g('k');
     if(y===''&&k===''){r.textContent='Εκκρεμεί';r.className='res';return}
@@ -559,6 +587,7 @@ function cloneFor(src){
   cc.forEach((cv,i)=>{const im=document.createElement('img');im.src=sc[i].toDataURL('image/png');im.className=cv.className;cv.replaceWith(im)});
   const si=src.querySelectorAll('input,textarea'),ci=c.querySelectorAll('input,textarea');
   ci.forEach((el,i)=>{const o=si[i];
+    if(o.type==='hidden'){el.remove();return}
     if(o.type==='checkbox'||o.type==='radio'){if(o.name)el.name=o.name+'-pdf';el.checked=o.checked;if(o.checked)el.setAttribute('checked','');else el.removeAttribute('checked');return}
     const sp=document.createElement('span');sp.className='pv'+(o.tagName==='TEXTAREA'?' pv-area':'')+(o.type==='number'?' pv-num':'');
     let v=o.value;if(o.type==='date'&&v){const [y,m,d]=v.split('-');v=d+'/'+m+'/'+y}
@@ -585,7 +614,7 @@ async function makePdf(btn,kind,fname){
       margin:[10,8,12,8],filename:fname,image:{type:'jpeg',quality:0.94},
       html2canvas:{scale:2,useCORS:true,backgroundColor:'#FFFFFF',scrollX:0,scrollY:0},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-      pagebreak:{mode:['css','legacy'],avoid:['.em-sum','.em-grid','.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
+      pagebreak:{mode:['css','legacy'],avoid:['.dr-kpis','.dr-t tr','.dr-sec h4','.em-sum','.em-grid','.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
     }).from(host).toPdf().get('pdf').then(pdf=>{const n=pdf.internal.getNumberOfPages(),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight();
       for(let i=1;i<=n;i++){pdf.setPage(i);pdf.setFontSize(8);pdf.setTextColor(130);pdf.text(i+' / '+n,w-8,h-5,{align:'right'})}}).outputPdf('blob');
   }catch(e){toast('Δεν ήταν δυνατή η δημιουργία του PDF. Ελέγξτε τη σύνδεση και δοκιμάστε ξανά.')}
@@ -671,6 +700,93 @@ function emSummary(){
     if(i>0)s+=`· η Γραμματεία απάντησε ή απέστειλε ${Math.round(o/i*100)} μηνύματα ανά 100 εισερχόμενα`;ps.push(s+'.')}
   if(inv!==null)ps.push(inv?`Από τα εισερχόμενα, ${nf(inv)} ${inv===1?'ήταν πρόσκληση':'ήταν προσκλήσεις'} (θέμα με «πρόσκληση»)${i?` — ${(inv/i*100).toLocaleString('el-GR',{maximumFractionDigits:1})}% των εισερχομένων`:''}.`:'Δεν ελήφθησαν προσκλήσεις στο διάστημα αυτό.');
   box.innerHTML=ps.map(x=>`<p>${esc(x)}</p>`).join('');box.hidden=false}
+/* Archive statistics from the Grand Secretariat's Drive folder (Google Drive connector, owner only) */
+const DRIVE_FOLDER='1kKR7v86jjs5QJE9-K5uUebvS6nZd9J03';
+const DQ={
+  dec:"title contains 'ΔΙΑΤΑΓΜΑ' or title contains 'Διάταγμα' or title contains 'Διαταγμα'",
+  kan:"title contains 'ΚΑΝΟΝΙΣΜΟΣ' or title contains 'Κανονισμός' or title contains 'Κανονισμος'",
+  vis:"title contains 'ΕΠΙΣΚΕΨΗ' or title contains 'Επίσκεψη' or title contains 'Επισκεψη' or title contains 'Εκπροσώπηση' or title contains 'ΕΚΠΡΟΣΩΠΗΣΗ' or title contains 'Εκπροσωπηση'"};
+const stripExt=t=>String(t).replace(/(\s*\(\d+\))?(\.(docx?|pdf|odt))+(\s*\(\d+\))?(\.(docx?|pdf))*$/i,'').replace(/\.(docx?|pdf)$/i,'').trim();
+const protoOf=t=>{const m=String(t).match(/^\s*(\d{2})\.?(\d{3})/);return m?m[1]+m[2]:''};
+const fileDate=f=>{const a=Date.parse(f.createdTime),b=Date.parse(f.modifiedTime);return Math.min(isNaN(a)?Infinity:a,isNaN(b)?Infinity:b)};
+const dmy=ms=>{const d=new Date(ms);return d.toLocaleDateString('el-GR',{timeZone:'Europe/Athens',day:'2-digit',month:'2-digit',year:'numeric'})};
+function lodgeOf(title){const t=stripExt(title);let m=t.match(/«([^»]+)»\s*υπ[’']?\s*αριθμ\.?\s*(\d+)?/);
+  if(m)return{l:m[1].trim(),n:m[2]||''};
+  m=t.match(/(?:ΕΙΣ\s+)?Στ\.?\s+(.+)$/);let r=m?m[1]:(t.match(/Μ\.?Δ\.?\s+(.+)$/)||[,''])[1];
+  r=r.split(/\s+την\s+|\s*\(/)[0].replace(/\s*\d{1,2}\s*[A-Za-zΑ-Ωα-ωά-ώ]{3,}\s*\d{2,4}$/,'').replace(/^ΕΙΣ\s+(Στ\.?\s+)?/,'').trim();
+  m=r.match(/^(.*?)\s+(\d+)$/);return m?{l:m[1],n:m[2]}:{l:r,n:''}}
+function visitDateOf(title){const t=stripExt(title);let m=t.match(/(?:την|το)\s+[^,]+,\s*(\d{1,2}\s+[^\s\d]+(?:\s+\d{4})?)/);if(m)return m[1];
+  m=t.match(/\s(\d{1,2})\s*([A-Za-zΑ-Ωα-ω]{3})\s*(\d{4})$/);if(m)return m[1]+' '+m[2]+' '+m[3];
+  m=t.match(/\((\d{1,2})\.(\d{1,2})\.(\d{4})\)/);if(m)return m[1].padStart(2,'0')+'/'+m[2].padStart(2,'0')+'/'+m[3];
+  m=t.match(/την\s+(\d{1,2}\s+\S+\s+\d{2,4})/);return m?m[1]:''}
+function decreeSubject(title){let t=stripExt(title).replace(/^\s*\d{2}\.?\d{3}(_\d{4})?\s*-?\s*/,'');
+  t=t.replace(/^(ΔΙΑΤΑΓΜΑ|Διάταγμα|Διαταγμα)[\s\-_]*(\d{3}|ΧΧΧ)?([\-_ ]\d{4})?[\s\-_]*/i,'');return t.replace(/_/g,' ').replace(/\s{2,}/g,' ').trim()}
+/* one entry per document: .docx and .pdf copies and twin protocol numbers collapse together */
+function groupFiles(files,keysOf){const groups=[],idx=new Map();
+  files.forEach(f=>{const ks=keysOf(f).filter(Boolean);let g=null;ks.forEach(k=>{if(!g&&idx.has(k))g=idx.get(k)});
+    if(!g){g={files:[]};groups.push(g)}g.files.push(f);ks.forEach(k=>idx.set(k,g))});
+  return groups.map(g=>{const best=g.files.find(f=>/\.pdf$/i.test(f.title)&&!/\(\d+\)/.test(f.title))||g.files.find(f=>/\.pdf$/i.test(f.title))||g.files[0];
+    return{f:best,date:Math.min(...g.files.map(fileDate))}})}
+const decNo=t=>{const m=String(t).match(/(?:ΔΙΑΤΑΓΜΑ|Διάταγμα|Διαταγμα)[\s\-_]*(\d{3})/i);return m?m[1]:''};
+async function driveStats(mcp,from,to,progress){
+  const start=athensMidnight(from),end=athensMidnight(shiftDay(to,1));
+  const list=async q=>{const out=[];let tok='',n=0;
+    do{const input={query:`parentId = '${DRIVE_FOLDER}' and (${q})`,pageSize:100,excludeContentSnippets:true,...(tok?{pageToken:tok}:{})};
+      let r;try{r=(await mcp.callTool('Google Drive','search_files',input)).payload||{}}
+      catch(e){if(e&&e.retryable){await new Promise(z=>setTimeout(z,(e.retryAfterMs||1500)+Math.random()*800));r=(await mcp.callTool('Google Drive','search_files',input)).payload||{}}else throw e}
+      (r.files||[]).forEach(f=>{if(!out.some(x=>x.id===f.id))out.push(f)});tok=r.nextPageToken||'';n++;progress();
+    }while(tok&&n<40);return out};
+  const inRange=g=>g.date>=start&&g.date<end;
+  const dec=groupFiles(await list(DQ.dec),f=>['d'+decNo(f.title),'p'+protoOf(f.title)].filter(k=>k.length>1)).filter(inRange)
+    .map(g=>({n:decNo(g.f.title),p:protoOf(g.f.title),t:decreeSubject(g.f.title),d:g.date,u:g.f.viewUrl||''}))
+    .sort((a,b)=>(+a.n||9e9)-(+b.n||9e9)||a.d-b.d);
+  const kan=groupFiles((await list(DQ.kan)).filter(f=>/εσωτερικ/i.test(plainTxt(f.title))),f=>['p'+protoOf(f.title)].filter(k=>k.length>1)).filter(inRange)
+    .map(g=>{const t=stripExt(g.f.title).replace(/^\s*\d{2}\.?\d{3}(_\d{4})?\s*-?\s*/,'').replace(/ΕΣΩΤΕΡΙΚΟΣ\s+ΚΑΝΟΝΙΣΜΟΣ|Εσωτερικός\s+Κανονισμός/i,'').trim();return{l:t||'—',p:protoOf(g.f.title),d:g.date,u:g.f.viewUrl||''}})
+    .sort((a,b)=>a.d-b.d);
+  const vis=groupFiles(await list(DQ.vis),f=>['p'+protoOf(f.title)].filter(k=>k.length>1)).filter(inRange);
+  const off=[],repr=[];
+  vis.forEach(g=>{const pt=plainTxt(g.f.title),lo=lodgeOf(g.f.title),row={l:lo.l,n:lo.n,v:visitDateOf(g.f.title),p:protoOf(g.f.title),d:g.date,u:g.f.viewUrl||''};
+    if(/κπροσωπ/.test(pt))repr.push(row);else if(/επισκεψ/.test(pt))off.push(row)});
+  const byDate=(a,b)=>a.d-b.d;off.sort(byDate);repr.sort(byDate);
+  return{from,to,dec,kan,off,rep:repr}}
+function driveRender(){
+  const box=$('drOut');let D=null;try{D=JSON.parse($('t13-drive').value||'null')}catch(e){}
+  if(!D){box.hidden=true;box.innerHTML='';return}
+  const E=s=>esc(s==null?'':s),fd=v=>fmtD(v);
+  const pl=(n,one,many)=>n===1?one:many.replace('#',nf(n));
+  const kpi=(n,l)=>`<div class="dr-kpi"><b>${nf(n)}</b><span>${l}</span></div>`;
+  const sec=(title,n,head,rows)=>`<div class="dr-sec"><h4><span class="dr-n">${nf(n)}</span>${title}</h4>${n?`<table class="dr-t"><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`:'<p class="dr-empty">Κανένα στο διάστημα αυτό.</p>'}</div>`;
+  const lodge=r=>`«${E(r.l)}»${r.n?` Νο ${E(r.n)}`:''}`;
+  box.innerHTML=
+    `<div class="dr-kpis">${kpi(D.dec.length,'Διατάγματα')}${kpi(D.off.length,'Επίσημες Επισκέψεις Μ.Δ.')}${kpi(D.rep.length,'Εκπροσωπήσεις Μ.Δ.')}${kpi(D.kan.length,'Εγκρίσεις Εσωτ. Κανονισμών')}</div>`+
+    `<p class="dr-lead">Από ${E(fd(D.from))} έως ${E(fd(D.to))} ${pl(D.dec.length,'εκδόθηκε 1 Διάταγμα','εκδόθηκαν # Διατάγματα')}${D.dec.length?` (${D.dec.map(x=>x.n).filter(Boolean).map(E).join(', ')})`:''}, ${pl(D.off.length,'ορίστηκε 1 Επίσημη Επίσκεψη','ορίστηκαν # Επίσημες Επισκέψεις')} και ${pl(D.rep.length,'1 Εκπροσώπηση','# Εκπροσωπήσεις')} του Μεγάλου Διδασκάλου, και ${pl(D.kan.length,'εγκρίθηκε 1 Εσωτερικός Κανονισμός Στοάς','εγκρίθηκαν # Εσωτερικοί Κανονισμοί Στοών')}.</p>`+
+    sec('Διατάγματα',D.dec.length,['Αρ.','Πρωτ.','Θέμα','Ημ/νία'],D.dec.map(r=>`<tr><td class="num">${E(r.n||'—')}</td><td class="num">${E(r.p)}</td><td>${E(r.t)}</td><td class="num">${E(dmy(r.d))}</td></tr>`))+
+    sec('Επίσημες Επισκέψεις Μεγάλου Διδασκάλου',D.off.length,['Στοά','Ημ/νία επίσκεψης','Πρωτ.'],D.off.map(r=>`<tr><td>${lodge(r)}</td><td>${E(r.v||'—')}</td><td class="num">${E(r.p)}</td></tr>`))+
+    sec('Εκπροσωπήσεις Μεγάλου Διδασκάλου',D.rep.length,['Στοά','Ημ/νία επίσκεψης','Πρωτ.'],D.rep.map(r=>`<tr><td>${lodge(r)}</td><td>${E(r.v||'—')}</td><td class="num">${E(r.p)}</td></tr>`))+
+    sec('Εγκρίσεις Εσωτερικών Κανονισμών',D.kan.length,['Στοά','Πρωτ.','Ημ/νία'],D.kan.map(r=>`<tr><td>${E(r.l)}</td><td class="num">${E(r.p)}</td><td class="num">${E(dmy(r.d))}</td></tr>`))+
+    `<p class="dr-note">Πηγή: φάκελος Αρχείου της Μεγάλης Γραμματείας στο Google Drive · κάθε έγγραφο μετράει μία φορά (.docx/.pdf).</p>`;
+  box.hidden=false}
+$('drCalc').addEventListener('click',async()=>{
+  const st=$('drStatus'),b=$('drCalc');let f=$('t13-dr-from').value,t=$('t13-dr-to').value;
+  if(!f){toast('Επιλέξτε ημερομηνία «Από»');return}
+  if(!t){t=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Athens'}).format(new Date());$('t13-dr-to').value=t}
+  if(f>t){toast('Η ημερομηνία «Από» είναι μετά την «Έως»');return}
+  const lbl=b.textContent;b.disabled=true;b.textContent='Υπολογισμός…';
+  try{
+    const mcp=window.claude&&window.claude.use?await window.claude.use('mcp').catch(()=>null):null;
+    if(!mcp){st.textContent='Ο υπολογισμός από το Αρχείο γίνεται από τη σελίδα του claude.ai.';return}
+    const u=await window.claude.use('user').catch(()=>null);
+    if(!(u&&await u.isOwner().catch(()=>false))){st.textContent='Τα στατιστικά του Αρχείου υπολογίζονται από τον Μεγάλο Γραμματέα. Εμφανίζονται εδώ μόλις υπολογιστούν.';return}
+    let calls=0;st.textContent='Αναζήτηση στο Αρχείο (Google Drive)…';
+    try{const D=await driveStats(mcp,f,t,()=>{st.textContent=`Αναζήτηση στο Αρχείο (Google Drive)… ${++calls}`});
+      $('t13-drive').value=JSON.stringify(D);
+      $('t13-s1').value=D.off.length;$('t13-s2').value=D.rep.length;$('t13-s3').value=D.dec.length;
+      $('t13-s3-list').value=D.dec.map(x=>x.n).filter(Boolean).join(', ');
+      refresh();save();
+      st.textContent='Ενημερώθηκε '+new Date().toLocaleString('el-GR',{dateStyle:'short',timeStyle:'short'})+' από το Google Drive.'}
+    catch(e){st.textContent=mcpMsg(e).replace(/Gmail/g,'Google Drive')}
+  }finally{b.disabled=ro;b.textContent=lbl}});
+
 /* Counting through the viewer's Gmail connector (claude.ai): the mailbox of the Grand Secretariat */
 const OWN=['grandsecretary@nglgreece.gr','info@nglgreece.gr'];
 const normAddr=a=>{a=String(a||'').toLowerCase().trim();const m=a.match(/[a-z0-9._%+\-]+@[a-z0-9.\-]+\.[a-z]{2,}/);if(!m)return'';const [l,d]=m[0].split('@');return l.replace(/\./g,'')+'@'+d};
@@ -747,7 +863,7 @@ const clean=h=>{const t=document.createElement('template');t.innerHTML=String(h)
 function setRO(){if(ro)return;ro=true;
   fields().forEach(el=>el.disabled=true);eds().forEach(el=>el.setAttribute('contenteditable','false'));
   form.querySelectorAll('[data-unan]').forEach(b=>b.disabled=true);
-  ['resetBtn','sigClear','emCalc'].forEach(i=>document.getElementById(i).disabled=true);pad.style.pointerEvents='none';
+  ['resetBtn','sigClear','emCalc','drCalc'].forEach(i=>document.getElementById(i).disabled=true);pad.style.pointerEvents='none';
   syncNote.textContent='Μόνο ανάγνωση · ζωντανή προβολή των κοινόχρηστων καταχωρήσεων.'}
 function queueSync(d){if(!ST||ro)return;
   Object.keys({...d,...synced}).forEach(k=>{const v=k in d?d[k]:null;if(v!==(k in synced?synced[k]:null)||dirty.has(k)){pend[k]=v;dirty.add(k)}});
