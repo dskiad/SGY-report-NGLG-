@@ -221,6 +221,66 @@ input:focus,textarea:focus{border-color:var(--gold-line);outline:none;box-shadow
 .dr-empty{font-size:12.5px;color:var(--muted);margin:0}
 .dr-note{font-size:11px;color:var(--muted);margin:0}
 .pdf-host .dr-kpis{grid-template-columns:repeat(4,minmax(0,1fr))}
+/* ===== Official report styling (Item 13) ===== */
+.rep13{--navy:#14284B;--navy-soft:#EEF1F6;--rule:#9AA6BA}
+:root[data-theme="dark"] .rep13{--navy:#AFC3EA;--navy-soft:#1B2232;--rule:#4A5670}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) .rep13{--navy:#AFC3EA;--navy-soft:#1B2232;--rule:#4A5670}}
+.rep-doc{display:flex;flex-direction:column;gap:12px}
+.rep-class{text-align:center;font:700 10.5px/1 var(--f-body);letter-spacing:.22em;color:var(--navy);border-top:1.5px solid var(--navy);border-bottom:1.5px solid var(--navy);padding:5px 0}
+.rep-class-b{margin-top:14px}
+.rep13 .rep-head,.pdf-host .rep-head{display:flex;flex-direction:column;align-items:stretch;gap:10px;text-align:left;border:1.5px solid var(--navy);border-radius:2px;padding:16px 18px;background:var(--solid)}
+.rep13 .rep-head::after{display:none}
+.rep-lh{display:flex;align-items:center;gap:14px;border-bottom:1px solid var(--rule);padding-bottom:10px}
+.seal-mini{width:64px;height:64px;flex:none}
+.rep13 .rep-org{font:700 13px/1.3 var(--f-body);letter-spacing:.16em;text-transform:uppercase;color:var(--navy)}
+.rep-org-sub{font:600 11.5px/1.3 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);margin-top:2px}
+.rep13 .rep-title{font:700 clamp(19px,3.6vw,24px)/1.25 var(--f-display);color:var(--navy);text-align:center;text-transform:uppercase;letter-spacing:.04em;padding:4px 0 2px}
+.memo{width:100%;border-collapse:collapse;font-size:13.5px}
+.memo th{width:118px;text-align:left;vertical-align:middle;font:700 11px/1.2 var(--f-body);letter-spacing:.12em;color:var(--navy);padding:6px 10px 6px 0;border-bottom:1px solid var(--line)}
+.memo td{padding:6px 0;border-bottom:1px solid var(--line);color:var(--ink)}
+.memo .rep-date,.memo .rep-per{justify-content:flex-start;margin:0;order:0}
+.memo .rep-per label{font-size:12.5px}
+.memo-in{max-width:200px;font-family:var(--f-num)!important}
+.rep13 .rep-btn{align-self:center}
+.toc{border:1px solid var(--rule);border-radius:2px;padding:10px 14px;background:var(--solid)}
+.toc-h{font:700 11px/1 var(--f-body);letter-spacing:.18em;text-transform:uppercase;color:var(--navy);margin-bottom:6px}
+.toc ol{list-style:none;margin:0;padding:0;columns:2;column-gap:24px;font-size:13px}
+@media (max-width:560px){.toc ol{columns:1}}
+.toc li{padding:2px 0;break-inside:avoid}.toc li span{display:inline-block;min-width:26px;font:700 12.5px/1 var(--f-num);color:var(--navy)}
+.rep13 .panel{background:var(--solid);border:0;border-top:2px solid var(--navy);border-radius:0}
+.rep13 .panel summary{padding:10px 2px 6px}
+.rep13 .panel .pn,.sig-sec .pn{background:none;color:var(--navy);padding:0;font:700 15px/1 var(--f-num)}
+.rep13 .panel .pn::after,.sig-sec .pn::after{content:"."}
+.rep13 .panel .pt,.sig-sec .pt{font:700 14px/1.3 var(--f-body);letter-spacing:.1em;text-transform:uppercase;color:var(--navy)}
+.rep13 .panel-b{padding:2px 2px 14px}
+.sig-sec{display:flex;align-items:center;gap:10px;border-top:2px solid var(--navy);padding:10px 2px 0;margin-top:6px}
+.sn{display:inline-block;min-width:30px;margin-right:6px;font:700 12.5px/1 var(--f-num);color:var(--navy)}
+.rep13 .dg-card{border-radius:2px;border-color:var(--line);background:var(--solid)}
+.rep13 .dg-h{color:var(--navy)}
+.sec-intro{margin:0 0 8px;font:400 14.5px/1.5 var(--f-display);color:var(--ink);max-width:75ch}
+.sec-empty{margin:4px 0;font-size:13px;color:var(--muted);font-style:italic}
+.sub-h{margin:14px 0 4px;font:700 13.5px/1.3 var(--f-body);color:var(--navy);display:flex;align-items:baseline;gap:4px}
+.sub-h em{font-style:normal;font:600 12px/1 var(--f-num);color:var(--muted);margin-left:6px}
+.tcap{margin:10px 0 4px;font:700 11.5px/1.3 var(--f-body);color:var(--navy);letter-spacing:.02em}
+.rep13 .dr-t{border:1px solid var(--rule)}
+.rep13 .dr-t th{background:var(--navy-soft);color:var(--navy);border-bottom:1px solid var(--rule);font-size:10.5px}
+.rep13 .dr-t td{border-bottom:1px solid var(--line)}
+.rep13 .dr-t tr:nth-child(even) td{background:transparent}
+.rep13 .dr-t .r{text-align:right}
+.rep13 .dr-sec h4{color:var(--navy)}
+.rep13 .dr-sec h4 .dr-n,.rep13 .dr-kpi b{color:var(--navy)}
+.rep13 .dr-sec h4 .dr-n{background:var(--navy);color:var(--solid)}
+.rep13 .dr-kpi{border-color:var(--rule);border-radius:2px}
+.sum-kpis{grid-template-columns:repeat(4,minmax(0,1fr));margin-bottom:10px}
+.sum-txt p{margin:0 0 6px;font:400 15px/1.55 var(--f-display);max-width:80ch}
+.ecell{display:inline-block;min-width:90px;border-radius:2px;outline:1px dashed transparent;padding:0 2px}
+.ecell:hover,.ecell:focus{outline-color:var(--rule)}
+.ecell.ecell-empty:empty::before{content:attr(data-ph);color:var(--muted);font-style:italic}
+.pdf-mode .ecell{outline:none}
+.pdf-mode .ecell.ecell-empty:empty::before{content:"—";font-style:normal}
+.st-ok{font-weight:700;color:var(--ok)}.st-no{font-weight:700;color:var(--bad)}
+.est{color:var(--muted);margin-left:2px}
+.pdf-report .rep-doc{gap:10px}
 .dg-live{border:1px solid var(--ok);border-left:4px solid var(--ok);border-radius:8px;background:var(--ok-bg);padding:12px 16px;display:flex;flex-direction:column;gap:8px}
 .dg-live p{margin:0;font-size:14px;line-height:1.5;max-width:70ch}
 .dg-live-h{display:flex;align-items:center;flex-wrap:wrap;gap:9px;font-weight:700;font-size:14.5px;color:var(--blue)}
@@ -460,10 +520,30 @@ const ITEMS=[
  {t:'Ανακοινώσεις Μεγάλου Καγκελαρίου',b:[doc('https://drive.google.com/file/d/1oYOQf0CWQApTr_5vMikzn6JE2HFWnjNC/view?usp=drive_link','Ανακοινώσεις'),area('t11-n','Σημειώσεις')]},
  {t:'Ανακοινώσεις Μεγάλου Γραμματέως Εκπαιδεύσεως',b:[area('t12-n','Σημειώσεις')]},
  {t:'Ανακοινώσεις Μεγάλου Γραμματέως',b:[
-   `<div class="rep-head"><div class="rep-org">Εθνική Μεγάλη Στοά της Ελλάδος</div>
-     <div class="rep-title">Αναφορά Μεγάλου Γραμματέως προς το ΣΓΥ</div>
-     <label class="rep-date" for="t13-date"><span>Ημερομηνία</span><input type="date" id="t13-date" required data-label="Ημερομηνία αναφοράς"><em class="rep-ask">Επιλέξτε ημερομηνία</em></label><div class="rep-per"><span>Περίοδος αναφοράς</span><label for="t13-per-from">Από<input type="date" id="t13-per-from" value="2026-09-14" data-label="Περίοδος αναφοράς · Από"></label><label for="t13-per-to">Έως<input type="date" id="t13-per-to" data-label="Περίοδος αναφοράς · Έως"></label></div><button type="button" class="btn primary rep-btn" id="repPdfBtn">PDF Αναφοράς ΜΓραμ</button></div>`,
-   panel('13.1','Ανακοινώσεις',`<div class="who">${MIC}Εκφωνεί ο Γραμματέας<span class="edit-hint">✎ επεξεργάσιμο</span></div><div class="dg-grid">${[
+   `<div class="rep-doc">
+     <div class="rep-class">ΕΣΩΤΕΡΙΚΟ ΕΓΓΡΑΦΟ · ΓΙΑ ΤΑ ΜΕΛΗ ΤΟΥ ΣΓΥ</div>
+     <div class="rep-head">
+       <div class="rep-lh"><img class="seal-mini" alt="Σφραγίδα Μεγάλης Γραμματείας"><div><div class="rep-org">Εθνική Μεγάλη Στοά της Ελλάδος</div><div class="rep-org-sub">Μεγάλη Γραμματεία</div></div></div>
+       <div class="rep-title">Αναφορά Μεγάλου Γραμματέως προς το ΣΓΥ</div>
+       <table class="memo"><tbody>
+         <tr><th>ΠΡΟΣ</th><td>Το Συμβούλιο (ΣΓΥ) της Εθνικής Μεγάλης Στοάς της Ελλάδος</td></tr>
+         <tr><th>ΑΠΟ</th><td>Τον Μέγα Γραμματέα</td></tr>
+         <tr><th>ΘΕΜΑ</th><td>Πεπραγμένα και στατιστικά στοιχεία της Μεγάλης Γραμματείας</td></tr>
+         <tr><th>ΣΥΝΕΔΡΙΑΣΗ</th><td>Τακτική Συνεδρίαση Συμβουλίου · Δευτέρα 2 Νοεμβρίου 2026</td></tr>
+         <tr><th>ΗΜΕΡΟΜΗΝΙΑ</th><td><label class="rep-date" for="t13-date"><input type="date" id="t13-date" required data-label="Ημερομηνία αναφοράς"><em class="rep-ask">Επιλέξτε ημερομηνία</em></label></td></tr>
+         <tr><th>ΠΕΡΙΟΔΟΣ</th><td><div class="rep-per"><label for="t13-per-from">Από<input type="date" id="t13-per-from" value="2026-09-14" data-label="Περίοδος αναφοράς · Από"></label><label for="t13-per-to">Έως<input type="date" id="t13-per-to" data-label="Περίοδος αναφοράς · Έως"></label></div></td></tr>
+         <tr><th>ΑΡ. ΠΡΩΤ.</th><td><input type="text" id="t13-proto" class="memo-in" placeholder="π.χ. 20576" data-label="Αριθμός πρωτοκόλλου αναφοράς"></td></tr>
+       </tbody></table>
+       <button type="button" class="btn primary rep-btn" id="repPdfBtn">PDF Αναφοράς ΜΓραμ</button>
+     </div>
+     <div class="toc"><div class="toc-h">Περιεχόμενα</div><ol>
+       <li><span>1.</span>Σύνοψη</li><li><span>2.</span>Ανακοινώσεις</li><li><span>3.</span>Ηλεκτρονική Αλληλογραφία</li>
+       <li><span>4.</span>Προσκλήσεις Στοών ανά Επαρχία</li><li><span>5.</span>Αναφορές Επαρχιακών Μεγάλων Στοών</li><li><span>6.</span>Ιστοσελίδες Στοών</li>
+       <li><span>7.</span>Αρχείο: Διατάγματα, Επισκέψεις, Κανονισμοί</li><li><span>8.</span>Λοιπές Ενέργειες</li><li><span>9.</span>Ψηφιακή Οργάνωση και Αναβάθμιση</li><li><span>10.</span>Υπογραφή</li></ol></div>
+   </div>`,
+   panel('1','Σύνοψη',`<div id="sumOut" class="sum-out"></div>`),
+
+   panel('2','Ανακοινώσεις',`<div class="who">${MIC}Εκφωνεί ο Γραμματέας<span class="edit-hint">✎ επεξεργάσιμο</span></div><div class="dg-grid">${[
      ['a1','Αίτηση 23 Διδασκάλων','Λήψη αίτησης για χορήγηση Χάρτας Λειτουργίας Στοάς στον Πειραιά υπό την ονομασία «Άτλας» Νο 118 (30/06/26). Ακολουθεί το Διάταγμα 517.'],
      ['a2','Έκτακτη Επαρχιακή Μεγάλη Συνέλευση Πειραιώς','14/09/2026<br>Εγκαταστάθηκε ο Πσεβ. Αδ. Βασίλειος Ζαχαριάς.'],
      ['a8','Έκτακτη Περιφερειακή Μεγάλη Συνέλευση Κύπρου','19/09/2026<br>Εγκατάσταση νέου Περιφερειακού Μεγάλου Διδασκάλου, του Πσεβ. Αδ. Θεοδώρου Θεοδώρου.'],
@@ -472,9 +552,9 @@ const ITEMS=[
      ['a5','Ημερίδα Ενημέρωσης Γραμματέων Στοών','Παρασκευή 13 Νοεμβρίου, Τεκτονικό Μέγαρο Πειραιώς.'],
      ['a6','Επιστολή Σ.Σ. «Απολλώνιος ο Ρόδιος» Νο 80 (19/10/2026)','Επιστολή Σεβτ. Αδ. Ιωάννη Μπενετάτου προς τον Μ.Δ. για ονομασία του Τεκτονικού Μεγάρου Ρόδου ως «Τεκτονικό Μέγαρο Νικόλαος Σαββόπουλος».'],
      ['a7','Αιτήσεις Ενδιαφέροντος','Βασίλειος Σταματέλος (11/10/2026)<br>Μητσόπουλος Στυλιανός (08/10/2026 – Στοά Καβάλας)']
-   ].map(([id,t,x])=>card(t,`<div class="ed" contenteditable="true" spellcheck="true" data-edit="${id}">${x}</div>`)).join('')}</div>`),
-   panel('13.2','Ενέργειες',`<div class="dg-grid">
-     <div class="dg-card em-card"><div class="dg-h">Ηλεκτρονική αλληλογραφία Γραμματείας</div><div class="dg-body">
+   ].map(([id,t,x],n)=>card(`<span class="sn">2.${n+1}</span>${t}`,`<div class="ed" contenteditable="true" spellcheck="true" data-edit="${id}">${x}</div>`)).join('')}</div>`),
+   panel('3','Ηλεκτρονική Αλληλογραφία',`<div class="dg-grid">
+     <div class="dg-card em-card"><div class="dg-h"><span class="sn">3.1</span>Κίνηση ηλεκτρονικού ταχυδρομείου</div><div class="dg-body">
        <div class="em-range">
          <label class="f" for="t13-em-from">Από<input type="date" id="t13-em-from" value="2026-09-14" data-label="Στατιστικά email · Από"></label>
          <label class="f" for="t13-em-to">Έως<input type="date" id="t13-em-to" data-label="Στατιστικά email · Έως"></label>
@@ -491,13 +571,12 @@ const ITEMS=[
        <input type="hidden" id="t13-em-detail" data-label="Email · ανά διεύθυνση">
        <div class="em-sum" id="emSum" hidden></div>
      </div></div>
-     ${card('Επιστολές',`<label class="ck"><input type="checkbox" id="t13-c1" data-label="Επιστολή για τη βελτιστοποίηση και τον διαχωρισμό της ηλεκτρονικής αλληλογραφίας της Μεγάλης Στοάς με το info@nglgreece.gr"><span>Βελτιστοποίηση και διαχωρισμός ηλεκτρονικής αλληλογραφίας της Μεγάλης Στοάς με το <b>info@nglgreece.gr</b></span></label>
-       <label class="ck"><input type="checkbox" id="t13-c2" data-label="Επιστολή ζήτησης επικαιροποίησης για τη Μηνιαία Αναφορά Πεπραγμένων Επαρχιών της ΕΜΣτΕ"><span>Ζήτηση επικαιροποίησης για τη Μηνιαία Αναφορά Πεπραγμένων Επαρχιών της ΕΜΣτΕ</span></label>`)}
-     ${card('Στατιστικά',[['t13-s1','Επισκέψεις Μ.Δ.'],['t13-s2','Εκπροσωπήσεις Μ.Α.Ξ. για Μ.Δ.'],['t13-s3','Διατάγματα','5']].map(([i,l,v])=>`<div class="stat"><label class="ck"><input type="checkbox" id="${i}-c" data-label="Στατιστικά · ${l} (ανακοινώθηκε)"><span>${l}</span></label><input type="number" min="0" inputmode="numeric" id="${i}" data-label="Αριθμός · ${l}" aria-label="Αριθμός · ${l}"${v?` value="${v}"`:''}></div>`).join('')+`<label class="f" for="t13-s3-list">Αριθμοί Διαταγμάτων<input type="text" id="t13-s3-list" data-label="Αριθμοί Διαταγμάτων" value="513, 514, 515, 516, 517"></label>`)}
-     ${card('Διπλώματα',`<div class="diplo">Εκδόθηκαν
-       <input type="number" min="0" inputmode="numeric" id="t13-dip" value="16" data-label="Διπλώματα Διδασκάλων Τεκτόνων" aria-label="Διπλώματα Διδασκάλων Τεκτόνων"> διπλώματα Διδασκάλων Τεκτόνων και
-       <input type="number" min="0" inputmode="numeric" id="t13-adopt" value="1" data-label="Διπλώματα Υιοθεσίας" aria-label="Διπλώματα Υιοθεσίας"> Υιοθεσίας</div>`)}
-     <div class="dg-card dr-card"><div class="dg-h">Αρχείο Μεγάλης Γραμματείας · Διατάγματα, Επισκέψεις, Κανονισμοί</div><div class="dg-body">
+   </div>`),
+   panel('4','Προσκλήσεις Στοών ανά Επαρχία',`<p class="sec-intro">Προσκλήσεις εργασιών που περιήλθαν στη Μεγάλη Γραμματεία κατά την περίοδο αναφοράς, ανά Επαρχία αποστολής. Πηγή: ηλεκτρονικό ταχυδρομείο (ενότητα 3).</p><div id="invOut" class="sec-out"></div>`),
+   panel('5','Αναφορές Επαρχιακών Μεγάλων Στοών',`<p class="sec-intro">Αναφορές των Επαρχιακών Γραμματειών (μηνιαίες αναφορές, αναφορές πεπραγμένων και μεταβολών) που ελήφθησαν κατά την περίοδο αναφοράς, με τον μήνα στον οποίο αφορούν.</p><div id="repOut" class="sec-out"></div>`),
+   panel('6','Ιστοσελίδες Στοών',`<p class="sec-intro">Μηνύματα Στοών, Επαρχιών ή αξιωματικών με αντικείμενο ιστοσελίδα, website, διαδίκτυο ή μέσα κοινωνικής δικτύωσης.</p><div id="webOut" class="sec-out"></div>`),
+   panel('7','Αρχείο: Διατάγματα, Επισκέψεις, Κανονισμοί',`<div class="dg-grid">
+     <div class="dg-card dr-card"><div class="dg-h"><span class="sn">7.1</span>Στοιχεία από το Αρχείο της Μεγάλης Γραμματείας (Google Drive)</div><div class="dg-body">
        <div class="em-range">
          <label class="f" for="t13-dr-from">Από<input type="date" id="t13-dr-from" value="2026-09-14" data-label="Αρχείο · Από"></label>
          <label class="f" for="t13-dr-to">Έως<input type="date" id="t13-dr-to" data-label="Αρχείο · Έως"></label>
@@ -508,18 +587,26 @@ const ITEMS=[
        <div class="dr-out" id="drOut" hidden></div>
      </div></div>
    </div>`),
-   panel('13.3','Ψηφιακή Οργάνωση και Αναβάθμιση της Μεγάλης Γραμματείας',`<p class="dg-intro">Στο πλαίσιο της προσπάθειας εκσυγχρονισμού της Μεγάλης Γραμματείας της ΕΜΣτΕ, παρουσιάζονται οι ακόλουθες ψηφιακές λειτουργίες, με στόχο την καλύτερη οργάνωση, την ταχύτερη επικοινωνία και την απλούστευση των καθημερινών εργασιών.</p><div class="dg-grid">${DIG.map(([t,x],i)=>card(`<span class="dg-n">${i+1}</span>${t}`,x)).join('')}</div>
+   panel('8','Λοιπές Ενέργειες',`<div class="dg-grid">
+     ${card('<span class="sn">8.1</span>Επιστολές',`<label class="ck"><input type="checkbox" id="t13-c1" data-label="Επιστολή για τη βελτιστοποίηση και τον διαχωρισμό της ηλεκτρονικής αλληλογραφίας της Μεγάλης Στοάς με το info@nglgreece.gr"><span>Βελτιστοποίηση και διαχωρισμός ηλεκτρονικής αλληλογραφίας της Μεγάλης Στοάς με το <b>info@nglgreece.gr</b></span></label>
+       <label class="ck"><input type="checkbox" id="t13-c2" data-label="Επιστολή ζήτησης επικαιροποίησης για τη Μηνιαία Αναφορά Πεπραγμένων Επαρχιών της ΕΜΣτΕ"><span>Ζήτηση επικαιροποίησης για τη Μηνιαία Αναφορά Πεπραγμένων Επαρχιών της ΕΜΣτΕ</span></label>`)}
+     ${card('<span class="sn">8.2</span>Στατιστικά',[['t13-s1','Επισκέψεις Μ.Δ.'],['t13-s2','Εκπροσωπήσεις Μ.Α.Ξ. για Μ.Δ.'],['t13-s3','Διατάγματα','5']].map(([i,l,v])=>`<div class="stat"><label class="ck"><input type="checkbox" id="${i}-c" data-label="Στατιστικά · ${l} (ανακοινώθηκε)"><span>${l}</span></label><input type="number" min="0" inputmode="numeric" id="${i}" data-label="Αριθμός · ${l}" aria-label="Αριθμός · ${l}"${v?` value="${v}"`:''}></div>`).join('')+`<label class="f" for="t13-s3-list">Αριθμοί Διαταγμάτων<input type="text" id="t13-s3-list" data-label="Αριθμοί Διαταγμάτων" value="513, 514, 515, 516, 517"></label>`)}
+     ${card('<span class="sn">8.3</span>Διπλώματα',`<div class="diplo">Εκδόθηκαν
+       <input type="number" min="0" inputmode="numeric" id="t13-dip" value="16" data-label="Διπλώματα Διδασκάλων Τεκτόνων" aria-label="Διπλώματα Διδασκάλων Τεκτόνων"> διπλώματα Διδασκάλων Τεκτόνων και
+       <input type="number" min="0" inputmode="numeric" id="t13-adopt" value="1" data-label="Διπλώματα Υιοθεσίας" aria-label="Διπλώματα Υιοθεσίας"> Υιοθεσίας</div>`)}
+   </div>`),
+   panel('9','Ψηφιακή Οργάνωση και Αναβάθμιση της Μεγάλης Γραμματείας',`<p class="dg-intro">Στο πλαίσιο της προσπάθειας εκσυγχρονισμού της Μεγάλης Γραμματείας της ΕΜΣτΕ, παρουσιάζονται οι ακόλουθες ψηφιακές λειτουργίες, με στόχο την καλύτερη οργάνωση, την ταχύτερη επικοινωνία και την απλούστευση των καθημερινών εργασιών.</p><div class="dg-grid">${DIG.map(([t,x],i)=>card(`<span class="sn">9.${i+1}</span>${t}`,x)).join('')}</div>
      <div class="dg-live"><div class="dg-live-h"><span class="dg-live-b">Σε λειτουργία</span>Ψηφιακή Αίτηση Εισδοχής και Υιοθεσίας</div><p>Η ψηφιακή Αίτηση Εισδοχής και Υιοθεσίας έχει ήδη υλοποιηθεί και συνδεθεί με την επίσημη ιστοσελίδα της ΕΜΣτΕ. Βρίσκεται στο κάτω μέρος κάθε σελίδας, με τον τίτλο «Αίτηση Εισδοχής».</p><a class="doc" href="https://dskiad.github.io/NGLG-AITHSH/" target="_blank" rel="noopener">${DOC}Αίτηση Εισδοχής</a></div>
      <div class="dg-goal"><div class="dg-goal-h">Σκοπός</div><p>Η δημιουργία μιας ενιαίας Ψηφιακής Μεγάλης Γραμματείας, που θα συνδέει τη Μεγάλη Διοίκηση, τις Επαρχίες, τις Στοές και τους Αδελφούς.</p><p>Στόχος μας είναι λιγότερη γραφειοκρατία, ταχύτερη επικοινωνία, καλύτερη οργάνωση και αποτελεσματικότερη λειτουργία της ΕΜΣτΕ.</p></div>
      <label class="ck"><input type="checkbox" id="t13-dg" data-label="Παρουσιάστηκε η Ψηφιακή Οργάνωση της Μεγάλης Γραμματείας"><span>Παρουσιάστηκε στο Συμβούλιο</span></label>
      <label class="f" for="t13-dg-n">Παρατηρήσεις Συμβουλίου<textarea id="t13-dg-n" data-label="Παρατηρήσεις για την Ψηφιακή Οργάνωση"></textarea></label>`),
-   `<div class="rep-sign">
+   `<div class="sig-sec"><span class="pn">10</span><span class="pt">Υπογραφή</span></div><div class="rep-sign">
      <div class="sig-area"><img class="seal" id="sealImg" alt="Σφραγίδα Μεγάλης Γραμματείας"><div class="sig-pad-wrap"><canvas class="sig-pad" id="sigPad" aria-label="Πεδίο υπογραφής"></canvas><span class="sig-hint">Υπογράψτε εδώ</span></div></div>
      <div class="rep-line"></div>
      <div class="rep-name ed" contenteditable="true" spellcheck="true" data-edit="sig2">Πσεβ. Αδ. Δημήτριος Σκιαδόπουλος</div>
      <div class="rep-role ed" contenteditable="true" spellcheck="true" data-edit="sig3">Μέγας Γραμματεύς</div>
      <div class="rep-org2 ed" contenteditable="true" spellcheck="true" data-edit="sig4">Εθνική Μεγάλη Στοά της Ελλάδος</div>
-     <button type="button" class="btn sig-clear" id="sigClear">Καθαρισμός υπογραφής</button></div>`
+     <button type="button" class="btn sig-clear" id="sigClear">Καθαρισμός υπογραφής</button></div><div class="rep-class rep-class-b">ΕΣΩΤΕΡΙΚΟ ΕΓΓΡΑΦΟ · ΓΙΑ ΤΑ ΜΕΛΗ ΤΟΥ ΣΓΥ</div>`
  ]},
  {t:'Ενημέρωσις υπό του Μεγάλου Θησαυροφύλακος',b:[note('<b>Επιβεβαίωση:</b> αν καλύφθηκε στο Θέμα 7.'),seg('t14-cov','Καλύφθηκε στο Θέμα 7'),area('t14-n','Σημειώσεις')]},
  {t:'Λήξις Συνεδριάσεως',b:[`<div class="grid2"><label class="f" for="t15-end">Ώρα λήξεως<input type="time" id="t15-end" data-label="Ώρα λήξεως"></label></div>`,
@@ -527,7 +614,7 @@ const ITEMS=[
 ];
 
 const form=document.getElementById('form'), dots=document.getElementById('dots');
-form.innerHTML=ITEMS.map((it,i)=>{const n=i+1;return `<section class="item" id="item-${n}" data-title="${esc(it.t)}">
+form.innerHTML=ITEMS.map((it,i)=>{const n=i+1;return `<section class="item${n===13?' rep13':''}" id="item-${n}" data-title="${esc(it.t)}">
   <div class="n">${n}</div>
   <div class="body">
     <div class="head"><div><div class="eyebrow">Θέμα ${n}</div><h2>${it.t}</h2>${it.ref?`<div class="ref">${it.ref}</div>`:''}<a class="sgy-btn" href="https://drive.google.com/drive/folders/1r65eC2SsFGpexmAokTGG45ozafX-rOYn" target="_blank" rel="noopener"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 7a2 2 0 0 1 2-2h4l2 2h8a2 2 0 0 1 2 2v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/></svg>Όλα τα σχετικά ΣΓΥ</a></div>
@@ -553,7 +640,7 @@ function refresh(){
     document.getElementById('item-'+n).classList.toggle('is-done',on);
     dots.children[i].classList.toggle('done',on)});
   document.getElementById('pc').textContent=c;
-  emSummary();driveRender();
+  emSummary();driveRender();renderMail();repSummary();numberTables();
   form.querySelectorAll('[data-vote]').forEach(v=>{const id=v.dataset.vote,r=document.getElementById(id+'-res');
     const g=k=>document.getElementById(id+'-'+k).value, y=g('y'),k=g('k');
     if(y===''&&k===''){r.textContent='Εκκρεμεί';r.className='res';return}
@@ -628,6 +715,11 @@ function cloneFor(src){
   c.querySelectorAll('[id]').forEach(e=>e.removeAttribute('id'));c.removeAttribute('id');
   return c;
 }
+const BAND_W=733,BAND_H=16,BAND_RATIO=BAND_W/BAND_H;
+function pdfBand(left,right,rule){const k=3,c=document.createElement('canvas');c.width=BAND_W*k;c.height=BAND_H*k;const x=c.getContext('2d');x.scale(k,k);
+  x.fillStyle='#FFFFFF';x.fillRect(0,0,BAND_W,BAND_H);x.strokeStyle='#14284B';x.lineWidth=0.8;x.beginPath();const y=rule==='bottom'?BAND_H-0.5:0.5;x.moveTo(0,y);x.lineTo(BAND_W,y);x.stroke();
+  x.fillStyle='#14284B';x.textBaseline='middle';x.font='700 8.5px Commissioner, "Noto Sans", sans-serif';x.textAlign='left';x.fillText(left,0,BAND_H/2);
+  x.font='600 8.5px Commissioner, "Noto Sans", sans-serif';x.textAlign='right';x.fillText(right,BAND_W,BAND_H/2);return c.toDataURL('image/png')}
 async function makePdf(btn,kind,fname){
   if(PDF_BTNS.some(b=>b.disabled))return;
   PDF_BTNS.forEach(b=>b.disabled=true);const lbl=btn.textContent;btn.textContent='Δημιουργία PDF…';
@@ -641,12 +733,16 @@ async function makePdf(btn,kind,fname){
     root.setAttribute('data-theme','light');
     await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
     blob=await html2pdf().set({
-      margin:[10,8,12,8],filename:fname,image:{type:'jpeg',quality:0.94},
+      margin:[16,8,15,8],filename:fname,image:{type:'jpeg',quality:0.94},
       html2canvas:{scale:2,useCORS:true,backgroundColor:'#FFFFFF',scrollX:0,scrollY:0},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-      pagebreak:{mode:['css','legacy'],avoid:['.inv-h','.dr-kpis','.dr-t tr','.dr-sec h4','.em-sum>p','.em-grid','.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
+      pagebreak:{mode:['css','legacy'],avoid:['.tblock','.rep-head','.toc','.sub-h','.tcap','.memo','.sum-kpis','.sig-sec','.inv-h','.dr-kpis','.dr-t tr','.dr-sec h4','.em-sum>p','.em-grid','.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
     }).from(host).toPdf().get('pdf').then(pdf=>{const n=pdf.internal.getNumberOfPages(),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight();
-      for(let i=1;i<=n;i++){pdf.setPage(i);pdf.setFontSize(8);pdf.setTextColor(130);pdf.text(i+' / '+n,w-8,h-5,{align:'right'})}}).outputPdf('blob');
+      const dIn=document.getElementById('t13-date').value,dd=dIn?fmtD(dIn):'02/11/2026';
+      const right=kind==='report'?'Αναφορά Μεγάλου Γραμματέως προς το ΣΓΥ · '+dd:'Ροή Τακτικής Συνεδριάσεως ΣΓΥ · 02/11/2026';
+      const head=pdfBand('ΕΘΝΙΚΗ ΜΕΓΑΛΗ ΣΤΟΑ ΤΗΣ ΕΛΛΑΔΟΣ · ΜΕΓΑΛΗ ΓΡΑΜΜΑΤΕΙΑ',right,'bottom');
+      for(let i=1;i<=n;i++){pdf.setPage(i);pdf.addImage(head,'PNG',8,6,w-16,(w-16)/BAND_RATIO);
+        pdf.addImage(pdfBand('ΕΣΩΤΕΡΙΚΟ ΕΓΓΡΑΦΟ · ΓΙΑ ΤΑ ΜΕΛΗ ΤΟΥ ΣΓΥ','Σελίδα '+i+' από '+n,'top'),'PNG',8,h-10,w-16,(w-16)/BAND_RATIO)}}).outputPdf('blob');
   }catch(e){toast('Δεν ήταν δυνατή η δημιουργία του PDF. Ελέγξτε τη σύνδεση και δοκιμάστε ξανά.')}
   finally{
     if(prev===null)root.removeAttribute('data-theme');else root.setAttribute('data-theme',prev);
@@ -705,7 +801,7 @@ async function drawSeal(){
   [Math.PI*0.16,Math.PI*0.84].forEach(a=>{x.beginPath();x.arc(c+(c-60)*Math.cos(a),c+(c-60)*Math.sin(a),6,0,Math.PI*2);x.fill()});
   const im=new Image();await new Promise(r=>{im.onload=r;im.onerror=r;im.src=JEWEL});
   if(im.width){const h=S-230,w=h*im.width/im.height;x.drawImage(im,c-w/2,c-h/2,w,h)}
-  document.getElementById('sealImg').src=cv.toDataURL('image/png');
+  const sealURL=cv.toDataURL('image/png');document.getElementById('sealImg').src=sealURL;document.querySelectorAll('.seal-mini').forEach(im=>im.src=sealURL);
 }
 drawSeal();
 
@@ -733,16 +829,9 @@ function emSummary(){
   let tbl='';try{const D=JSON.parse($('t13-em-detail').value||'null');
     if(D&&D.byAddress){const rows=Object.entries(D.byAddress).map(([a,x])=>{const c=v=>typeof v==='number'?nf(v):'—';return `<tr><td>${esc(a)}</td><td class="num">${c(x.in??x.incoming)}</td><td class="num">${c(x.out??x.outgoing)}</td><td class="num">${c(x.uin)}</td><td class="num">${c(x.uout)}</td><td class="num">${c(x.inv)}</td></tr>`});
       rows.push(`<tr class="em-tot"><td>Σύνολο Γραμματείας</td><td class="num">${i===null?'—':nf(i)}</td><td class="num">${o===null?'—':nf(o)}</td><td class="num">${ui===null?'—':nf(ui)}</td><td class="num">${uo===null?'—':nf(uo)}</td><td class="num">${inv===null?'—':nf(inv)}</td></tr>`);
-      tbl=`<table class="dr-t em-t"><thead><tr><th>Διεύθυνση</th><th>Εισερχ.</th><th>Εξερχ.</th><th>Αποστολείς</th><th>Παραλήπτες</th><th>Προσκλ.</th></tr></thead><tbody>${rows.join('')}</tbody></table>`+
+      tbl=`<div class="tcap" data-t="Κίνηση ηλεκτρονικού ταχυδρομείου ανά διεύθυνση"></div><table class="dr-t em-t"><thead><tr><th>Διεύθυνση</th><th>Εισερχ.</th><th>Εξερχ.</th><th>Αποστολείς</th><th>Παραλήπτες</th><th>Προσκλ.</th></tr></thead><tbody>${rows.join('')}</tbody></table>`+
         `<p class="dr-note">Ένα μήνυμα προς δύο διευθύνσεις μετρά σε καθεμία, αλλά μία φορά στο σύνολο.${D.other?` ${nf(D.other)} εισερχόμενα δεν είχαν καμία από τις δύο ως ρητό παραλήπτη (π.χ. κρυφή κοινοποίηση ή λίστα) και μετρούν μόνο στο σύνολο.`:''}</p>`}}catch(e){}
-  let invT='';try{const D=JSON.parse($('t13-em-detail').value||'null');const L=D&&D.invites;
-    if(L&&L.length){const groups={};L.forEach((x,i)=>{(groups[x.p]=groups[x.p]||[]).push([x,i])});
-      const dmyShort=ms=>new Date(ms).toLocaleDateString('el-GR',{timeZone:'Europe/Athens',day:'2-digit',month:'2-digit'});
-      invT=`<div class="inv-h">Προσκλήσεις Στοών ανά Επαρχία <span>${nf(L.length)} μοναδικές προσκλήσεις</span></div>`+
-        Object.entries(groups).map(([p,rows])=>`<div class="dr-sec"><h4><span class="dr-n">${nf(rows.length)}</span>${esc(p)}</h4><table class="dr-t inv-t"><thead><tr><th>Στοά</th><th>Ημ/νία εργασιών</th><th>Παραλήφθηκε</th></tr></thead><tbody>${
-          rows.map(([x,i])=>`<tr><td><span class="inv-l${x.l?'':' inv-empty'}" contenteditable="${ro?'false':'true'}" spellcheck="false" data-inv="${i}" data-ph="${esc(x.s)}">${esc(x.l||'')}</span></td><td class="num">${esc(x.w||'—')}</td><td class="num">${esc(dmyShort(x.r))}</td></tr>`).join('')}</tbody></table></div>`).join('')+
-        `<p class="dr-note">Επαρχία από τον αποστολέα, Στοά και ημερομηνία εργασιών από το θέμα του μηνύματος.<span class="inv-hint"> Όπου δεν φαίνεται η Στοά, εμφανίζεται το θέμα · πατήστε πάνω του για να τη συμπληρώσετε.</span></p>`}}catch(e){}
-  box.innerHTML=ps.map(x=>`<p>${esc(x)}</p>`).join('')+tbl+invT;box.hidden=false}
+  box.innerHTML=ps.map(x=>`<p>${esc(x)}</p>`).join('')+tbl;box.hidden=false}
 /* Archive statistics from the Grand Secretariat's Drive folder (Google Drive connector, owner only) */
 const DRIVE_FOLDER='1kKR7v86jjs5QJE9-K5uUebvS6nZd9J03';
 const DQ={
@@ -798,7 +887,7 @@ function driveRender(){
   const E=s=>esc(s==null?'':s),fd=v=>fmtD(v);
   const pl=(n,one,many)=>n===1?one:many.replace('#',nf(n));
   const kpi=(n,l)=>`<div class="dr-kpi"><b>${nf(n)}</b><span>${l}</span></div>`;
-  const sec=(title,n,head,rows)=>`<div class="dr-sec"><h4><span class="dr-n">${nf(n)}</span>${title}</h4>${n?`<table class="dr-t"><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`:'<p class="dr-empty">Κανένα στο διάστημα αυτό.</p>'}</div>`;
+  const sec=(title,n,head,rows)=>`<div class="dr-sec"><h4><span class="dr-n">${nf(n)}</span>${title}</h4>${n?`<div class="tcap" data-t="${title}"></div><table class="dr-t"><thead><tr>${head.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody>${rows.join('')}</tbody></table>`:'<p class="dr-empty">Κανένα στο διάστημα αυτό.</p>'}</div>`;
   const lodge=r=>`«${E(r.l)}»${r.n?` Νο ${E(r.n)}`:''}`;
   box.innerHTML=
     `<div class="dr-kpis">${kpi(D.dec.length,'Διατάγματα')}${kpi(D.off.length,'Επίσημες Επισκέψεις Μ.Δ.')}${kpi(D.rep.length,'Εκπροσωπήσεις Μ.Δ.')}${kpi(D.kan.length,'Εγκρίσεις Εσωτ. Κανονισμών')}</div>`+
@@ -831,8 +920,8 @@ $('drCalc').addEventListener('click',async()=>{
   }finally{b.disabled=ro;b.textContent=lbl}});
 
 /* Invitations: province from the sender, lodge and work date from the subject */
-const PROVINCES=[[/^athens/,'Επαρχία Αθηνών'],[/^piraeus/,'Επαρχία Πειραιώς & Νήσων'],[/^ionian/,'Επαρχία Ιονίων Νήσων'],
-  [/prpwg/,'Επαρχία Πελοποννήσου & Δυτ. Ελλάδος'],[/provcentnorth|centnorth/,'Επαρχία Κεντρικής & Βόρειας Ελλάδος'],[/cyprus|kypros/,'Περιφέρεια Κύπρου']];
+const PROVINCES=[[/^athens/,'Επαρχία Αθηνών'],[/^piraeus/,'Επαρχία Πειραιώς & Νήσων'],[/^i?onian/,'Επαρχία Ιονίων Νήσων'],
+  [/prpwg/,'Επαρχία Δυτ. Ελλάδος & Πελοποννήσου'],[/provcentnorth|centnorth/,'Επαρχία Κεντρικής & Βόρειας Ελλάδος'],[/cyprus|kypros/,'Περιφέρεια Κύπρου']];
 const provinceOf=addr=>{const l=String(addr||'').toLowerCase().split('@')[0].replace(/\./g,'');for(const [re,n] of PROVINCES)if(re.test(l))return n;return 'Απευθείας από Στοές / λοιποί'};
 const INV_MONTHS={ιαν:1,φεβ:2,μαρ:3,απρ:4,μαι:5,ιουν:6,ιουλ:7,αυγ:8,σεπ:9,οκτ:10,νοε:11,δεκ:12};
 const pad2=n=>String(n).padStart(2,'0');
@@ -856,6 +945,24 @@ function invLodge(subj){let s=String(subj).replace(/^\s*((fw|fwd|wg|tr|πρθ)\s
   m=s.match(/(?:\/|\s)([A-Z][A-Za-z.]+(?:\s?[A-Z][A-Za-z]+)?)\s*n\.\s*(\d+)/);if(m)return out(m[1],m[2]);
   m=s.match(/^([Α-ΩA-ZΆ-Ώ][^:]{2,40}?)\s*:\s*Πρ[οό]σκλ/i);if(m)return out(m[1]);
   return ''}
+
+/* Provincial reports and website messages (section 5 and 6) */
+const REPORT=/αναφορ|πεπραγμεν|απολογισμ/,REPORT_PROV=/επαρχ|επμστ|μηνιαι|μεταβολ/;
+const WEB=/ιστοσελιδ|ιστοτοπ|website|web\s?site|ιντερνετ|internet|διαδικτυ|domain|hosting|facebook|social\s?media/;
+const SPAM=/www\.|τηλ\.?\s*:|tel\.?\s*:|κιν\.?\s*:/;
+const AUTO2=/(no-?reply|noreply|notifications?@|mailer-daemon|calendar-notification|drive-shares|payments-|alerts?-|invoice|ebill)/;
+const PROV_SUBJ=[[/αθην/,'Επαρχία Αθηνών'],[/πειρα/,'Επαρχία Πειραιώς & Νήσων'],[/ιον|επμστιν/,'Επαρχία Ιονίων Νήσων'],
+  [/δυτ|πελοπ|πελ\b/,'Επαρχία Δυτ. Ελλάδος & Πελοποννήσου'],[/βορ|κεντρ|μακεδ|θεσσαλ/,'Επαρχία Κεντρικής & Βόρειας Ελλάδος'],[/κυπρ/,'Περιφέρεια Κύπρου']];
+const MONTHS_GEN=[['ιανουαρ','Ιανουάριος'],['φεβρουαρ','Φεβρουάριος'],['μαρτ','Μάρτιος'],['απριλ','Απρίλιος'],['μαι','Μάιος'],['ιουν','Ιούνιος'],['ιουλ','Ιούλιος'],['αυγουστ','Αύγουστος'],['σεπτεμβρ','Σεπτέμβριος'],['οκτωβρ','Οκτώβριος'],['νοεμβρ','Νοέμβριος'],['δεκεμβρ','Δεκέμβριος']];
+function reportMonth(subj,recv){const t=plainTxt(subj);
+  for(const [k,n] of MONTHS_GEN){const m=t.match(new RegExp(k+'[α-ω]*\\s*(\\d{4})?'));if(m&&(k!=='μαι'||/\bμαι(ος|ου)\b/.test(t)))return{m:n+' '+(m[1]||new Date(recv).getFullYear()),e:false}}
+  let m=t.match(/(\d{4})\s*[-–\/]\s*(\d{2,4})/);if(m)return{m:'Έτος '+m[1]+'–'+m[2],e:false};
+  m=t.match(/(?<!\d)(\d{1,2})\s*[\/.\-]\s*(\d{4})(?!\d)/);if(m&&+m[1]>=1&&+m[1]<=12)return{m:MONTHS_GEN[+m[1]-1][1]+' '+m[2],e:false};
+  const d=new Date(recv);d.setDate(1);d.setMonth(d.getMonth()-1);return{m:MONTHS_GEN[d.getMonth()][1]+' '+d.getFullYear(),e:true}}
+function provinceFor(addr,subj){const p=provinceOf(addr);if(!/^Απευθείας/.test(p))return p;const t=plainTxt(subj);for(const [re,n] of PROV_SUBJ)if(re.test(t))return n;return p}
+const isReport=(subj,from)=>{const t=plainTxt(subj),f=String(from||'').toLowerCase();if(!REPORT.test(t)||REPLY.test(t)||AUTO2.test(f))return false;
+  return !/^Απευθείας/.test(provinceOf(f))||REPORT_PROV.test(t)};
+const isWeb=(subj,from)=>{const t=plainTxt(subj),f=String(from||'').toLowerCase();return WEB.test(t)&&!REPLY.test(t)&&!SPAM.test(t)&&!AUTO2.test(f)&&!AUTO.test(f)};
 
 /* Counting through the viewer's Gmail connector (claude.ai): the mailbox of the Grand Secretariat */
 const OWN=['grand.secretary@nglgreece.gr','info@nglgreece.gr'];
@@ -891,7 +998,7 @@ async function gmailStats(mcp,from,to,progress){
     catch(e){if(e&&e.retryable){await new Promise(r=>setTimeout(r,(e.retryAfterMs||1500)+Math.random()*800));return (await mcp.callTool('Gmail',tool,input)).payload||{}}throw e}};
   const mk=()=>({in:0,out:0,s:new Set(),r:new Set(),inv:0});
   const tot=mk(),per={};OWN_N.forEach(a=>per[a]=mk());let other=0;
-  const seenM=new Set(),seenT=new Set(),invs=[];let full=0,days=0,complete=true;
+  const seenM=new Set(),seenT=new Set(),invs=[],reps=[],webs=[];let full=0,days=0,complete=true;
   const take=m=>{if(!m||!m.id||seenM.has(m.id))return;seenM.add(m.id);
     const t=idTime(m.id);if(!(t>=start&&t<end))return;
     const snd=normAddr(m.sender),rc=[...(m.toRecipients||[]),...(m.ccRecipients||[]),...(m.bccRecipients||[])].map(normAddr).filter(Boolean);
@@ -899,6 +1006,8 @@ async function gmailStats(mcp,from,to,progress){
     if(OWN_N.includes(snd)){tot.out++;ext.forEach(a=>tot.r.add(a));per[snd].out++;ext.forEach(a=>per[snd].r.add(a));return}
     const inv=isInvite(m.subject,m.sender);
     tot.in++;if(snd)tot.s.add(snd);if(inv){tot.inv++;invs.push({r:t,s:String(m.subject||''),f:snd})}
+    if(isReport(m.subject,snd))reps.push({r:t,s:String(m.subject||''),f:snd});
+    if(isWeb(m.subject,snd))webs.push({r:t,s:String(m.subject||''),f:snd});
     const to=OWN_N.filter(a=>rc.includes(a));if(!to.length)other++;
     to.forEach(a=>{per[a].in++;if(snd)per[a].s.add(snd);if(inv)per[a].inv++})};
   const nDays=Math.round((Date.parse(to)-Date.parse(from))/864e5)+3;
@@ -916,17 +1025,66 @@ async function gmailStats(mcp,from,to,progress){
   const invites=invs.sort((a,b)=>a.r-b.r).map(x=>({p:provinceOf(x.f),l:invLodge(x.s),w:workDate(x.s,x.r),r:x.r,s:x.s.replace(/^\s*((fw|fwd|wg|tr|πρθ)\s*:\s*)+/i,'').slice(0,110)}))
     .filter(x=>{const k=x.l&&x.w?x.p+'|'+plainTxt(x.l)+'|'+x.w:plainTxt(x.s);if(seenI.has(k))return false;seenI.add(k);return true})
     .sort((a,b)=>{const pa=order.indexOf(a.p),pb=order.indexOf(b.p);return (pa<0?99:pa)-(pb<0?99:pb)||a.r-b.r});
+  const strip=x=>x.replace(/^\s*((fw|fwd|wg|tr|πρθ)\s*:\s*)+/i,'').slice(0,120);
+  const seenR=new Set(),reports=reps.sort((a,b)=>a.r-b.r).map(x=>{const mm=reportMonth(x.s,x.r);return{p:provinceFor(x.f,x.s),m:mm.m,e:mm.e,l:invLodge(x.s),r:x.r,s:strip(x.s)}})
+    .filter(x=>{const k=x.p+'|'+plainTxt(x.s);if(seenR.has(k))return false;seenR.add(k);return true});
+  const seenW=new Set(),web=webs.sort((a,b)=>a.r-b.r).map(x=>({p:provinceFor(x.f,x.s),l:invLodge(x.s),r:x.r,s:strip(x.s),f:x.f}))
+    .filter(x=>{const k=plainTxt(x.s);if(seenW.has(k))return false;seenW.add(k);return true});
   return{incoming:tot.in,outgoing:tot.out,uniqueSenders:tot.s.size,uniqueRecipients:tot.r.size,invitations:tot.inv,
-    byAddress,invites,otherIncoming:other,messagesScanned:seenM.size,complete}}
+    byAddress,invites,reports,web,otherIncoming:other,messagesScanned:seenM.size,complete}}
 function applyStats(r){
-  $('t13-em-detail').value=r.byAddress?JSON.stringify({byAddress:r.byAddress,other:r.otherIncoming||0,invites:r.invites||[]}):'';
+  $('t13-em-detail').value=r.byAddress?JSON.stringify({byAddress:r.byAddress,other:r.otherIncoming||0,invites:r.invites||[],reports:r.reports||[],web:r.web||[]}):'';
   [['t13-in','incoming'],['t13-out','outgoing'],['t13-uin','uniqueSenders'],['t13-uout','uniqueRecipients'],['t13-inv','invitations']].forEach(([id,k])=>{if(typeof r[k]==='number')$(id).value=r[k]});
   refresh();save()}
-$('emSum').addEventListener('focusout',e=>{const el=e.target.closest&&e.target.closest('[data-inv]');if(!el)return;
-  let D=null;try{D=JSON.parse($('t13-em-detail').value||'null')}catch(err){}if(!D||!D.invites)return;
-  const i=+el.dataset.inv,v=el.textContent.replace(/\s+/g,' ').trim();if(!D.invites[i]||D.invites[i].l===v)return;
-  D.invites[i].l=v;$('t13-em-detail').value=JSON.stringify(D);save();setTimeout(emSummary,0)});
-$('emSum').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.closest('[data-inv]')){e.preventDefault();e.target.blur()}});
+const PROV_ORDER=['Επαρχία Αθηνών','Επαρχία Πειραιώς & Νήσων','Επαρχία Ιονίων Νήσων','Επαρχία Δυτ. Ελλάδος & Πελοποννήσου','Επαρχία Κεντρικής & Βόρειας Ελλάδος','Περιφέρεια Κύπρου'];
+const provRank=p=>{const i=PROV_ORDER.indexOf(p);return i<0?99:i};
+const dmShort=ms=>new Date(ms).toLocaleDateString('el-GR',{timeZone:'Europe/Athens',day:'2-digit',month:'2-digit',year:'numeric'});
+const mailDetail=()=>{try{return JSON.parse($('t13-em-detail').value||'null')}catch(e){return null}};
+const cell=(list,i,k,v,ph)=>`<span class="ecell${v?'':' ecell-empty'}" contenteditable="${ro?'false':'true'}" spellcheck="false" data-list="${list}" data-i="${i}" data-k="${k}" data-ph="${esc(ph||'')}">${esc(v||'')}</span>`;
+const NODATA='<p class="sec-empty">Δεν υπάρχουν ακόμη στοιχεία · πατήστε «Υπολογισμός στατιστικών» στην ενότητα 3.</p>';
+function renderMail(){
+  const D=mailDetail(),busy=id=>$(id).contains(document.activeElement);
+  if(!busy('invOut')){const L=D&&D.invites;
+    if(!L){$('invOut').innerHTML=NODATA}else if(!L.length){$('invOut').innerHTML='<p class="sec-empty">Δεν ελήφθησαν προσκλήσεις κατά την περίοδο αναφοράς.</p>'}
+    else{const g={};L.forEach((x,i)=>(g[x.p]=g[x.p]||[]).push([x,i]));
+      const sum=Object.entries(g).sort((a,b)=>provRank(a[0])-provRank(b[0]));
+      $('invOut').innerHTML=`<div class="tcap" data-t="Προσκλήσεις ανά Επαρχία (σύνοψη)"></div><table class="dr-t"><thead><tr><th>Επαρχία</th><th class="r">Προσκλήσεις</th></tr></thead><tbody>${sum.map(([p,r])=>`<tr><td>${esc(p)}</td><td class="num r">${nf(r.length)}</td></tr>`).join('')}<tr class="em-tot"><td>Σύνολο</td><td class="num r">${nf(L.length)}</td></tr></tbody></table>`+
+        sum.map(([p,rows],n)=>`<div class="sub-h"><span class="sn">4.${n+1}</span>${esc(p)} <em>${nf(rows.length)}</em></div><div class="tcap" data-t="Προσκλήσεις · ${esc(p)}"></div><table class="dr-t"><thead><tr><th>Στοά</th><th>Ημ/νία εργασιών</th><th>Παραλήφθηκε</th></tr></thead><tbody>${
+          rows.map(([x,i])=>`<tr><td>${cell('invites',i,'l',x.l,x.s)}</td><td class="num">${cell('invites',i,'w',x.w,'—')}</td><td class="num">${esc(dmShort(x.r))}</td></tr>`).join('')}</tbody></table>`).join('')+
+        `<p class="dr-note">Επαρχία από τον αποστολέα · Στοά και ημερομηνία εργασιών από το θέμα του μηνύματος.<span class="inv-hint"> Τα κενά κελιά δείχνουν το θέμα · πατήστε για συμπλήρωση.</span></p>`}}
+  if(!busy('repOut')){const L=D&&D.reports;
+    if(!L){$('repOut').innerHTML=NODATA}else{
+      const g={};PROV_ORDER.slice(0,5).forEach(p=>g[p]=[]);L.forEach((x,i)=>(g[x.p]=g[x.p]||[]).push([x,i]));
+      const ent=Object.entries(g).sort((a,b)=>provRank(a[0])-provRank(b[0]));
+      $('repOut').innerHTML=`<div class="tcap" data-t="Κάλυψη αναφορών ανά Επαρχιακή Μεγάλη Στοά"></div><table class="dr-t"><thead><tr><th>Επαρχιακή Μεγάλη Στοά</th><th class="r">Αναφορές</th><th>Μήνες αναφοράς</th><th>Κατάσταση</th></tr></thead><tbody>${
+        ent.map(([p,r])=>`<tr><td>${esc(p)}</td><td class="num r">${nf(r.length)}</td><td>${esc([...new Set(r.map(([x])=>x.m))].join(', ')||'—')}</td><td>${r.length?'<span class="st-ok">Ελήφθη</span>':'<span class="st-no">Εκκρεμεί</span>'}</td></tr>`).join('')}</tbody></table>`+
+        (L.length?`<div class="tcap" data-t="Αναφορές που ελήφθησαν"></div><table class="dr-t"><thead><tr><th>Επαρχία</th><th>Αναφορά</th><th>Μήνας</th><th>Παραλήφθηκε</th></tr></thead><tbody>${
+          L.map((x,i)=>[x,i]).sort((a,b)=>provRank(a[0].p)-provRank(b[0].p)||a[0].r-b[0].r).map(([x,i])=>`<tr><td>${esc(x.p)}</td><td>${esc(x.s)}</td><td>${cell('reports',i,'m',x.m,'—')}${x.e?'<sup class="est">*</sup>':''}</td><td class="num">${esc(dmShort(x.r))}</td></tr>`).join('')}</tbody></table>
+          <p class="dr-note">${L.some(x=>x.e)?'* Ο μήνας δεν αναγράφεται στο θέμα· εκτιμάται ως ο προηγούμενος της παραλαβής. ':''}Επαρχία από τον αποστολέα ή το θέμα.<span class="inv-hint"> Ο μήνας διορθώνεται με κλικ.</span></p>`:'<p class="sec-empty">Δεν ελήφθησαν αναφορές κατά την περίοδο αναφοράς.</p>')}}
+  if(!busy('webOut')){const L=D&&D.web;
+    if(!L){$('webOut').innerHTML=NODATA}else if(!L.length){$('webOut').innerHTML='<p class="sec-empty">Δεν υπήρξαν μηνύματα για ιστοσελίδες κατά την περίοδο αναφοράς.</p>'}
+    else $('webOut').innerHTML=`<div class="tcap" data-t="Μηνύματα σχετικά με ιστοσελίδες"></div><table class="dr-t"><thead><tr><th>Ημ/νία</th><th>Επαρχία / Αποστολέας</th><th>Στοά</th><th>Θέμα</th></tr></thead><tbody>${
+      L.map((x,i)=>`<tr><td class="num">${esc(dmShort(x.r))}</td><td>${esc(/^Απευθείας/.test(x.p)?x.f:x.p)}</td><td>${cell('web',i,'l',x.l,'—')}</td><td>${esc(x.s)}</td></tr>`).join('')}</tbody></table>`}
+}
+function repSummary(){
+  const box=$('sumOut'),D=mailDetail();let A=null;try{A=JSON.parse($('t13-drive').value||'null')}catch(e){}
+  const i=num('t13-in'),o=num('t13-out'),pf=$('t13-per-from').value,pt=$('t13-per-to').value;
+  const k=[];const add=(v,l)=>{if(v!==null&&v!==undefined)k.push(`<div class="dr-kpi"><b>${nf(v)}</b><span>${l}</span></div>`)};
+  add(i,'Εισερχόμενα email');add(o,'Εξερχόμενα email');add(D&&D.invites?D.invites.length:null,'Προσκλήσεις Στοών');
+  add(D&&D.reports?D.reports.length:null,'Αναφορές Επαρχιών');add(D&&D.web?D.web.length:null,'Θέματα ιστοσελίδων');
+  add(A?A.dec.length:null,'Διατάγματα');add(A?A.off.length:null,'Επίσημες Επισκέψεις Μ.Δ.');add(A?A.rep.length:null,'Εκπροσωπήσεις Μ.Δ.');
+  const ps=[];ps.push(`Η παρούσα αναφορά καλύπτει την περίοδο ${pf?'από '+fmtD(pf):''}${pt?' έως '+fmtD(pt):''} και υποβάλλεται στο Συμβούλιο για την Τακτική Συνεδρίαση της 2ας Νοεμβρίου 2026.`);
+  if(i!==null)ps.push(`Η Μεγάλη Γραμματεία διαχειρίστηκε ${nf(i+(o||0))} μηνύματα ηλεκτρονικού ταχυδρομείου (${nf(i)} εισερχόμενα, ${nf(o||0)} εξερχόμενα)${D&&D.invites?`, μεταξύ των οποίων ${nf(D.invites.length)} προσκλήσεις εργασιών Στοών`:''}.`);
+  if(D&&D.reports){const got=new Set(D.reports.map(x=>x.p));const miss=PROV_ORDER.slice(0,5).filter(p=>!got.has(p));ps.push(`Ελήφθησαν ${nf(D.reports.length)} αναφορές Επαρχιακών Γραμματειών${miss.length?`· εκκρεμούν αναφορές από: ${miss.map(x=>x.replace('Επαρχία ','')).join(', ')}`:' από όλες τις Επαρχίες'}.`)}
+  const pl=(n,one,many)=>n===1?one:many.replace('#',nf(n));
+  if(A)ps.push(`${pl(A.dec.length,'Εκδόθηκε 1 Διάταγμα','Εκδόθηκαν # Διατάγματα')}, ${pl(A.off.length,'ορίστηκε 1 Επίσημη Επίσκεψη','ορίστηκαν # Επίσημες Επισκέψεις')} και ${pl(A.rep.length,'1 Εκπροσώπηση','# Εκπροσωπήσεις')} του Μεγάλου Διδασκάλου, και ${pl(A.kan.length,'εγκρίθηκε 1 Εσωτερικός Κανονισμός','εγκρίθηκαν # Εσωτερικοί Κανονισμοί')}.`);
+  box.innerHTML=(k.length?`<div class="dr-kpis sum-kpis">${k.join('')}</div>`:'')+`<div class="sum-txt">${ps.map(x=>`<p>${esc(x)}</p>`).join('')}</div>`}
+function numberTables(){document.querySelectorAll('#item-13 .tcap').forEach((c,n)=>{c.textContent=`Πίνακας ${n+1}. ${c.dataset.t||''}`;
+  const t=c.nextElementSibling;if(t&&t.tagName==='TABLE'&&!c.parentElement.classList.contains('tblock')){const w=document.createElement('div');w.className='tblock';c.before(w);w.append(c,t)}})}
+document.getElementById('item-13').addEventListener('focusout',e=>{const el=e.target.closest&&e.target.closest('.ecell');if(!el)return;
+  const D=mailDetail();const L=D&&D[el.dataset.list];if(!L)return;const i=+el.dataset.i,k=el.dataset.k,v=el.textContent.replace(/\s+/g,' ').trim();
+  if(!L[i]||(L[i][k]||'')===v)return;L[i][k]=v;if(k==='m')L[i].e=false;$('t13-em-detail').value=JSON.stringify(D);save();setTimeout(refresh,0)});
+document.getElementById('item-13').addEventListener('keydown',e=>{if(e.key==='Enter'&&e.target.closest&&e.target.closest('.ecell')){e.preventDefault();e.target.blur()}});
 $('emCalc').addEventListener('click',async()=>{
   const f=$('t13-em-from').value,t=$('t13-em-to').value,st=$('emStatus'),b=$('emCalc');
   if(!f||!t){toast('Επιλέξτε ημερομηνίες «Από» και «Έως»');return}
