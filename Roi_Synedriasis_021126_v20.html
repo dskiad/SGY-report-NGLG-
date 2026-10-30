@@ -1062,6 +1062,7 @@ const isReport=(subj,from)=>{const t=plainTxt(subj),f=String(from||'').toLowerCa
 const EXCUSE=/δικαιολογ|απουσια μου|παρουσια μου|δεν (θα )?(μπορεσω|μπορω|δυναμαι|δυνηθω|παρευρεθω|παραστω|συμμετασχω|ειμαι παρων)|δεν θα μου επιτρεψουν|κωλυμα/;
 const COUNCIL=/(^|[^α-ω])σ\.?\s?γ\.?\s?υ(?![α-ω])|συμβουλι|επισυναπτομενο πρακτικο|τηλεδιασκεψ/;
 const sessDate=t=>{const m=plainTxt(t).match(/(\d{1,2})[.\/\-](\d{1,2})[.\/\-](\d{4})/);return m?`${m[3]}-${m[2].padStart(2,'0')}-${m[1].padStart(2,'0')}`:''};
+const EXC_Q='(δικαιολόγηση OR δικαιολογήσετε OR δικαιολογηθεί OR δικαιολογηθώ OR δικαιολόγησή OR απουσία OR "παρουσία μου" OR συμμετάσχω OR παρευρεθώ OR κώλυμα)';
 const isExcuse=(subj,snip,from)=>{const t=plainTxt(subj),b=plainTxt(snip),f=String(from||'').toLowerCase();
   if(AUTO.test(f)||AUTO2.test(f)||!EXCUSE.test(b)||!(COUNCIL.test(t)||COUNCIL.test(b)))return false;const d=sessDate(subj);return !d||d===SESSION_ID};
 /* name from the signature: last line of the message's own text (quoted invitation cut off) that is a bare name once titles are stripped */
@@ -1121,7 +1122,6 @@ async function gmailStats(mcp,from,to,progress){
     tot.in++;if(snd)tot.s.add(snd);if(inv){tot.inv++;invs.push({r:t,s:String(m.subject||''),f:snd})}
     if(isReport(m.subject,snd))reps.push({r:t,s:String(m.subject||''),f:snd,rc:rc.filter(a=>!OWN_N.includes(a))});
     if(isWeb(m.subject,snd))webs.push({r:t,s:String(m.subject||''),f:snd});
-    if(isExcuse(m.subject,m.snippet,snd))excs.push({r:t,f:snd,id:m.id,th:m.threadId,n:'',w:excWhy(m.snippet)});
     const to=OWN_N.filter(a=>rc.includes(a));if(!to.length)other++;
     to.forEach(a=>{per[a].in++;if(snd)per[a].s.add(snd);if(inv)per[a].inv++})};
   const nDays=Math.round((Date.parse(to)-Date.parse(from))/864e5)+3;
@@ -1144,14 +1144,19 @@ async function gmailStats(mcp,from,to,progress){
     .filter(x=>{const k=x.p+'|'+plainTxt(x.s);if(seenR.has(k))return false;seenR.add(k);return true});
   const seenW=new Set(),web=webs.sort((a,b)=>a.r-b.r).map(x=>({p:provinceFor(x.f,x.s),l:invLodge(x.s),r:x.r,s:strip(x.s),f:x.f}))
     .filter(x=>{const k=plainTxt(x.s);if(seenW.has(k))return false;seenW.add(k);return true});
+  /* excuses: search results carry no message text, so the matching threads are read in full */
+  const q0=`after:${shiftDay(from,-1).replace(/-/g,'/')} before:${shiftDay(to,2).replace(/-/g,'/')} -in:sent `;
+  const er=await call('search_threads',{query:q0+EXC_Q,pageSize:50,view:'THREAD_VIEW_MINIMAL'});
+  for(const th of er.threads||[]){let f;try{f=await call('get_thread',{threadId:th.id,messageFormat:'PLAIN_TEXT'})}catch(e){continue}
+    for(const m of f.messages||[]){const t=idTime(m.id),snd=normAddr(m.sender);if(!(t>=start&&t<end)||!snd||OWN_N.includes(snd))continue;
+      const body=String(m.plaintextBody||m.snippet||''),own=body.split(/\n\s*(?:Στις |On |From:|>)/)[0];
+      if(isExcuse(m.subject,own,snd))excs.push({r:t,f:snd,n:excName(body),w:excWhy(own)})}}
   const seenE=new Set(),excuses=excs.sort((a,b)=>a.r-b.r).filter(x=>{if(seenE.has(x.f))return false;seenE.add(x.f);return true});
-  /* few messages: read each in full for the signature and the stated reason */
-  for(const x of excuses){try{const f=await call('get_thread',{threadId:x.th,messageFormat:'PLAIN_TEXT'});
-    const m=(f.messages||[]).find(y=>y.id===x.id);const b=m&&(m.plaintextBody||'');if(b){x.n=excName(b);x.w=excWhy(b.split(/\n\s*(?:Στις |On |From:|>)/)[0])||x.w}}catch(e){}
-    delete x.id;delete x.th}
   return{incoming:tot.in,outgoing:tot.out,uniqueSenders:tot.s.size,uniqueRecipients:tot.r.size,invitations:tot.inv,
     byAddress,invites,reports,web,excuses,otherIncoming:other,messagesScanned:seenM.size,complete}}
 function applyStats(r){
+  /* a recount keeps names and reasons already corrected by hand */
+  const prev=mailDetail();if(prev&&prev.excuses&&r.excuses)r.excuses.forEach(x=>{const o=prev.excuses.find(y=>y.f===x.f);if(o){x.n=o.n||x.n;x.w=o.w||x.w}});
   $('t13-em-detail').value=r.byAddress?JSON.stringify({byAddress:r.byAddress,other:r.otherIncoming||0,invites:r.invites||[],reports:r.reports||[],web:r.web||[],excuses:r.excuses||[]}):'';
   [['t13-in','incoming'],['t13-out','outgoing'],['t13-uin','uniqueSenders'],['t13-uout','uniqueRecipients'],['t13-inv','invitations']].forEach(([id,k])=>{if(typeof r[k]==='number')$(id).value=r[k]});
   refresh();save()}
