@@ -1010,7 +1010,7 @@ $('drCalc').addEventListener('click',async()=>{
 /* Invitations: province from the sender, lodge and work date from the subject */
 const PROVINCES=[[/^athens/,'Επαρχία Αθηνών'],[/^piraeus/,'Επαρχία Πειραιώς & Νήσων'],[/^i?onian/,'Επαρχία Ιονίων Νήσων'],
   [/prpwg/,'Επαρχία Δυτ. Ελλάδος & Πελοποννήσου'],[/provcentnorth|centnorth/,'Επαρχία Κεντρικής & Βόρειας Ελλάδος'],[/cyprus|kypros/,'Περιφέρεια Κύπρου']];
-const provinceOf=addr=>{const l=String(addr||'').toLowerCase().split('@')[0].replace(/\./g,'');for(const [re,n] of PROVINCES)if(re.test(l))return n;return 'Απευθείας από Στοές / λοιποί'};
+const provinceOf=addr=>{if(/dglcyprus/.test(String(addr||'').toLowerCase()))return 'Περιφέρεια Κύπρου';const l=String(addr||'').toLowerCase().split('@')[0].replace(/\./g,'');for(const [re,n] of PROVINCES)if(re.test(l))return n;return 'Απευθείας από Στοές / λοιποί'};
 const INV_MONTHS={ιαν:1,φεβ:2,μαρ:3,απρ:4,μαι:5,ιουν:6,ιουλ:7,αυγ:8,σεπ:9,οκτ:10,νοε:11,δεκ:12};
 const pad2=n=>String(n).padStart(2,'0');
 function workDate(subj,recv){const t=String(subj).normalize('NFD').replace(/[̀-ͯ]/g,'').toLowerCase();const ry=new Date(recv).getFullYear();
