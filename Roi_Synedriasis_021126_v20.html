@@ -472,6 +472,15 @@ body.pdf-mode::before,.pdf-mode .bar,.pdf-mode .toast,.pdf-mode .sgy-btn,.pdf-mo
 .arch-row{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border:1px solid var(--line);border-radius:8px;background:var(--solid);padding:9px 12px}
 .arch-row b{font:700 14px/1.3 var(--f-body);color:var(--ink)}
 .arch-row span{font-size:12.5px;color:var(--muted)}
+.vbar{position:sticky;top:8px;z-index:30;display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin:0 0 14px;border:1.5px solid var(--gold-line);border-radius:10px;background:var(--solid);padding:10px 14px;box-shadow:0 6px 18px rgba(0,0,0,.12)}
+.vbar[hidden]{display:none}
+.vbar-t{display:flex;flex-direction:column;gap:2px;min-width:0;flex:1 1 260px}
+.vbar-t b{font:700 15px/1.3 var(--f-body);color:var(--blue)}
+.vbar-t span{font-size:12.5px;color:var(--muted)}
+.vbar-a{display:flex;gap:8px;flex-wrap:wrap}
+.pdf-mode .vbar{display:none!important}
+.arch-row.on{border-color:var(--gold-line);box-shadow:inset 3px 0 0 var(--gold)}
+.arch-row .arch-cur{margin-left:auto;font:700 11px/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
 .arch-row .btn{margin-left:auto;padding:7px 12px;font-size:12.5px}
 .arch-row .arch-gh{font-size:12.5px;font-weight:600;color:var(--gold)}
 .pdf-host{background:#FFFFFF;color:var(--ink);font:15px/1.55 var(--f-body)}
@@ -561,13 +570,15 @@ body.pdf-mode::before,.pdf-mode .bar,.pdf-mode .toast,.pdf-mode .sgy-btn,.pdf-mo
 </div>
 
 <div class="wrap" lang="el">
+  <div class="vbar" id="vbar" hidden role="status"><div class="vbar-t"><b id="vbarDate"></b><span id="vbarNote">Προβολή αποθηκευμένης συνεδρίασης · οι αλλαγές αποθηκεύονται σε αυτή την εγγραφή του Αρχείου.</span></div>
+    <div class="vbar-a"><button type="button" class="btn primary" id="vbarSave" disabled>Αποθήκευση αλλαγών</button><button type="button" class="btn" id="vbarClose">Επιστροφή στην τρέχουσα</button></div></div>
   <form id="form" autocomplete="off"></form>
   <div id="fb" class="fallback" hidden>
     <label class="f" for="fbText">Επιλέξτε και αντιγράψτε το κείμενο</label>
     <textarea id="fbText" readonly></textarea>
   </div>
   <section class="arch" id="arch" aria-labelledby="archH"><h2 id="archH">Αρχείο Συνεδριάσεων ΣΓΥ</h2>
-    <p class="lead">Κάθε «Αποθήκευση ΣΓΥ» κρατά πλήρες αντίγραφο της συνεδρίασης (πεδία, στατιστικά, υπογραφή). Τα αντίγραφα αρχειοθετούνται και στο GitHub.</p>
+    <p class="lead">Κάθε «Αποθήκευση ΣΓΥ» κρατά πλήρες αντίγραφο της συνεδρίασης (πεδία, στατιστικά, υπογραφή), με τίτλο την ημερομηνία διεξαγωγής. Με «Άνοιγμα» βλέπετε μια αποθηκευμένη ΣΓΥ και αποθηκεύετε σε αυτήν τις αλλαγές στα θέματά της· η τρέχουσα συνεδρίαση δεν επηρεάζεται. Τα αντίγραφα αρχειοθετούνται και στο GitHub.</p>
     <div class="arch-list" id="archList"><p class="lead">Δεν υπάρχουν ακόμα αποθηκευμένες συνεδριάσεις.</p></div></section>
   <div class="foot"><span>Μεγάλη Γραμματεία · ΕΜΣτΕ</span><span id="syncNote">Οι καταχωρήσεις αποθηκεύονται μόνο σε αυτή τη συσκευή.</span></div>
 </div>
@@ -775,7 +786,7 @@ const eds=()=>form.querySelectorAll('[data-edit]');
 const DEF={};eds().forEach(el=>DEF[el.dataset.edit]=el.innerHTML);
 function collect(){const d={};fields().forEach(el=>{if(el.type==='radio'||el.type==='checkbox')d[el.id]=el.checked;else d[el.id]=el.value});eds().forEach(el=>{if(el.innerHTML!==DEF[el.dataset.edit])d['edit:'+el.dataset.edit]=el.innerHTML});return d}
 function saveLocal(d){try{localStorage.setItem(KEY,JSON.stringify(d||collect()))}catch(e){}}
-function save(){const d=collect();saveLocal(d);queueSync(d)}
+function save(){if(VIEW){viewDirty=true;viewBar();return}const d=collect();saveLocal(d);queueSync(d)}
 function load(){let d=null;try{d=JSON.parse(localStorage.getItem(KEY)||'null')}catch(e){}if(!d)return;
   fields().forEach(el=>{if(!(el.id in d))return;if(el.type==='radio'||el.type==='checkbox')el.checked=!!d[el.id];else el.value=d[el.id]});eds().forEach(el=>{const v=d['edit:'+el.dataset.edit];if(typeof v==='string')el.innerHTML=v})}
 
@@ -1369,7 +1380,7 @@ function applyShared(v){
   eds().forEach(el=>{const k='edit:'+el.dataset.edit;if(dirty.has(k)||el===document.activeElement||el.contains(document.activeElement))return;
     const nv=typeof v[k]==='string'?clean(v[k]):DEF[el.dataset.edit];if(el.innerHTML!==nv)el.innerHTML=nv});
   refresh();saveLocal()}
-async function pushSig(){if(!SG||ro)return;if(sigBusy){sigAgain=true;return}sigBusy=true;
+async function pushSig(){if(!SG||ro||VIEW)return;if(sigBusy){sigAgain=true;return}sigBusy=true;
   try{await SG.set({png:sigData||null})}catch(e){if(e&&(e.code==='invalid_argument'||e.code==='revoked'))setRO();else if(e&&e.code==='permission-denied')detach()}
   sigBusy=false;if(sigAgain){sigAgain=false;pushSig()}}
 function resetShared(){if(!ST||ro)return;clearTimeout(flushT);dirty.clear();synced={};
@@ -1381,11 +1392,12 @@ function attach(st,sg){ST=st;SG=sg;
       /* first opener with write access seeds the shared record from this device's entries */
       if(!snap.metadata.fromCache&&!seeded&&!ro){seeded=true;const d=collect();Object.keys(d).forEach(k=>{pend[k]=d[k];dirty.add(k)});flush()}
       return}
-    const v=(snap.data()||{}).v||{};synced={...v};applyShared(v)},
+    const v=(snap.data()||{}).v||{};synced={...v};if(!VIEW)applyShared(v)},
     e=>{if(e&&e.code==='permission-denied')detach();else syncNote.textContent='Η ζωντανή σύνδεση διακόπηκε — ανανεώστε τη σελίδα.'});
   SG.onSnapshot(snap=>{if(drawing)return;const p=snap.exists?(snap.data()||{}).png||null:null;
     if(!snap.exists){if(!snap.metadata.fromCache&&sigData&&!ro)pushSig();return}
     if(typeof p==='string'&&!/^data:image\/png;base64,[A-Za-z0-9+/=]+$/.test(p))return;
+    if(VIEW){liveSig=p;return}
     if(p!==sigData){sigData=p;try{p?localStorage.setItem(SIGKEY,p):localStorage.removeItem(SIGKEY)}catch(e){}
       pctx.clearRect(0,0,pad.width,pad.height);sizePad()}},()=>{});
 }
@@ -1426,27 +1438,59 @@ async function startFirebase(){
 /* Session archive: a full copy of each ΣΓΥ in db `archive/<session date>`; Claude mirrors it to GitHub `archive/` */
 const SESSION_ID='2026-11-02',SESSION_TITLE='Τακτική Συνεδρίαση Συμβουλίου · Δευτέρα 2 Νοεμβρίου 2026';
 let ARCH=null,archItems=[];
+/* VIEW: the archived session open on screen (null = the current, live session) */
+let VIEW=null,viewDirty=false,liveSig=null,closeArm=null;
+const longDate=id=>{const [y,m,d]=String(id).split('-').map(Number);if(!y||!m||!d)return String(id);
+  const t=new Date(Date.UTC(y,m-1,d,12)).toLocaleDateString('el-GR',{timeZone:'UTC',weekday:'long',day:'numeric',month:'long',year:'numeric'});return t.charAt(0).toUpperCase()+t.slice(1)};
+const savedAt=a=>a.savedAt?new Date(a.savedAt).toLocaleString('el-GR',{dateStyle:'short',timeStyle:'short'}):'—';
 function archRender(){const box=$('archList');
   if(!archItems.length){box.innerHTML='<p class="lead">Δεν υπάρχουν ακόμα αποθηκευμένες συνεδριάσεις.</p>';return}
-  box.innerHTML=archItems.map(a=>`<div class="arch-row"><b>${esc(fmtD(a.id))}</b><span>${esc(a.title||'')}</span><span>Αποθήκευση: ${esc(a.savedAt?new Date(a.savedAt).toLocaleString('el-GR',{dateStyle:'short',timeStyle:'short'}):'—')}</span>${a.id===SESSION_ID?'':`<button type="button" class="btn" data-restore="${esc(a.id)}">Φόρτωση</button>`}</div>`).join('')}
+  box.innerHTML=archItems.map(a=>{const cur=a.id===SESSION_ID,on=VIEW?VIEW.id===a.id:cur;
+    return `<div class="arch-row${on?' on':''}"><b>ΣΓΥ ${esc(longDate(a.id))}</b><span>${esc(a.title||'')}</span><span>Αποθήκευση: ${esc(savedAt(a))}</span>${
+      on?`<span class="arch-cur">${cur&&!VIEW?'Τρέχουσα':'Ανοιχτή'}</span>`:`<button type="button" class="btn" data-open="${esc(a.id)}">${cur?'Επιστροφή στην τρέχουσα':'Άνοιγμα'}</button>`}</div>`}).join('')}
+function setForm(v){
+  fields().forEach(el=>{const k=el.id,has=k in v&&v[k]!==null;
+    if(el.type==='radio'||el.type==='checkbox')el.checked=has?!!v[k]:el.defaultChecked;else el.value=has?String(v[k]):el.defaultValue});
+  eds().forEach(el=>{const k='edit:'+el.dataset.edit;el.innerHTML=typeof v[k]==='string'?clean(v[k]):DEF[el.dataset.edit]});refresh()}
+function setSig(p){sigData=p||null;pctx.clearRect(0,0,pad.width,pad.height);pad.parentNode.classList.toggle('signed',!!sigData);sizePad()}
+function viewBar(){const b=$('vbar');b.hidden=!VIEW;if(!VIEW)return;
+  $('vbarDate').textContent='Αρχείο · ΣΓΥ '+longDate(VIEW.id);
+  $('vbarSave').disabled=ro||!viewDirty;$('vbarSave').textContent=viewDirty?'Αποθήκευση αλλαγών':'Αποθηκευμένο';
+  $('vbarNote').textContent=ro?'Προβολή αποθηκευμένης συνεδρίασης · μόνο ανάγνωση.':viewDirty?'Υπάρχουν αλλαγές που δεν έχουν αποθηκευτεί σε αυτή τη συνεδρίαση.':'Προβολή αποθηκευμένης συνεδρίασης · οι αλλαγές αποθηκεύονται σε αυτή την εγγραφή του Αρχείου.'}
+function openArch(id){const a=archItems.find(x=>x.id===id);if(!a)return;
+  if(id===SESSION_ID){closeArch();return}
+  if(!VIEW){clearTimeout(flushT);flush();liveSig=sigData}
+  VIEW=a;viewDirty=false;closeArm=null;setForm(a.v||{});setSig(a.sig);
+  ['resetBtn','sigClear'].forEach(i=>$(i).disabled=true);pad.style.pointerEvents='none';
+  viewBar();archRender();window.scrollTo({top:0,behavior:'smooth'});toast('Άνοιξε η ΣΓΥ '+longDate(id))}
+function closeArch(){if(!VIEW)return;VIEW=null;viewDirty=false;closeArm=null;
+  setForm(ST?synced:(()=>{try{return JSON.parse(localStorage.getItem(KEY)||'{}')}catch(e){return{}}})());setSig(liveSig);
+  if(!ro){['resetBtn','sigClear'].forEach(i=>$(i).disabled=false);pad.style.pointerEvents=''}
+  viewBar();archRender();toast('Επιστροφή στην τρέχουσα συνεδρίαση')}
+async function saveView(){if(!VIEW||!ARCH||ro)return;const b=$('vbarSave');b.disabled=true;b.textContent='Αποθήκευση…';
+  const rec={id:VIEW.id,title:VIEW.title||'',savedAt:Date.now(),v:collect(),sig:VIEW.sig||null};
+  try{await ARCH.doc(VIEW.id).set(rec);VIEW=rec;viewDirty=false;toast('Αποθηκεύτηκαν οι αλλαγές στη ΣΓΥ '+longDate(rec.id))}
+  catch(e){toast(e&&e.code==='invalid_argument'?'Δεν έχετε δικαίωμα αποθήκευσης':'Η αποθήκευση απέτυχε · δοκιμάστε ξανά')}
+  viewBar()}
+$('vbarSave').addEventListener('click',saveView);
+$('vbarClose').addEventListener('click',()=>{const b=$('vbarClose');
+  if(viewDirty&&closeArm!==b){closeArm=b;b.textContent='Κλείσιμο χωρίς αποθήκευση;';setTimeout(()=>{if(closeArm===b){closeArm=null;b.textContent='Επιστροφή στην τρέχουσα'}},4000);return}
+  b.textContent='Επιστροφή στην τρέχουσα';closeArch()});
 $('archBtn').addEventListener('click',async()=>{
   if(!ARCH){toast('Η αποθήκευση στο Αρχείο γίνεται από τη σελίδα του claude.ai');return}
   if(ro){toast('Μόνο ανάγνωση · δεν επιτρέπεται αποθήκευση');return}
+  if(VIEW){saveView();return}
   const b=$('archBtn'),lbl=b.textContent;b.disabled=true;b.textContent='Αποθήκευση…';
   try{await ARCH.doc(SESSION_ID).set({id:SESSION_ID,title:SESSION_TITLE,savedAt:Date.now(),v:collect(),sig:sigData||null});toast('Η συνεδρίαση αποθηκεύτηκε στο Αρχείο')}
   catch(e){toast(e&&e.code==='invalid_argument'?'Δεν έχετε δικαίωμα αποθήκευσης':'Η αποθήκευση απέτυχε · δοκιμάστε ξανά')}
   finally{b.disabled=false;b.textContent=lbl}});
-let rsArm=null;
-$('archList').addEventListener('click',e=>{const b=e.target.closest('[data-restore]');if(!b||ro)return;
-  if(rsArm!==b){rsArm=b;b.textContent='Επιβεβαίωση φόρτωσης';setTimeout(()=>{if(rsArm===b){rsArm=null;b.textContent='Φόρτωση'}},4000);return}
-  rsArm=null;const a=archItems.find(x=>x.id===b.dataset.restore);if(!a)return;
-  applyShared(a.v||{});sigData=a.sig||null;try{sigData?localStorage.setItem(SIGKEY,sigData):localStorage.removeItem(SIGKEY)}catch(err){}
-  pctx.clearRect(0,0,pad.width,pad.height);sizePad();
-  const d=collect();Object.keys({...d,...synced}).forEach(k=>{pend[k]=k in d?d[k]:null;dirty.add(k)});flush();pushSig();
-  toast('Φορτώθηκε η συνεδρίαση '+fmtD(a.id));b.textContent='Φόρτωση'});
+$('archList').addEventListener('click',e=>{const b=e.target.closest('[data-open]');if(!b)return;
+  if(VIEW&&viewDirty){toast('Αποθηκεύστε ή κλείστε πρώτα τις αλλαγές της ανοιχτής ΣΓΥ');return}
+  openArch(b.dataset.open)});
 async function startArchive(){const db=window.claude&&window.claude.use?await window.claude.use('db').catch(()=>null):null;if(!db)return;
   ARCH=db.collection('archive');
-  ARCH.onSnapshot(q=>{archItems=q.docs.map(d=>d.data()).filter(Boolean).sort((a,b)=>String(b.id).localeCompare(String(a.id)));archRender()},()=>{})}
+  ARCH.onSnapshot(q=>{archItems=q.docs.map(d=>d.data()).filter(Boolean).sort((a,b)=>String(b.id).localeCompare(String(a.id)));
+    if(VIEW&&!viewDirty){const a=archItems.find(x=>x.id===VIEW.id);if(a&&a.savedAt!==VIEW.savedAt){VIEW=a;setForm(a.v||{});setSig(a.sig)}}archRender()},()=>{})}
 
 load();refresh();startShared();startArchive();
 })();
