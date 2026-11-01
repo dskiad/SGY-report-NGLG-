@@ -734,8 +734,8 @@ const ITEMS=[
    panel('2','Ηλεκτρονική Αλληλογραφία',`<div class="dg-grid">
      <div class="dg-card em-card"><div class="dg-h"><span class="sn">2.1</span>Κίνηση ηλεκτρονικού ταχυδρομείου</div><div class="dg-body">
        <div class="acct" id="acctBox"><div class="acct-t"><b>Λογαριασμός Gmail</b><span id="acctState">Ο υπολογισμός γίνεται μόνο με το grand.secretary@nglgreece.gr (και info@).</span></div>
-         <div class="acct-a"><button type="button" class="btn" id="acctCheck">Έλεγχος λογαριασμού</button><a class="btn primary" id="acctChange" href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">Αλλαγή λογαριασμού ↗</a></div>
-         <ol class="acct-steps" id="acctSteps" hidden><li>Στη σελίδα που άνοιξε, στο <b>Gmail</b> πατήστε <b>Disconnect</b>.</li><li>Πατήστε <b>Connect</b> και στο παράθυρο της Google επιλέξτε <b>grand.secretary@nglgreece.gr</b> (αν δεν φαίνεται: «Χρήση άλλου λογαριασμού»).</li><li>Επιστρέψτε εδώ, ανανεώστε τη σελίδα και πατήστε <b>Έλεγχος λογαριασμού</b>.</li></ol></div>
+         <div class="acct-a"><button type="button" class="btn" id="acctCheck">Έλεγχος λογαριασμού</button><a class="btn primary" id="acctChange" href="https://claude.ai/customize/connectors" target="_blank" rel="noopener">Αλλαγή λογαριασμού ↗</a></div>
+         <ol class="acct-steps" id="acctSteps" hidden><li>Στη σελίδα που άνοιξε (Connectors), πατήστε <b>Gmail</b>. Στο κινητό κατεβείτε <b>στο τέλος</b> της λίστας εργαλείων· στον υπολογιστή πατήστε <b>⋯</b> δίπλα στο Gmail. Πατήστε <b>Disconnect</b>.</li><li>Πατήστε <b>Connect</b> και στο παράθυρο της Google επιλέξτε <b>grand.secretary@nglgreece.gr</b> (αν δεν φαίνεται: «Χρήση άλλου λογαριασμού»).</li><li>Επιστρέψτε εδώ, ανανεώστε τη σελίδα και πατήστε <b>Έλεγχος λογαριασμού</b>.</li></ol></div>
        <div class="em-range">
          <label class="f" for="t13-em-from">Από<input type="date" id="t13-em-from" value="2026-09-14" data-label="Στατιστικά email · Από"></label>
          <label class="f" for="t13-em-to">Έως<input type="date" id="t13-em-to" data-label="Στατιστικά email · Έως"></label>
@@ -1215,7 +1215,7 @@ $('acctCheck').addEventListener('click',async()=>{const b=$('acctCheck');
   b.disabled=true;b.textContent='Έλεγχος…';
   try{acctShow(await gmailAccount(mcp))}catch(e){$('acctBox').classList.add('bad');$('acctState').textContent=mcpMsg(e);$('acctSteps').hidden=false}
   finally{b.disabled=false;b.textContent='Έλεγχος λογαριασμού'}});
-const WRONG_ACCT=a=>`<b>⚠ Ο υπολογισμός δεν έγινε.</b> Το Gmail του claude.ai είναι συνδεδεμένο με ${a?`τον λογαριασμό <b>${esc(a)}</b>`:'άλλον λογαριασμό'} και όχι με το γραμματοκιβώτιο της Μεγάλης Γραμματείας (grand.secretary@nglgreece.gr · info@nglgreece.gr).<br>Αλλάξτε τη σύνδεση: <a href="https://claude.ai/settings/connectors" target="_blank" rel="noopener">claude.ai → Settings → Connectors</a> → Gmail → Disconnect → Connect και επιλέξτε <b>grand.secretary@nglgreece.gr</b>. Μετά πατήστε ξανά «Υπολογισμός στατιστικών». Τα αποθηκευμένα στοιχεία δεν άλλαξαν.`;
+const WRONG_ACCT=a=>`<b>⚠ Ο υπολογισμός δεν έγινε.</b> Το Gmail του claude.ai είναι συνδεδεμένο με ${a?`τον λογαριασμό <b>${esc(a)}</b>`:'άλλον λογαριασμό'} και όχι με το γραμματοκιβώτιο της Μεγάλης Γραμματείας (grand.secretary@nglgreece.gr · info@nglgreece.gr).<br>Αλλάξτε τη σύνδεση: <a href="https://claude.ai/customize/connectors" target="_blank" rel="noopener">claude.ai → Connectors</a> → Gmail → ⋯ → Disconnect → Connect και επιλέξτε <b>grand.secretary@nglgreece.gr</b>. Μετά πατήστε ξανά «Υπολογισμός στατιστικών». Τα αποθηκευμένα στοιχεία δεν άλλαξαν.`;
 async function gmailStats(mcp,from,to,progress){
   const start=athensMidnight(from),end=athensMidnight(shiftDay(to,1));
   const call=async(tool,input)=>{try{return (await mcp.callTool('Gmail',tool,input)).payload||{}}
