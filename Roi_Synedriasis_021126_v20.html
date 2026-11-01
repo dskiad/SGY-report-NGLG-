@@ -288,9 +288,9 @@ input:focus,textarea:focus{border-color:var(--gold-line);outline:none;box-shadow
 .pdf-host .rep13 .ov{margin-top:0}
 .pdf-host .rep13 .ov-h{font-size:13px;padding:4px 0;margin-bottom:6px}
 .pdf-host .rep13 .ov-c{padding:4px 8px 5px}
-.pdf-host .rep13 .ov-c h4{font-size:11px;margin-bottom:2px}
-.pdf-host .rep13 .ov-r{font-size:11.5px;line-height:1.28;padding:1px 0}
-.pdf-host .rep13 .ov-l{font-size:11px;line-height:1.26;margin:2px 0 2px}
+.pdf-host .rep13 .ov-c h4{font-size:10.5px;margin-bottom:2px}
+.pdf-host .rep13 .ov-r{font-size:11px;line-height:1.22;padding:1px 0}
+.pdf-host .rep13 .ov-l{font-size:10.5px;line-height:1.2;margin:1px 0 1px}
 .pdf-host .rep13 .ov-note{margin-top:4px;font-size:11px}
 .pdf-host .rep13 .sig-sec{display:none}
 .pdf-host .rep13 .partb{margin-top:0}
@@ -534,6 +534,10 @@ body.pdf-mode::before,.pdf-mode .bar,.pdf-mode .toast,.pdf-mode .sgy-btn,.pdf-mo
 .att-pen{width:100%;height:62px;object-fit:contain}
 .att-line{width:100%;border-bottom:1px solid #111;margin-bottom:3px}
 .att-sign b{font-size:13.5px}.att-role{font-weight:700;font-size:12.5px}.att-sign span{font-size:12.5px}
+.nd-intro{margin:0 0 8px;font-size:14px;line-height:1.55;color:var(--ink)}
+.nd-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
+@media (max-width:520px){.nd-grid{grid-template-columns:minmax(0,1fr)}}
+.pdf-host .nd-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
 .attbox{border:1px dashed var(--gold-line);border-radius:8px;background:var(--solid);padding:10px 12px;display:flex;flex-direction:column;gap:8px}
 .attbox-h{font:700 13px/1.3 var(--f-body);color:var(--ink)}
 .att-files{display:flex;flex-direction:column;gap:6px}
@@ -836,6 +840,8 @@ const ITEMS=[
      ${card('<span class="sn">8.3</span>Διπλώματα',`<div class="diplo">Εκδόθηκαν
        <input type="number" min="0" inputmode="numeric" id="t13-dip" value="16" data-label="Διπλώματα Διδασκάλων Τεκτόνων" aria-label="Διπλώματα Διδασκάλων Τεκτόνων"> διπλώματα Διδασκάλων Τεκτόνων και
        <input type="number" min="0" inputmode="numeric" id="t13-adopt" value="1" data-label="Διπλώματα Υιοθεσίας" aria-label="Διπλώματα Υιοθεσίας"> Υιοθεσίας</div>`)}
+     ${card('<span class="sn">8.4</span>Ευχές Ονομαστικής Εορτής',`<p class="nd-intro">Από τις 20 Σεπτεμβρίου 2026 αποστέλλεται ευχετήρια κάρτα εκ μέρους του Μεγάλου Διδασκάλου σε κάθε εορτάζοντα Αδελφό, με κοινοποίηση στον Επαρχιακό Μεγάλο Γραμματέα και στον Επαρχιακό Μεγάλο Διδάσκαλο. Πηγή: Εορτολόγιο της Ψηφιακής Μεγάλης Γραμματείας.</p>
+       <div class="nd-grid">${[['t13-nd-names','Ονόματα (εορτές)'],['t13-nd-people','Εορτάζοντες Αδελφοί'],['t13-nd-mails','Ευχετήρια email']].map(([i,l])=>`<label class="f" for="${i}">${l}<input type="number" min="0" inputmode="numeric" id="${i}" data-label="Ευχές · ${l}"></label>`).join('')}</div>`)}
    </div>`),
    panel('9','Ψηφιακή Οργάνωση και Αναβάθμιση της Μεγάλης Γραμματείας',`<p class="dg-intro">Στο πλαίσιο της προσπάθειας εκσυγχρονισμού της Μεγάλης Γραμματείας της ΕΜΣτΕ, παρουσιάζονται οι ακόλουθες ψηφιακές λειτουργίες, με στόχο την καλύτερη οργάνωση, την ταχύτερη επικοινωνία και την απλούστευση των καθημερινών εργασιών.</p><div class="dg-grid">${DIG.map(([t,x],i)=>card(`<span class="sn">9.${i+1}</span>${t}`,x)).join('')}</div>
      <div class="dg-live"><div class="dg-live-h"><span class="dg-live-b">Σε λειτουργία</span>Ψηφιακή Αίτηση Εισδοχής και Υιοθεσίας</div><p>Η ψηφιακή Αίτηση Εισδοχής και Υιοθεσίας έχει ήδη υλοποιηθεί και συνδεθεί με την επίσημη ιστοσελίδα της ΕΜΣτΕ. Βρίσκεται στο κάτω μέρος κάθε σελίδας, με τον τίτλο «Αίτηση Εισδοχής».</p><a class="doc" href="https://dskiad.github.io/NGLG-AITHSH/" target="_blank" rel="noopener">${DOC}Αίτηση Εισδοχής</a></div>
@@ -1487,7 +1493,7 @@ function overview(){
   out.push(cat(7,'Αρχείο Μεγάλης Γραμματείας',row('Διατάγματα',N(A?A.dec.length:null)+(decs.length>1?` <em>(${decs[0]}–${decs[decs.length-1]})</em>`:decs.length?` <em>(${decs[0]})</em>`:''))+
     row('Επίσημες Επισκέψεις Μ.Δ.',N(A?A.off.length:null))+row('Εκπροσωπήσεις Μ.Δ.',N(A?A.rep.length:null))+row('Εγκρίσεις Εσωτ. Κανονισμών',N(A?A.kan.length:null))));
   const letters=['Διαχωρισμός ηλεκτρονικής αλληλογραφίας (info@)','Επικαιροποίηση Μηνιαίας Αναφοράς Πεπραγμένων Επαρχιών'];
-  out.push(cat(8,'Λοιπές Ενέργειες',row('Επιστολές',N(letters.length))+list(letters)+row('Διπλώματα Διδασκάλων Τεκτόνων',N(num('t13-dip')))+row('Διπλώματα Υιοθεσίας',N(num('t13-adopt')))));
+  out.push(cat(8,'Λοιπές Ενέργειες',row('Επιστολές',N(letters.length))+list(letters)+row('Διπλώματα Διδασκάλων Τεκτόνων',N(num('t13-dip')))+row('Διπλώματα Υιοθεσίας',N(num('t13-adopt')))+row('Ευχές εορτ. (ονόμ. / Αδ. / email)',`${N(num('t13-nd-names'))} / ${N(num('t13-nd-people'))} / ${N(num('t13-nd-mails'))}`)));
   out.push(cat(9,'Ψηφιακή Οργάνωση',row('Σε λειτουργία','1')+list(['Ψηφιακή Αίτηση Εισδοχής και Υιοθεσίας'])+row('Λειτουργίες υπό ανάπτυξη',N(DIG.length))));
   box.innerHTML=out.join('')}
 function numberTables(){document.querySelectorAll('#item-13 .tcap').forEach((c,n)=>{c.textContent=`Πίνακας ${n+1}. ${c.dataset.t||''}`;if(c.parentElement.classList.contains('tblock')||c.parentElement.classList.contains('tblock-long'))return;
