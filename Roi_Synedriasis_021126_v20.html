@@ -269,6 +269,13 @@ input:focus,textarea:focus{border-color:var(--gold-line);outline:none;box-shadow
 .ov-l{margin:3px 0 4px;padding-left:16px;font:400 12px/1.4 var(--f-gov,serif);color:var(--ink)}
 .ov-note{margin:8px 0 0;font:italic 400 12.5px/1.4 var(--f-gov,serif);color:var(--ink);text-align:center}
 .pdf-host .ov-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.ov-c.ov-wide{grid-column:1/-1}
+.ov-c.ov-span2{grid-column:span 2}
+@media (max-width:760px){.ov-c.ov-span2{grid-column:auto}}
+.pdf-host .ov-c.ov-span2{grid-column:span 2}
+.ov-wide .ov-l{columns:2;column-gap:22px}
+.ov-wide .ov-l li{break-inside:avoid}
+@media (max-width:480px){.ov-wide .ov-l{columns:1}}
 .partb{break-before:page;page-break-before:always;margin-top:26px;text-align:center;border-top:2px solid var(--ink);border-bottom:2px solid var(--ink);padding:14px 4px 10px}
 .partb-k{font:700 12px/1 var(--f-gov,serif);letter-spacing:.2em;text-transform:uppercase;color:var(--ink)}
 .partb-h{margin-top:6px;font:700 19px/1.25 var(--f-gov,serif);letter-spacing:.1em;text-transform:uppercase;color:var(--ink)}
@@ -712,14 +719,15 @@ const DIG=[
  ['Ασφαλής Πρόσβαση','Διαφορετικά δικαιώματα πρόσβασης ανάλογα με την ιδιότητα και τις αρμοδιότητες κάθε χρήστη, με προστασία των προσωπικών δεδομένων.']];
 /* default announcements (section 2); the live list is kept in #t13-ann and can be edited, removed or extended */
 const ANN_DEF=[
-     ['a1','Αίτηση 23 Διδασκάλων','Λήψη αίτησης για χορήγηση Χάρτας Λειτουργίας Στοάς στον Πειραιά υπό την ονομασία «Άτλας» Νο 118 (30/06/26). Ακολουθεί το Διάταγμα 517.'],
+     ['a1','Αίτηση 23 Διδασκάλων για νέα Στοά «Άτλας» Νο 118 Επαρχίας Πειραιώς','Λήψη αίτησης για χορήγηση Χάρτας Λειτουργίας Στοάς στον Πειραιά υπό την ονομασία «Άτλας» Νο 118 (30/06/26). Ακολουθεί το Διάταγμα 517.'],
      ['a2','Έκτακτη Επαρχιακή Μεγάλη Συνέλευση Πειραιώς','14/09/2026<br>Εγκαταστάθηκε ο Πσεβ. Αδ. Βασίλειος Ζαχαριάς.'],
      ['a8','Έκτακτη Περιφερειακή Μεγάλη Συνέλευση Κύπρου','19/09/2026<br>Εγκατάσταση νέου Περιφερειακού Μεγάλου Διδασκάλου, του Πσεβ. Αδ. Θεοδώρου Θεοδώρου.'],
      ['a3','Έκτακτη Επαρχιακή Μεγάλη Συνέλευση Αθηνών','29/10/2026<br>Εγκαταστάθηκε ο Πσεβ. Αδ. Δημήτριος Παναγάκος.'],
-     ['a4','Παραίτηση Σεβασμίου Διδασκάλου','Από Στοά «Κάσσανδρος» (23/10/2026). '+ATT],
-     ['a5','Ημερίδα Ενημέρωσης Γραμματέων Στοών','Προγραμματίζεται για την Παρασκευή 13 Νοεμβρίου 2026, στο Τεκτονικό Μέγαρο Πειραιώς.'],
-     ['a9','Ευχετήριες Κάρτες Εορταζόντων','Από 20 Σεπτεμβρίου 2026 αποστέλλεται ευχετήρια κάρτα εκ μέρους του Μεγάλου Διδασκάλου σε κάθε εορτάζοντα Αδελφό, με κοινοποίηση στον Επαρχιακό Μεγάλο Γραμματέα και στον Επαρχιακό Μεγάλο Διδάσκαλο.'],
-     ['a7','Αιτήσεις Ενδιαφέροντος','Βασίλειος Σταματέλος (11/10/2026)<br>Μητσόπουλος Στυλιανός (08/10/2026 – Στοά Καβάλας)']
+     ['a4','Παραίτηση Σεβασμίου Διδασκάλου στη Στοά «Κάσσανδρος»','Από Στοά «Κάσσανδρος» (23/10/2026). '+ATT],
+     ['a5','Ημερίδα Ενημέρωσης Γραμματέων Στοών · 13 Νοεμβρίου','Προγραμματίζεται για την Παρασκευή 13 Νοεμβρίου 2026, στο Τεκτονικό Μέγαρο Πειραιώς.'],
+     ['a9','Ευχετήριες Κάρτες σε 124 Εορτάζοντες · 7 Ονόματα','Από 20 Σεπτεμβρίου 2026 αποστέλλεται ευχετήρια κάρτα εκ μέρους του Μεγάλου Διδασκάλου σε κάθε εορτάζοντα Αδελφό, με κοινοποίηση στον Επαρχιακό Μεγάλο Γραμματέα και στον Επαρχιακό Μεγάλο Διδάσκαλο.'],
+     ['a7','Αιτήσεις Ενδιαφέροντος από την ιστοσελίδα (2)','Βασίλειος Σταματέλος (11/10/2026)<br>Μητσόπουλος Στυλιανός (08/10/2026 – Στοά Καβάλας)'],
+     ['a10','Νέα Ψηφιακή Αίτηση Εισδοχής – Υιοθεσίας στην ιστοσελίδα www.nglgreece.org','Η ψηφιακή Αίτηση Εισδοχής και Υιοθεσίας λειτουργεί στην επίσημη ιστοσελίδα της ΕΜΣτΕ, www.nglgreece.org, στο κάτω μέρος κάθε σελίδας, με τον τίτλο «Αίτηση Εισδοχής».']
 ].map(([id,t,x])=>({t,x}));
 const ITEMS=[
  {t:'Έναρξις Συνεδριάσεως',b:[`<div class="grid2">${`<label class="f" for="t1-start">Ώρα έναρξης<input type="time" id="t1-start" data-label="Ώρα έναρξης"></label>`}</div>`]},
@@ -1475,7 +1483,7 @@ function overview(){
   const N=v=>v===null||v===undefined||v===''||Number.isNaN(v)?'—':nf(+v);
   const row=(l,v,cls)=>`<div class="ov-r${cls?' '+cls:''}"><span>${esc(l)}</span><b>${v}</b></div>`;
   const list=L=>L.length?`<ul class="ov-l">${L.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'';
-  const cat=(n,t,body)=>`<section class="ov-c"><h4><span>${n}.</span>${esc(t)}</h4>${body}</section>`;
+  const cat=(n,t,body)=>`<section class="ov-c${n===1?' ov-wide':n===9?' ov-span2':''}"><h4><span>${n}.</span>${esc(t)}</h4>${body}</section>`;
   const short=p=>p.replace(/^Επαρχία /,'').replace(/^Περιφέρεια /,'Περιφ. ').replace(/^Απευθείας από Στοές \/ λοιποί$/,'Απευθείας / λοιποί');
   const out=[];
   const ann=annData().map(a=>txt(a.t)).filter(Boolean);
