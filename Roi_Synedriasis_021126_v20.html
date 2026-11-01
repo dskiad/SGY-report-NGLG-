@@ -1182,9 +1182,10 @@ async function gmailStats(mcp,from,to,progress){
     for(const part of ['in:sent','-in:sent']){
       const r=await call('search_threads',{query:q+' '+part,pageSize:50,view:'THREAD_VIEW_MINIMAL'});
       const ths=r.threads||[];if(ths.length>=50)complete=false;
-      for(const th of ths){if(seenT.has(th.id))continue;seenT.add(th.id);const ms=th.messages||[];
-        if((th.messageCount||ms.length)>ms.length){full++;const f=await call('get_thread',{threadId:th.id,messageFormat:'MINIMAL'});(f.messages||[]).forEach(take)}
-        else ms.forEach(take)}}
+      /* a thread can come back on several days and in both parts (our message and the reply to it):
+         its messages are taken every time (each message counts once); a full read is done once per thread */
+      for(const th of ths){const ms=th.messages||[];ms.forEach(take);
+        if((th.messageCount||ms.length)>ms.length&&!seenT.has(th.id)){seenT.add(th.id);full++;const f=await call('get_thread',{threadId:th.id,messageFormat:'MINIMAL'});(f.messages||[]).forEach(take)}}}
     days++;progress(days,nDays)}
   const pack=x=>({in:x.in,out:x.out,uin:x.s.size,uout:x.r.size,inv:x.inv});
   const byAddress={};OWN.forEach((a,i)=>byAddress[a]=pack(per[OWN_N[i]]));
