@@ -117,6 +117,7 @@ h2{font:700 22px/1.3 var(--f-body);margin:0;text-wrap:balance;color:var(--blue);
 .rule{border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:6px;background:var(--solid);padding:10px 14px}
 .rule-src{font:700 10.5px/1.3 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
 .rule-h{margin-top:3px;font:700 14px/1.3 var(--f-body);color:var(--ink)}
+.pdf-mode .rule{display:none!important} /* advice on the web page only, never in the PDF */
 .rule p{margin:6px 0 0;font:400 15.5px/1.55 var(--f-display);color:var(--ink);max-width:70ch}
 .script{background:var(--script-bg);border:1px solid var(--script-line);border-radius:8px;padding:14px 16px}
 .script .who,.panel .who{font:700 11px/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:7px}
@@ -882,7 +883,7 @@ async function makePdf(btn,kind,fname){
       margin:[13,12,17,12],filename:fname,image:{type:'jpeg',quality:0.94},
       html2canvas:{scale:2,useCORS:true,backgroundColor:'#FFFFFF',scrollX:0,scrollY:0},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-      pagebreak:{mode:['css','legacy'],avoid:['.rule','.ov','.partb','.tblock','.tblock-long .sub-h','.tblock-long .tcap','.rep-head','.toc','.sub-h','.tcap','.memo','.sum-kpis','.sig-sec','.inv-h','.dr-kpis','.dr-t tr','.dr-sec h4','.em-sum>p','.em-grid','.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
+      pagebreak:{mode:['css','legacy'],avoid:['.ov','.partb','.tblock','.tblock-long .sub-h','.tblock-long .tcap','.rep-head','.toc','.sub-h','.tcap','.memo','.sum-kpis','.sig-sec','.inv-h','.dr-kpis','.dr-t tr','.dr-sec h4','.em-sum>p','.em-grid','.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
     }).from(host).toPdf().get('pdf').then(pdf=>{const n=pdf.internal.getNumberOfPages(),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight();
       const dIn=document.getElementById('t13-date').value,dd=dIn?fmtD(dIn):'02/11/2026';
       const right=kind==='report'?'Αναφορά Μεγάλου Γραμματέως προς το ΣΓΥ · '+dd:'Ροή Τακτικής Συνεδριάσεως ΣΓΥ · 02/11/2026';
