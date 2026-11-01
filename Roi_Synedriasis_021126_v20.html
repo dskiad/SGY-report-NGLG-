@@ -1493,7 +1493,7 @@ function overview(){
   out.push(cat(7,'Αρχείο Μεγάλης Γραμματείας',row('Διατάγματα',N(A?A.dec.length:null)+(decs.length>1?` <em>(${decs[0]}–${decs[decs.length-1]})</em>`:decs.length?` <em>(${decs[0]})</em>`:''))+
     row('Επίσημες Επισκέψεις Μ.Δ.',N(A?A.off.length:null))+row('Εκπροσωπήσεις Μ.Δ.',N(A?A.rep.length:null))+row('Εγκρίσεις Εσωτ. Κανονισμών',N(A?A.kan.length:null))));
   const letters=['Διαχωρισμός ηλεκτρονικής αλληλογραφίας (info@)','Επικαιροποίηση Μηνιαίας Αναφοράς Πεπραγμένων Επαρχιών'];
-  out.push(cat(8,'Λοιπές Ενέργειες',row('Επιστολές',N(letters.length))+list(letters)+row('Διπλώματα Διδασκάλων Τεκτόνων',N(num('t13-dip')))+row('Διπλώματα Υιοθεσίας',N(num('t13-adopt')))+row('Ευχές εορτ. (ονόμ. / Αδ. / email)',`${N(num('t13-nd-names'))} / ${N(num('t13-nd-people'))} / ${N(num('t13-nd-mails'))}`)));
+  out.push(cat(8,'Λοιπές Ενέργειες',row('Επιστολές',N(letters.length))+list(letters)+row('Διπλώματα Διδασκάλων Τεκτόνων',N(num('t13-dip')))+row('Διπλώματα Υιοθεσίας',N(num('t13-adopt')))+row('Εορτάζοντες (ευχετήριες κάρτες)',N(num('t13-nd-people')))));
   out.push(cat(9,'Ψηφιακή Οργάνωση',row('Σε λειτουργία','1')+list(['Ψηφιακή Αίτηση Εισδοχής και Υιοθεσίας'])+row('Λειτουργίες υπό ανάπτυξη',N(DIG.length))));
   box.innerHTML=out.join('')}
 function numberTables(){document.querySelectorAll('#item-13 .tcap').forEach((c,n)=>{c.textContent=`Πίνακας ${n+1}. ${c.dataset.t||''}`;if(c.parentElement.classList.contains('tblock')||c.parentElement.classList.contains('tblock-long'))return;
