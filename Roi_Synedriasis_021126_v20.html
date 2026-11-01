@@ -526,7 +526,7 @@ body.pdf-mode::before,.pdf-mode .bar,.pdf-mode .toast,.pdf-mode .sgy-btn,.pdf-mo
 .att-sec th{background:#EDEDED;font-weight:700}
 .att-sec .c{text-align:center;width:48px}
 .att-sec td:nth-child(3){width:150px}
-.att-box{display:inline-block;width:12px;height:12px;border:1.2px solid #111;margin-top:2px}
+.att-box{display:inline-block;width:12px;height:12px;border:1.2px solid #111;margin-top:2px;font:700 11px/11px Georgia,serif;text-align:center}
 .att-close{margin:16px 0 0}
 .att-sign{display:flex;flex-direction:column;align-items:center;gap:1px;width:320px;margin:4px 0 0 auto;text-align:center;break-inside:avoid}
 .att-sig{display:grid;grid-template-columns:76px minmax(0,1fr);align-items:center;width:100%}
@@ -534,6 +534,20 @@ body.pdf-mode::before,.pdf-mode .bar,.pdf-mode .toast,.pdf-mode .sgy-btn,.pdf-mo
 .att-pen{width:100%;height:62px;object-fit:contain}
 .att-line{width:100%;border-bottom:1px solid #111;margin-bottom:3px}
 .att-sign b{font-size:13.5px}.att-role{font-weight:700;font-size:12.5px}.att-sign span{font-size:12.5px}
+.attbox{border:1px dashed var(--gold-line);border-radius:8px;background:var(--solid);padding:10px 12px;display:flex;flex-direction:column;gap:8px}
+.attbox-h{font:700 13px/1.3 var(--f-body);color:var(--ink)}
+.att-files{display:flex;flex-direction:column;gap:6px}
+.att-file{display:flex;align-items:center;gap:10px;flex-wrap:wrap;border:1px solid var(--line);border-radius:6px;padding:7px 10px;background:var(--surface)}
+.att-file a{font:600 14px/1.35 var(--f-body);color:var(--blue);overflow-wrap:anywhere;flex:1 1 200px}
+.att-file small{font-size:12px;color:var(--muted)}
+.att-file button{margin-left:auto;padding:4px 10px;font-size:12px}
+.att-none{font-size:13px;color:var(--muted)}
+.att-up{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.att-pick{cursor:pointer}
+.att-msg{font-size:12.5px;color:var(--muted)}
+.att-msg.err{color:var(--red);font-weight:600}
+.pdf-mode .att-up,.pdf-mode .att-file button{display:none!important}
+.pdf-mode .attbox{border-style:solid}
 .pdf-host{background:#FFFFFF;color:var(--ink);font:15px/1.55 var(--f-body)}
 .pdf-host .mast{padding-block:6px 10px}
 .pdf-host .item{grid-template-columns:48px minmax(0,1fr);padding:22px 18px 20px 12px}
@@ -655,6 +669,9 @@ const rule=(src,title,body)=>`<div class="rule"><div class="rule-src">${src}</di
 const doc=(href,t)=>`<a class="doc" href="${href}" target="_blank" rel="noopener">${DOC}${t}</a>`;
 const text=(id,l,ph='')=>`<label class="f" for="${id}">${l}<input type="text" id="${id}" data-label="${esc(l)}" placeholder="${esc(ph)}"></label>`;
 const area=(id,l)=>`<label class="f" for="${id}">${l}<textarea id="${id}" data-label="${esc(l)}"></textarea></label>`;
+/* file attachment for an item: files go to the artifact's asset store, the list (id, name, size, date) is kept in a hidden field */
+const attBox=(id,label)=>`<div class="attbox" data-att="${id}"><div class="attbox-h">📎 ${label}</div><input type="hidden" id="${id}" data-label="${esc(label)}"><div class="att-files" id="${id}-list"></div>
+  <div class="att-up"><label class="btn att-pick">Επισύναψη αρχείου<input type="file" id="${id}-file" accept=".pdf,.png,.jpg,.jpeg,.webp,.csv,.txt,.json,.md" hidden></label><span class="att-msg" id="${id}-msg">PDF, εικόνα ή CSV · έως 20 MB · Word/Excel: αποθηκεύστε πρώτα ως PDF</span></div></div>`;
 const seg=(id,l)=>`<div class="seg" data-seg="${id}" data-label="${esc(l)}"><span class="lbl">${l}</span><span class="opts">
   <input type="radio" name="${id}" id="${id}-y" value="yes"><label for="${id}-y">ΝΑΙ</label>
   <input type="radio" name="${id}" id="${id}-n" value="no"><label for="${id}-n">ΟΧΙ</label></span></div>`;
@@ -719,6 +736,7 @@ const ITEMS=[
  {t:'Παρουσίασις & Έγκρισις Οικονομικού Προϋπολογισμού',ref:'Περίοδος 1/1/2027 – 31/12/2027 · Βάσει Κανόνα 228γ',b:[
    note('<b>Έχει ζητηθεί από Π. Βλάχο.</b> Θα δοθεί Δευτέρα — αν προλάβουμε να σταλεί. Να διασταυρωθεί αν θα γίνουν παράλληλα οι ανακοινώσεις του Θέματος 14 από τον Μ. Θησαυροφύλακα.'),
    script(['«Ο Οικονομικός Προϋπολογισμός έχει αποσταλεί στα μέλη του Συμβουλίου και δεν έχουν υπάρξει παρατηρήσεις. Προτείνω όπως θεωρηθεί αναγνωσθείς.»'],'Μόνο αν εστάλη στα μέλη. Διαφορετικά παρουσιάζει ο Μ.Θ. και περνάμε απευθείας στο B (Έγκριση).'),
+   attBox('t7-att','Οικονομικός Προϋπολογισμός 2027 · αρχείο'),
    seg('t7-sent','Εστάλη στα μέλη'),
    vote('t7a','A','Έγκριση θεωρήσεως ως αναγνωσθέντος'),
    vote('t7b','B','Έγκριση Προϋπολογισμού',{action:'Ενέργεια / Αποστολή'})]},
@@ -841,7 +859,7 @@ dots.innerHTML=ITEMS.map((it,i)=>`<button type="button" class="dot" data-go="${i
 
 /* storage */
 const KEY='emste-sgy-021126-v1';
-const fields=()=>form.querySelectorAll('input,textarea');
+const fields=()=>form.querySelectorAll('input:not([type=file]),textarea');
 const eds=()=>form.querySelectorAll('[data-edit]');
 const DEF={};eds().forEach(el=>DEF[el.dataset.edit]=el.innerHTML);
 function collect(){const d={};fields().forEach(el=>{if(el.type==='radio'||el.type==='checkbox')d[el.id]=el.checked;else d[el.id]=el.value});eds().forEach(el=>{if(el.innerHTML!==DEF[el.dataset.edit])d['edit:'+el.dataset.edit]=el.innerHTML});return d}
@@ -856,7 +874,7 @@ function refresh(){
     document.getElementById('item-'+n).classList.toggle('is-done',on);
     dots.children[i].classList.toggle('done',on)});
   document.getElementById('pc').textContent=c;
-  renderAnn();emSummary();driveRender();renderMail();overview();numberTables();
+  renderAnn();emSummary();driveRender();renderMail();overview();attRender();numberTables();
   form.querySelectorAll('[data-vote]').forEach(v=>{const id=v.dataset.vote,r=document.getElementById(id+'-res');
     const g=k=>document.getElementById(id+'-'+k).value, y=g('y'),k=g('k');
     if(y===''&&k===''){r.textContent='Εκκρεμεί';r.className='res';return}
@@ -1020,6 +1038,29 @@ const ATT_LIST=[
    ['—','Σχέδιο Πρακτικού της Συνεδριάσεως προς τα Μέλη του Συμβουλίου','Μεγάλη Γραμματεία'],
    ['—','Γνωστοποίηση των αποφάσεων του Συμβουλίου (Συνδρομές, Προϋπολογισμός, Μεγάλη Συνέλευσις) στους αρμοδίους','Μεγάλη Γραμματεία'],
    ['—','Καταχώριση των δικαιολογήσεων μη συμμετοχής των Μελών στο Πρακτικό','Μεγάλη Γραμματεία']]]];
+const ATT_TYPES={pdf:'application/pdf',png:'image/png',jpg:'image/jpeg',jpeg:'image/jpeg',webp:'image/webp',csv:'text/csv',txt:'text/plain',json:'application/json',md:'text/markdown'};
+const attData=id=>{try{const v=JSON.parse($(id).value||'[]');return Array.isArray(v)?v:[]}catch(e){return[]}};
+const kb=n=>n>=1048576?(n/1048576).toFixed(1).replace('.',',')+' MB':Math.max(1,Math.round(n/1024))+' KB';
+function attRender(){document.querySelectorAll('[data-att]').forEach(box=>{const id=box.dataset.att,L=attData(id);
+  $(id+'-list').innerHTML=L.length?L.map((f,i)=>`<div class="att-file"><a href="/_blob/${esc(f.id)}" target="_blank" rel="noopener">📄 ${esc(f.name)}</a><small>${esc(kb(f.size||0))} · ${esc(f.at?new Date(f.at).toLocaleDateString('el-GR'):'')}</small>${ro?'':`<button type="button" class="btn" data-att-del="${i}">Αφαίρεση</button>`}</div>`).join(''):'<div class="att-none">Δεν έχει επισυναφθεί αρχείο.</div>'})}
+form.addEventListener('change',async e=>{const inp=e.target;if(!inp.matches||!inp.matches('.attbox input[type=file]'))return;
+  const box=inp.closest('[data-att]'),id=box.dataset.att,msg=$(id+'-msg'),file=inp.files&&inp.files[0];inp.value='';if(!file)return;
+  const ext=(file.name.split('.').pop()||'').toLowerCase(),type=ATT_TYPES[ext];
+  const say=(t,err)=>{msg.textContent=t;msg.classList.toggle('err',!!err)};
+  if(!type){say(/^(docx?|xlsx?|pptx?|odt|ods)$/.test(ext)?'Τα αρχεία Word/Excel αποθηκεύστε τα πρώτα ως PDF (Αρχείο → Αποθήκευση ως → PDF) και επισυνάψτε το PDF.':'Μη αποδεκτός τύπος αρχείου · PDF, εικόνα ή CSV.',true);return}
+  if(file.size>20*1048576){say('Το αρχείο ξεπερνά τα 20 MB.',true);return}
+  const assets=window.claude&&window.claude.use?await window.claude.use('assets').catch(()=>null):null;
+  if(!assets){say('Η επισύναψη γίνεται στη ζωντανή σελίδα του claude.ai, από τον συντάκτη της σελίδας.',true);return}
+  say('Μεταφόρτωση «'+file.name+'»…');
+  try{const r=await assets.upload(file,{type});const L=attData(id);L.push({id:r.id,name:file.name,size:r.sizeBytes||file.size,type,at:Date.now()});
+    $(id).value=JSON.stringify(L);save();attRender();say('Επισυνάφθηκε «'+file.name+'».');toast('Επισυνάφθηκε το αρχείο')}
+  catch(err){const c=err&&err.code;say(c==='too_large'?'Το αρχείο είναι πολύ μεγάλο (έως 20 MB).':c==='unsupported_type'?'Μη αποδεκτός τύπος αρχείου.':c==='quota_or_state'?'Δεν υπάρχει διαθέσιμος χώρος αποθήκευσης.':c==='rate_limited'?'Πολλές προσπάθειες · δοκιμάστε σε λίγο.':c==='not_granted'?'Δεν δόθηκε άδεια για αποθήκευση αρχείων.':'Η επισύναψη απέτυχε · δοκιμάστε ξανά.',true)}});
+let attArm=null;
+form.addEventListener('click',async e=>{const b=e.target.closest('[data-att-del]');if(!b||ro)return;e.preventDefault();
+  if(attArm!==b){attArm=b;b.textContent='Επιβεβαίωση αφαίρεσης';setTimeout(()=>{if(attArm===b){attArm=null;b.textContent='Αφαίρεση'}},4000);return}
+  attArm=null;const id=b.closest('[data-att]').dataset.att,L=attData(id),f=L[+b.dataset.attDel];if(!f)return;
+  /* an archived session may still point at this file, so only the link is removed here */
+  L.splice(+b.dataset.attDel,1);$(id).value=JSON.stringify(L);save();attRender();toast('Αφαιρέθηκε το «'+f.name+'»')});
 const MONTHS_G=['Ιανουαρίου','Φεβρουαρίου','Μαρτίου','Απριλίου','Μαΐου','Ιουνίου','Ιουλίου','Αυγούστου','Σεπτεμβρίου','Οκτωβρίου','Νοεμβρίου','Δεκεμβρίου'];
 const sessGen=id=>{const [y,m,d]=String(id).split('-').map(Number);return `${d}${d%10===2&&d!==12?'ας':'ης'} ${MONTHS_G[m-1]} ${y}`};
 /* Greek capitals drop the accent (tonos) but keep the diaeresis */
@@ -1031,7 +1072,7 @@ function buildAttach(){const id=VIEW?VIEW.id:SESSION_ID,seal=(document.querySele
   <h1 class="att-h">${UP('Μεγάλη Γραμματεία')}<br>${UP('Συνημμένα · Έλεγχος')}<br><span>${esc(UP('για το Συμβούλιο Γενικών Υποθέσεων της '+sessGen(id)))}</span></h1>
   <p class="att-intro">Κατάλογος των εγγράφων που πρέπει να συνοδεύουν την Πρόσκληση και τα Θέματα της Ημερησίας Διατάξεως, προς έλεγχο από τη Μεγάλη Γραμματεία πριν από την αποστολή τους στα Μέλη του Συμβουλίου.</p>
   ${ATT_LIST.map(([h,rows])=>`<div class="att-sec"><h2>${esc(UP(h))}</h2><table><thead><tr><th class="c">Θέμα</th><th>Συνημμένο έγγραφο</th><th>Αρμόδιος</th><th class="c">Εστάλη</th></tr></thead><tbody>${
-    rows.map(([n,d,w])=>`<tr><td class="c">${esc(n)}</td><td>${esc(d)}</td><td>${esc(w)}</td><td class="c"><span class="att-box"></span></td></tr>`).join('')}</tbody></table></div>`).join('')}
+    rows.map(([n,d,w])=>{const f=n==='7'?attData('t7-att'):[];return `<tr><td class="c">${esc(n)}</td><td>${esc(d)}${f.length?`<br><b>Επισυνάφθηκε:</b> ${esc(f.map(x=>x.name).join(', '))}`:''}</td><td>${esc(w)}</td><td class="c"><span class="att-box${f.length?' on':''}">${f.length?'✓':''}</span></td></tr>`}).join('')}</tbody></table></div>`).join('')}
   <p class="att-close">Με Αφοσίωση και Αδελφική Αγάπη,</p>
   <div class="att-sign"><div class="att-sig"><img class="att-seal" src="${seal}" alt=""><img class="att-pen" src="${sig}" alt=""></div><div class="att-line"></div>
     <b>${esc(txt('sig2')||'Πσεβ. Αδ. Δημήτριος Σκιαδόπουλος')}</b><span class="att-role">${esc(txt('sig3')||'Μέγας Γραμματεύς')}</span><span>${esc(txt('sig4')||'Εθνική Μεγάλη Στοά της Ελλάδος')}</span></div>`;
