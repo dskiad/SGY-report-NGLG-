@@ -770,6 +770,7 @@ const ITEMS=[
          <tr><th>ΑΡ. ΠΡΩΤ.</th><td><input type="text" id="t13-proto" class="memo-in" placeholder="π.χ. 20576" data-label="Αριθμός πρωτοκόλλου αναφοράς"></td></tr>
        </tbody></table>
        <button type="button" class="btn primary rep-btn" id="repPdfBtn">PDF Αναφοράς ΜΓραμ</button>
+       <input type="hidden" id="pdfver-report" data-label="Έκδοση PDF Αναφοράς"><input type="hidden" id="pdfver-full" data-label="Έκδοση PDF Συνεδριάσεως"><input type="hidden" id="pdfver-attach" data-label="Έκδοση PDF Συνημμένων">
      </div>
      <div class="ov"><div class="ov-h">Μέρος Α΄ · Συνοπτική Εποπτική Αναφορά</div><div class="ov-grid" id="ovOut"></div>
        <p class="ov-note">Τα αναλυτικά στοιχεία κάθε κατηγορίας παρατίθενται στο Μέρος Β΄ · Τεύχος Ανάλυσης Δεδομένων.</p></div>
@@ -1000,10 +1001,14 @@ async function makePdf(btn,kind,fname){
     if(prev===null)root.removeAttribute('data-theme');else root.setAttribute('data-theme',prev);
   }
   if(blob){
+    const ddmmyy=v=>{const [y,m,d]=String(v).split('-');return d+m+y.slice(2)},sid=VIEW?VIEW.id:SESSION_ID;
+    const base={report:20,full:20,attach:1}[kind]||0,ver=(parseInt($('pdfver-'+kind).value,10)||base)+1;
+    fname={report:`Αναφορά_ΜΓραμ_ΣΓΥ_${ddmmyy($('t13-date').value||sid)}`,full:`Συνεδρίαση_ΣΓΥ_${ddmmyy(sid)}`,attach:`Συνημμένα_ΣΓΥ_${ddmmyy(sid)}`}[kind]+`_έκδ${ver}.pdf`;
+    $('pdfver-'+kind).value=String(ver);save();
     let dl=null;try{dl=window.claude&&window.claude.use?await window.claude.use('downloads'):null}catch(e){}
-    if(dl){try{await dl.save({filename:fname,data:blob});toast('Το PDF αποθηκεύτηκε')}
+    if(dl){try{await dl.save({filename:fname,data:blob});toast('Αποθηκεύτηκε: '+fname)}
       catch(e){toast(e&&e.code==='declined'?'Η αποθήκευση ακυρώθηκε':e&&e.code==='rate_limited'?'Υπάρχει ήδη ανοιχτό παράθυρο αποθήκευσης':'Η αποθήκευση PDF δεν είναι διαθέσιμη σε αυτή την προβολή')}}
-    else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),8000);toast('Το PDF δημιουργήθηκε')}
+    else{const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=fname;document.body.appendChild(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(a.href),8000);toast('Λήψη: '+fname)}
   }
   PDF_BTNS.forEach(b=>b.disabled=false);btn.textContent=lbl;
 }
