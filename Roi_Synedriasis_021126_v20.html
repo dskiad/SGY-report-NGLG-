@@ -975,11 +975,14 @@ async function makePdf(btn,kind,fname){
     host.style.position='absolute';host.style.left='-10000px';host.style.top='0';document.body.appendChild(host);
     host.querySelectorAll('*').forEach(el=>{if(getComputedStyle(el).textTransform!=='uppercase')return;
       el.childNodes.forEach(n=>{if(n.nodeType===3)n.nodeValue=UP(n.nodeValue)});el.style.textTransform='none'});
+    /* the whole document is drawn on one canvas: phones and in-app viewers return a blank canvas above ~16 million
+       pixels, so long documents are drawn at a lower resolution to stay under that limit */
+    const hostH=host.scrollHeight*1.12,scale=Math.max(1,Math.min(2,Math.sqrt(12e6/(RW*hostH))));
     host.remove();host.style.position=host.style.left=host.style.top='';
     await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
     blob=await html2pdf().set({
       margin:[13,12,17,12],filename:fname,image:{type:'jpeg',quality:0.94},
-      html2canvas:{scale:2,useCORS:true,backgroundColor:'#FFFFFF',scrollX:0,scrollY:0},
+      html2canvas:{scale,useCORS:true,backgroundColor:'#FFFFFF',scrollX:0,scrollY:0},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
       pagebreak:{mode:['css','legacy'],avoid:['.att-sec h2','.att-sec thead','.att-sec tr','.att-sign','.att-lh','.att-h','.ov','.partb','.tblock','.tblock-long .sub-h','.tblock-long .tcap','.rep-head','.toc','.sub-h','.tcap','.memo','.sum-kpis','.sig-sec','.inv-h','.dr-kpis','.dr-t tr','.dr-sec h4','.em-sum>p','.em-grid','.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
     }).from(host).toPdf().get('pdf').then(pdf=>{const n=pdf.internal.getNumberOfPages(),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight();
