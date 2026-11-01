@@ -73,6 +73,18 @@ h1{font:400 clamp(32px,6.4vw,48px)/1.1 var(--f-display);margin:18px 0 6px;text-w
 /* Sticky onyx bar */
 .bar{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bar-bg);border-bottom:2px solid var(--gold-line);
   margin-inline:calc(-1 * max(16px,env(safe-area-inset-left,0px)));padding:10px max(16px,env(safe-area-inset-right,0px)) 10px max(16px,env(safe-area-inset-left,0px));box-shadow:0 6px 18px rgba(120,90,20,.08);-webkit-backdrop-filter:blur(8px);backdrop-filter:blur(8px)}
+.sgymenu{position:absolute;top:100%;left:50%;transform:translateX(-50%);width:min(520px,calc(100% - 32px));margin-top:6px;z-index:40;background:var(--solid);color:var(--ink);border:1.5px solid var(--gold-line);border-radius:10px;box-shadow:0 12px 32px rgba(0,0,0,.22);padding:10px;display:flex;flex-direction:column;gap:6px;max-height:70vh;overflow:auto}
+.sgymenu[hidden]{display:none}
+.sgymenu-h{font:700 11.5px/1.3 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted);padding:2px 4px 4px}
+.sgymenu-i{display:flex;flex-direction:column;align-items:flex-start;gap:2px;width:100%;text-align:left;background:transparent;border:1px solid var(--line);border-radius:8px;padding:9px 11px;cursor:pointer;color:var(--ink);font:inherit}
+.sgymenu-i:hover,.sgymenu-i:focus-visible{border-color:var(--gold-line);background:var(--surface)}
+.sgymenu-i b{font:700 14.5px/1.3 var(--f-body);color:var(--blue)}
+.sgymenu-i span{font-size:12.5px;color:var(--muted)}
+.sgymenu-i.on{border-color:var(--gold-line);box-shadow:inset 3px 0 0 var(--gold)}
+.sgymenu-i em{font-style:normal;font:700 10.5px/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
+.sgymenu-all{background:transparent;border:0;color:var(--gold);font:600 13px/1.4 var(--f-body);text-align:left;padding:6px 4px;cursor:pointer;text-decoration:underline}
+.sgymenu p{margin:4px;font-size:13px;color:var(--muted)}
+.pdf-mode .sgymenu{display:none!important}
 .bar-in{max-width:860px;margin:0 auto;display:flex;align-items:center;gap:14px;flex-wrap:wrap}
 .prog{flex:1 1 300px;min-width:0}
 .prog-top{display:flex;justify-content:space-between;font-size:12.5px;color:var(--bar-muted);margin-bottom:6px;letter-spacing:.04em}
@@ -569,6 +581,8 @@ body.pdf-mode::before,.pdf-mode .bar,.pdf-mode .toast,.pdf-mode .sgy-btn,.pdf-mo
 </div>
 
 <div class="bar">
+  <div class="sgymenu" id="sgyMenu" hidden role="menu" aria-label="Αποθηκευμένες ΣΓΥ"><div class="sgymenu-h">Αποθηκευμένες συνεδριάσεις ΣΓΥ</div><div id="sgyMenuList"></div>
+    <button type="button" class="sgymenu-all" id="sgyMenuAll">Αρχείο Συνεδριάσεων (στο τέλος της σελίδας) ↓</button></div>
   <div class="bar-in" lang="el">
     <div class="prog">
       <div class="prog-top"><span>Πρόοδος συνεδρίασης</span><span><b id="pc">0</b> / 15 θέματα</span></div>
@@ -579,7 +593,9 @@ body.pdf-mode::before,.pdf-mode .bar,.pdf-mode .toast,.pdf-mode .sgy-btn,.pdf-mo
       <button class="btn primary" id="copyBtn" type="button">Αντιγραφή πρακτικών</button>
       <button class="btn primary" id="pdfBtn" type="button" title="Λήψη PDF της Αναφοράς Μεγάλου Γραμματέως">Αναφορά ΜΓραμ</button>
       <button class="btn save" id="archBtn" type="button" title="Αποθήκευση ολόκληρης της συνεδρίασης στο Αρχείο Συνεδριάσεων">Αποθήκευση ΣΓΥ</button>
+      <button class="btn menu-btn" id="sgyMenuBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="sgyMenu">📂 Όλες οι ΣΓΥ ▾</button>
       <button class="btn" id="resetBtn" type="button">Επαναφορά</button>
+      <button class="btn theme-btn" id="themeBtn" type="button" title="Εμφάνιση: φωτεινό, σκοτεινό ή αυτόματο (όπως η συσκευή)">☀ Φωτεινό</button>
       <button class="btn" id="authBtn" type="button" hidden>Σύνδεση Google</button>
     </div>
   </div>
@@ -1540,11 +1556,31 @@ $('archList').addEventListener('click',e=>{const b=e.target.closest('[data-open]
 async function startArchive(){const db=window.claude&&window.claude.use?await window.claude.use('db').catch(()=>null):null;if(!db)return;
   ARCH=db.collection('archive');
   ARCH.onSnapshot(q=>{archItems=q.docs.map(d=>d.data()).filter(Boolean).sort((a,b)=>String(b.id).localeCompare(String(a.id)));
-    if(VIEW&&!viewDirty){const a=archItems.find(x=>x.id===VIEW.id);if(a&&a.savedAt!==VIEW.savedAt){VIEW=a;setForm(a.v||{});setSig(a.sig)}}archRender()},()=>{})}
+    if(VIEW&&!viewDirty){const a=archItems.find(x=>x.id===VIEW.id);if(a&&a.savedAt!==VIEW.savedAt){VIEW=a;setForm(a.v||{});setSig(a.sig)}}archRender();if(!$('sgyMenu').hidden)sgyMenuRender()},()=>{})}
 
 /* outside the claude.ai viewer (GitHub Pages, a saved file) nothing can be calculated or saved: point to the live page */
 async function liveCheck(){let db=null;try{db=window.claude&&window.claude.use?await window.claude.use('db'):null}catch(e){}
   if(!db&&!FB_CONFIG)$('golive').hidden=false}
+/* Appearance: light by default (white page); dark, or following the device, on request */
+const THEME_KEY=KEY+'-theme',THEMES=[['light','☀ Φωτεινό'],['dark','☾ Σκοτεινό'],['auto','◐ Αυτόματο']];
+function applyTheme(t){const r=document.documentElement;if(t==='auto')r.removeAttribute('data-theme');else r.setAttribute('data-theme',t);
+  const lbl=(THEMES.find(x=>x[0]===t)||THEMES[0])[1];$('themeBtn').textContent=lbl}
+let theme='light';try{theme=localStorage.getItem(THEME_KEY)||'light'}catch(e){}applyTheme(theme);
+$('themeBtn').addEventListener('click',()=>{const i=THEMES.findIndex(x=>x[0]===theme);theme=THEMES[(i+1)%THEMES.length][0];applyTheme(theme);try{localStorage.setItem(THEME_KEY,theme)}catch(e){}});
+/* Menu of every saved ΣΓΥ, titled by its date: open one to view and edit it */
+function sgyMenuRender(){const box=$('sgyMenuList');
+  if(!ARCH){box.innerHTML='<p>Οι αποθηκευμένες ΣΓΥ εμφανίζονται στη <a href="https://claude.ai/artifact/TokGbLGVAzWv6V5Nz1TFSb" target="_blank" rel="noopener">ζωντανή σελίδα</a> (claude.ai).</p>';return}
+  if(!archItems.length){box.innerHTML='<p>Δεν υπάρχουν ακόμα αποθηκευμένες ΣΓΥ · πατήστε «Αποθήκευση ΣΓΥ».</p>';return}
+  box.innerHTML=archItems.map(a=>{const cur=a.id===SESSION_ID,on=VIEW?VIEW.id===a.id:cur;
+    return `<button type="button" role="menuitem" class="sgymenu-i${on?' on':''}" data-menu-open="${esc(a.id)}"><b>ΣΓΥ ${esc(longDate(a.id))}</b><span>${esc(a.title||'')} · αποθήκευση ${esc(savedAt(a))}</span>${on?`<em>${cur&&!VIEW?'Τρέχουσα':'Ανοιχτή'}</em>`:cur?'<em>Τρέχουσα</em>':''}</button>`}).join('')}
+function sgyMenu(open){const m=$('sgyMenu'),b=$('sgyMenuBtn');if(open===undefined)open=m.hidden;m.hidden=!open;b.setAttribute('aria-expanded',String(open));if(open){sgyMenuRender();const f=m.querySelector('.sgymenu-i');if(f)f.focus()}}
+$('sgyMenuBtn').addEventListener('click',e=>{e.stopPropagation();sgyMenu()});
+$('sgyMenuList').addEventListener('click',e=>{const b=e.target.closest('[data-menu-open]');if(!b)return;
+  if(VIEW&&viewDirty&&VIEW.id!==b.dataset.menuOpen){toast('Αποθηκεύστε ή κλείστε πρώτα τις αλλαγές της ανοιχτής ΣΓΥ');return}
+  sgyMenu(false);openArch(b.dataset.menuOpen)});
+$('sgyMenuAll').addEventListener('click',()=>{sgyMenu(false);$('arch').scrollIntoView({behavior:'smooth',block:'start'})});
+document.addEventListener('click',e=>{if(!$('sgyMenu').hidden&&!e.target.closest('#sgyMenu'))sgyMenu(false)});
+document.addEventListener('keydown',e=>{if(e.key==='Escape'&&!$('sgyMenu').hidden){sgyMenu(false);$('sgyMenuBtn').focus()}});
 load();refresh();startShared();startArchive();liveCheck();
 })();
 </script>
