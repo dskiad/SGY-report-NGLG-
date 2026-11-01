@@ -511,6 +511,29 @@ body.pdf-mode::before,.pdf-mode .bar,.pdf-mode .toast,.pdf-mode .sgy-btn,.pdf-mo
 .arch-row .arch-cur{margin-left:auto;font:700 11px/1 var(--f-body);letter-spacing:.12em;text-transform:uppercase;color:var(--gold)}
 .arch-row .btn{margin-left:auto;padding:7px 12px;font-size:12.5px}
 .arch-row .arch-gh{font-size:12.5px;font-weight:600;color:var(--gold)}
+.att-doc{color:#111;font:400 13px/1.45 "Noto Serif","GFS Didot",Georgia,serif;padding:4px 2px}
+.att-lh{display:flex;align-items:center;justify-content:center;gap:12px;padding-bottom:8px;border-bottom:2px solid #111}
+.att-lh img{width:54px;height:54px}
+.att-org{font-weight:700;font-size:15px;letter-spacing:.12em}
+.att-sub{font-weight:700;font-size:12px;letter-spacing:.16em}
+.att-h{margin:14px 0 6px;text-align:center;font:700 17px/1.35 "Noto Serif",Georgia,serif;letter-spacing:.06em;color:#111}
+.att-h span{font-size:14px;letter-spacing:.04em}
+.att-intro{margin:6px 0 10px;text-align:justify}
+.att-sec{margin-top:10px}
+.att-sec h2{margin:0 0 4px;font:700 13.5px/1.3 "Noto Serif",Georgia,serif;letter-spacing:.05em;color:#111;border-bottom:1px solid #111;padding-bottom:3px}
+.att-sec table{width:100%;border-collapse:collapse;font-size:12.5px}
+.att-sec th,.att-sec td{border:1px solid #111;padding:4px 6px;vertical-align:top;text-align:left}
+.att-sec th{background:#EDEDED;font-weight:700}
+.att-sec .c{text-align:center;width:48px}
+.att-sec td:nth-child(3){width:150px}
+.att-box{display:inline-block;width:12px;height:12px;border:1.2px solid #111;margin-top:2px}
+.att-close{margin:16px 0 0}
+.att-sign{display:flex;flex-direction:column;align-items:center;gap:1px;width:320px;margin:4px 0 0 auto;text-align:center;break-inside:avoid}
+.att-sig{display:grid;grid-template-columns:76px minmax(0,1fr);align-items:center;width:100%}
+.att-seal{width:74px;height:74px;transform:rotate(-9deg);opacity:.92;position:relative;z-index:1;margin-right:-10px}
+.att-pen{width:100%;height:62px;object-fit:contain}
+.att-line{width:100%;border-bottom:1px solid #111;margin-bottom:3px}
+.att-sign b{font-size:13.5px}.att-role{font-weight:700;font-size:12.5px}.att-sign span{font-size:12.5px}
 .pdf-host{background:#FFFFFF;color:var(--ink);font:15px/1.55 var(--f-body)}
 .pdf-host .mast{padding-block:6px 10px}
 .pdf-host .item{grid-template-columns:48px minmax(0,1fr);padding:22px 18px 20px 12px}
@@ -592,6 +615,7 @@ body.pdf-mode::before,.pdf-mode .bar,.pdf-mode .toast,.pdf-mode .sgy-btn,.pdf-mo
       <button class="btn orange" id="fullPdfBtn" type="button" title="Λήψη PDF ολόκληρης της συνεδρίασης ΣΓΥ">ΣΓΥ PDF</button>
       <button class="btn primary" id="copyBtn" type="button">Αντιγραφή πρακτικών</button>
       <button class="btn primary" id="pdfBtn" type="button" title="Λήψη PDF της Αναφοράς Μεγάλου Γραμματέως">Αναφορά ΜΓραμ</button>
+      <button class="btn primary" id="attPdfBtn" type="button" title="PDF ελέγχου των συνημμένων εγγράφων της Συνεδριάσεως">Συνημμένα ΣΓΥ</button>
       <button class="btn save" id="archBtn" type="button" title="Αποθήκευση ολόκληρης της συνεδρίασης στο Αρχείο Συνεδριάσεων">Αποθήκευση ΣΓΥ</button>
       <button class="btn menu-btn" id="sgyMenuBtn" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="sgyMenu">📂 Όλες οι ΣΓΥ ▾</button>
       <button class="btn" id="resetBtn" type="button">Επαναφορά</button>
@@ -888,7 +912,7 @@ const JEWEL='data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAQcAAAEsCAYAAADOwHZSA
 let h2pP=null;
 function loadH2P(){if(window.html2pdf)return Promise.resolve();if(h2pP)return h2pP;
   h2pP=new Promise((res,rej)=>{const sc=document.createElement('script');sc.src='https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js';sc.onload=res;sc.onerror=()=>{h2pP=null;rej(new Error('load'))};document.head.appendChild(sc)});return h2pP}
-const PDF_BTNS=['pdfBtn','repPdfBtn','fullPdfBtn'].map(i=>document.getElementById(i));
+const PDF_BTNS=['pdfBtn','repPdfBtn','fullPdfBtn','attPdfBtn'].map(i=>document.getElementById(i));
 const RW=703; /* A4 inner width in px at 12 mm side margins */
 function cloneFor(src){
   const c=src.cloneNode(true);
@@ -926,17 +950,23 @@ async function makePdf(btn,kind,fname){
     host=document.createElement('div');host.className='pdf-host pdf-mode'+(kind==='report'?' pdf-report':'');host.lang='el';
     host.style.width=RW+'px';
     if(kind==='report')host.appendChild(cloneFor(document.getElementById('item-13')));
+    else if(kind==='attach')host.appendChild(buildAttach());
     else{host.appendChild(cloneFor(document.querySelector('.mast')));host.appendChild(cloneFor(form))}
     root.setAttribute('data-theme','light');
+    /* Greek capitals carry no accents: the PDF renderer ignores the language, so CSS capitals are written out here */
+    host.style.position='absolute';host.style.left='-10000px';host.style.top='0';document.body.appendChild(host);
+    host.querySelectorAll('*').forEach(el=>{if(getComputedStyle(el).textTransform!=='uppercase')return;
+      el.childNodes.forEach(n=>{if(n.nodeType===3)n.nodeValue=UP(n.nodeValue)});el.style.textTransform='none'});
+    host.remove();host.style.position=host.style.left=host.style.top='';
     await new Promise(r=>requestAnimationFrame(()=>requestAnimationFrame(r)));
     blob=await html2pdf().set({
       margin:[13,12,17,12],filename:fname,image:{type:'jpeg',quality:0.94},
       html2canvas:{scale:2,useCORS:true,backgroundColor:'#FFFFFF',scrollX:0,scrollY:0},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-      pagebreak:{mode:['css','legacy'],avoid:['.ov','.partb','.tblock','.tblock-long .sub-h','.tblock-long .tcap','.rep-head','.toc','.sub-h','.tcap','.memo','.sum-kpis','.sig-sec','.inv-h','.dr-kpis','.dr-t tr','.dr-sec h4','.em-sum>p','.em-grid','.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
+      pagebreak:{mode:['css','legacy'],avoid:['.att-sec h2','.att-sec thead','.att-sec tr','.att-sign','.att-lh','.att-h','.ov','.partb','.tblock','.tblock-long .sub-h','.tblock-long .tcap','.rep-head','.toc','.sub-h','.tcap','.memo','.sum-kpis','.sig-sec','.inv-h','.dr-kpis','.dr-t tr','.dr-sec h4','.em-sum>p','.em-grid','.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
     }).from(host).toPdf().get('pdf').then(pdf=>{const n=pdf.internal.getNumberOfPages(),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight();
       const dIn=document.getElementById('t13-date').value,dd=dIn?fmtD(dIn):'02/11/2026';
-      const right=kind==='report'?'Αναφορά Μεγάλου Γραμματέως προς το ΣΓΥ · '+dd:'Ροή Τακτικής Συνεδριάσεως ΣΓΥ · 02/11/2026';
+      const right=kind==='report'?'Αναφορά Μεγάλου Γραμματέως προς το ΣΓΥ · '+dd:kind==='attach'?'Συνημμένα · Έλεγχος ΣΓΥ · 02/11/2026':'Ροή Τακτικής Συνεδριάσεως ΣΓΥ · 02/11/2026';
       const proto=(document.getElementById('t13-proto')||{}).value||'';
       const head=pdfBand('','', '', 'ΕΣΩΤΕΡΙΚΟ ΕΓΓΡΑΦΟ');
       const ref='ΕΜΣτΕ · Μεγάλη Γραμματεία · '+right+(kind==='report'&&proto?' · Αρ. Πρωτ. '+proto:'');
@@ -964,6 +994,48 @@ function reportPdf(btn){
 PDF_BTNS[0].addEventListener('click',()=>reportPdf(PDF_BTNS[0]));
 PDF_BTNS[1].addEventListener('click',()=>reportPdf(PDF_BTNS[1]));
 PDF_BTNS[2].addEventListener('click',()=>makePdf(PDF_BTNS[2],'full','SGY_Synedriasi_021126_v20.pdf'));
+PDF_BTNS[3].addEventListener('click',()=>makePdf(PDF_BTNS[3],'attach','Synimmena_SGY_021126_v1.pdf'));
+
+/* Attachments check-list for the Council session: what must accompany the invitation and each item, signed by the Grand Secretary */
+const ATT_LIST=[
+ ['Α. Με την Πρόσκληση της Συνεδριάσεως',[
+   ['—','Πρόσκληση και Ημερησία Διάταξις της Τακτικής Συνεδριάσεως, με τον σύνδεσμο της τηλεδιασκέψεως','Μεγάλη Γραμματεία'],
+   ['—','Πρακτικό της προηγουμένης Τακτικής Συνεδριάσεως της 14ης Σεπτεμβρίου 2026','Μεγάλη Γραμματεία'],
+   ['—','Παρουσιολόγιο των Μελών του Συμβουλίου Γενικών Υποθέσεων','Αναπληρωτής Μέγας Γραμματεύς']]],
+ ['Β. Ανά Θέμα της Ημερησίας Διατάξεως',[
+   ['3','Ανάγνωσις και Επικύρωσις Πρακτικών: Πρακτικό της Τακτικής Συνεδριάσεως της 14ης Σεπτεμβρίου 2026 (βλ. ενότητα Α)','Μεγάλη Γραμματεία'],
+   ['4','Ανακοινώσεις Μεγάλου Διδασκάλου: α) «Αξίωμα Μεγάλου Μέντορα» · β) Πρόταση Τροποποιήσεως ΒΓΝκΚ (έκδοση 2)','Γραφείο Μεγάλου Διδασκάλου'],
+   ['5','Ανακοινώσεις Προέδρου ΣΓΥ: εισηγητικά σημειώματα του Προέδρου, εφόσον υπάρχουν','Πρόεδρος ΣΓΥ'],
+   ['6','Συνδρομές, Τέλη και Εισφορές: Πίνακας Πληρωτέων Συνδρομών, Τελών και Εισφορών περιόδου 1/1/2027 – 31/12/2027 (Κανόνες 269 και 270)','Μέγας Θησαυροφύλαξ'],
+   ['7','Οικονομικός Προϋπολογισμός περιόδου 1/1/2027 – 31/12/2027 (Κανών 228γ)','Μέγας Θησαυροφύλαξ'],
+   ['8','Μεγάλη Συνέλευσις της 19ης Δεκεμβρίου 2026: α) πρόταση τόπου και ώρας · β) Ημερησία Διάταξις','Μεγάλη Γραμματεία'],
+   ['9','Αναφορές των Επιτροπών: Οικονομικών · Εξωτερικών Σχέσεων · Διαδικασίας και Ειδικών Θεμάτων · Βιβλιοθήκης, Τέχνης και Δημοσιευμάτων · Πληροφορήσεως, Επικοινωνίας και Κτιρίων','Πρόεδροι των Επιτροπών'],
+   ['10','Έκθεσις Πεπραγμένων του Μεγάλου Αγαθοεργού Σώματος','Πρόεδρος Μεγάλου Αγαθοεργού Σώματος'],
+   ['11','Αναφορά και Ανακοινώσεις του Μεγάλου Καγκελαρίου','Μέγας Καγκελάριος'],
+   ['12','Ανακοινώσεις του Μεγάλου Γραμματέως Εκπαιδεύσεως και τυχόν εκπαιδευτικό υλικό, εφόσον υπάρχουν','Μέγας Γραμματεύς Εκπαιδεύσεως'],
+   ['13','Αναφορά του Μεγάλου Γραμματέως προς το ΣΓΥ: Συνοπτική Εποπτική Αναφορά και Τεύχος Αναλύσεως Δεδομένων (PDF)','Μεγάλη Γραμματεία'],
+   ['13','Επισυναπτόμενο 1 της Αναφοράς: Επιστολή παραιτήσεως του Σεβασμίου Διδασκάλου της Σ.Στ. «Κάσσανδρος» (23/10/2026)','Μεγάλη Γραμματεία'],
+   ['14','Ενημερωτικό σημείωμα του Μεγάλου Θησαυροφύλακος, εφόσον το θέμα δεν καλύφθηκε στο Θέμα 7','Μέγας Θησαυροφύλαξ']]],
+ ['Γ. Μετά τη Συνεδρίαση',[
+   ['—','Σχέδιο Πρακτικού της Συνεδριάσεως προς τα Μέλη του Συμβουλίου','Μεγάλη Γραμματεία'],
+   ['—','Γνωστοποίηση των αποφάσεων του Συμβουλίου (Συνδρομές, Προϋπολογισμός, Μεγάλη Συνέλευσις) στους αρμοδίους','Μεγάλη Γραμματεία'],
+   ['—','Καταχώριση των δικαιολογήσεων μη συμμετοχής των Μελών στο Πρακτικό','Μεγάλη Γραμματεία']]]];
+const MONTHS_G=['Ιανουαρίου','Φεβρουαρίου','Μαρτίου','Απριλίου','Μαΐου','Ιουνίου','Ιουλίου','Αυγούστου','Σεπτεμβρίου','Οκτωβρίου','Νοεμβρίου','Δεκεμβρίου'];
+const sessGen=id=>{const [y,m,d]=String(id).split('-').map(Number);return `${d}${d%10===2&&d!==12?'ας':'ης'} ${MONTHS_G[m-1]} ${y}`};
+/* Greek capitals drop the accent (tonos) but keep the diaeresis */
+const UP=t=>String(t).normalize('NFD').replace(/\u0301/g,'').normalize('NFC').toUpperCase();
+function buildAttach(){const id=VIEW?VIEW.id:SESSION_ID,seal=(document.querySelector('.seal-mini')||{}).src||'',sig=sigData||DEFAULT_SIG;
+  const txt=k=>{const e=document.querySelector(`[data-edit="${k}"]`);return e?e.textContent.trim():''};
+  const el=document.createElement('section');el.className='att-doc';el.lang='el';
+  el.innerHTML=`<div class="att-lh">${seal?`<img src="${seal}" alt="">`:''}<div><div class="att-org">${UP('Εθνική Μεγάλη Στοά της Ελλάδος')}</div><div class="att-sub">${UP('Μεγάλη Γραμματεία')}</div></div></div>
+  <h1 class="att-h">${UP('Μεγάλη Γραμματεία')}<br>${UP('Συνημμένα · Έλεγχος')}<br><span>${esc(UP('για το Συμβούλιο Γενικών Υποθέσεων της '+sessGen(id)))}</span></h1>
+  <p class="att-intro">Κατάλογος των εγγράφων που πρέπει να συνοδεύουν την Πρόσκληση και τα Θέματα της Ημερησίας Διατάξεως, προς έλεγχο από τη Μεγάλη Γραμματεία πριν από την αποστολή τους στα Μέλη του Συμβουλίου.</p>
+  ${ATT_LIST.map(([h,rows])=>`<div class="att-sec"><h2>${esc(UP(h))}</h2><table><thead><tr><th class="c">Θέμα</th><th>Συνημμένο έγγραφο</th><th>Αρμόδιος</th><th class="c">Εστάλη</th></tr></thead><tbody>${
+    rows.map(([n,d,w])=>`<tr><td class="c">${esc(n)}</td><td>${esc(d)}</td><td>${esc(w)}</td><td class="c"><span class="att-box"></span></td></tr>`).join('')}</tbody></table></div>`).join('')}
+  <p class="att-close">Με Αφοσίωση και Αδελφική Αγάπη,</p>
+  <div class="att-sign"><div class="att-sig"><img class="att-seal" src="${seal}" alt=""><img class="att-pen" src="${sig}" alt=""></div><div class="att-line"></div>
+    <b>${esc(txt('sig2')||'Πσεβ. Αδ. Δημήτριος Σκιαδόπουλος')}</b><span class="att-role">${esc(txt('sig3')||'Μέγας Γραμματεύς')}</span><span>${esc(txt('sig4')||'Εθνική Μεγάλη Στοά της Ελλάδος')}</span></div>`;
+  return el}
 
 /* Signature pad */
 /* default signature of the Grand Secretary, Δημήτριος Σκιαδόπουλος (transparent PNG); a drawn signature replaces it */
