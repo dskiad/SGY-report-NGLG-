@@ -114,6 +114,10 @@ h2{font:700 22px/1.3 var(--f-body);margin:0;text-wrap:balance;color:var(--blue);
 .item.is-done{border-color:var(--gold)}
 .item.is-done h2{color:var(--blue);opacity:.6}
 
+.rule{border:1px solid var(--line);border-left:3px solid var(--gold);border-radius:6px;background:var(--solid);padding:10px 14px}
+.rule-src{font:700 10.5px/1.3 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--muted)}
+.rule-h{margin-top:3px;font:700 14px/1.3 var(--f-body);color:var(--ink)}
+.rule p{margin:6px 0 0;font:400 15.5px/1.55 var(--f-display);color:var(--ink);max-width:70ch}
 .script{background:var(--script-bg);border:1px solid var(--script-line);border-radius:8px;padding:14px 16px}
 .script .who,.panel .who{font:700 11px/1 var(--f-body);letter-spacing:.14em;text-transform:uppercase;color:var(--gold);margin-bottom:8px;display:flex;align-items:center;gap:7px}
 .script .who svg,.panel .who svg{width:14px;height:14px}
@@ -577,6 +581,8 @@ const esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',
 let SC=0;
 const script=(paras,cond)=>`<div class="script"><div class="who">${MIC}Εκφωνεί ο Γραμματέας<span class="edit-hint">✎ επεξεργάσιμο</span></div>${cond?`<div class="cond">${cond}</div>`:''}${paras.map(p=>p.startsWith('<')?`<div class="ed" contenteditable="true" spellcheck="true" data-edit="s${++SC}">${p}</div>`:`<p class="ed" contenteditable="true" spellcheck="true" data-edit="s${++SC}">${p}</p>`).join('')}</div>`;
 const note=h=>`<div class="note">${h}</div>`;
+/* advisory text from the Constitution, shown read-only next to the item it governs */
+const rule=(src,title,body)=>`<div class="rule"><div class="rule-src">${src}</div><div class="rule-h">${title}</div>${body.map(p=>`<p>${p}</p>`).join('')}</div>`;
 const doc=(href,t)=>`<a class="doc" href="${href}" target="_blank" rel="noopener">${DOC}${t}</a>`;
 const text=(id,l,ph='')=>`<label class="f" for="${id}">${l}<input type="text" id="${id}" data-label="${esc(l)}" placeholder="${esc(ph)}"></label>`;
 const area=(id,l)=>`<label class="f" for="${id}">${l}<textarea id="${id}" data-label="${esc(l)}"></textarea></label>`;
@@ -624,7 +630,7 @@ const ANN_DEF=[
 ].map(([id,t,x])=>({t,x}));
 const ITEMS=[
  {t:'Έναρξις Συνεδριάσεως',b:[`<div class="grid2">${`<label class="f" for="t1-start">Ώρα έναρξης<input type="time" id="t1-start" data-label="Ώρα έναρξης"></label>`}</div>`]},
- {t:'Διαπίστωσις Απαρτίας',b:[seg('t2-q','Διαπιστώθηκε απαρτία'),
+ {t:'Διαπίστωσις Απαρτίας',b:[rule('Σύνταγμα ΕΜΣτΕ · Το Συμβούλιον Γενικών Υποθέσεων','Κανόνας 226 · Απαρτία',['<b>226.</b> Πέντε μέλη αποτελούν απαρτίαν και προβαίνουν εις εργασίας, πλην της περιπτώσεως εξετάσεως και λήψεως αποφάσεως επί Τεκτονικών καταγγελιών, οπότε πρέπει να είναι παρόντα τουλάχιστον επτά μέλη. Αποφάσεις λαμβάνονται δια πλειοψηφίας εις περίπτωσιν δε ισοψηφίας ο προεδρεύων Αδελφός έχει την δευτέραν ψήφον.']),seg('t2-q','Διαπιστώθηκε απαρτία'),
    `<div class="grid2"><label class="f" for="t2-count">Αριθμός παρόντων<input type="number" min="0" inputmode="numeric" id="t2-count" data-label="Αριθμός παρόντων"></label></div>`,
    area('t2-names','Παρόντα μέλη')]},
  {t:'Ανάγνωσις και Επικύρωσις Πρακτικών',ref:'Τακτική Συνεδρίαση 14ης Σεπτεμβρίου 2026',b:[
@@ -876,7 +882,7 @@ async function makePdf(btn,kind,fname){
       margin:[13,12,17,12],filename:fname,image:{type:'jpeg',quality:0.94},
       html2canvas:{scale:2,useCORS:true,backgroundColor:'#FFFFFF',scrollX:0,scrollY:0},
       jsPDF:{unit:'mm',format:'a4',orientation:'portrait'},
-      pagebreak:{mode:['css','legacy'],avoid:['.ov','.partb','.tblock','.tblock-long .sub-h','.tblock-long .tcap','.rep-head','.toc','.sub-h','.tcap','.memo','.sum-kpis','.sig-sec','.inv-h','.dr-kpis','.dr-t tr','.dr-sec h4','.em-sum>p','.em-grid','.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
+      pagebreak:{mode:['css','legacy'],avoid:['.rule','.ov','.partb','.tblock','.tblock-long .sub-h','.tblock-long .tcap','.rep-head','.toc','.sub-h','.tcap','.memo','.sum-kpis','.sig-sec','.inv-h','.dr-kpis','.dr-t tr','.dr-sec h4','.em-sum>p','.em-grid','.vote','.dg-goal','.dg-live','.dg-card','.script','.head','.note','.seg','.mast','.stat','.panel>.summary','.rep-head','.rep-sign']}
     }).from(host).toPdf().get('pdf').then(pdf=>{const n=pdf.internal.getNumberOfPages(),w=pdf.internal.pageSize.getWidth(),h=pdf.internal.pageSize.getHeight();
       const dIn=document.getElementById('t13-date').value,dd=dIn?fmtD(dIn):'02/11/2026';
       const right=kind==='report'?'Αναφορά Μεγάλου Γραμματέως προς το ΣΓΥ · '+dd:'Ροή Τακτικής Συνεδριάσεως ΣΓΥ · 02/11/2026';
