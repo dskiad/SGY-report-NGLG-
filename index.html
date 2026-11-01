@@ -901,6 +901,9 @@ function pdfBand(left,right,rule,center){const k=3,c=document.createElement('can
 async function makePdf(btn,kind,fname){
   if(PDF_BTNS.some(b=>b.disabled))return;
   PDF_BTNS.forEach(b=>b.disabled=true);const lbl=btn.textContent;btn.textContent='Δημιουργία PDF…';
+  /* the report carries the date it is produced (Athens time); an archived session keeps its own date */
+  if(!VIEW&&!ro){const today=new Intl.DateTimeFormat('en-CA',{timeZone:'Europe/Athens'}).format(new Date());
+    if($('t13-date').value!==today){$('t13-date').value=today;$('t13-date').dispatchEvent(new Event('change',{bubbles:true}));save();refresh()}}
   const root=document.documentElement,prev=root.getAttribute('data-theme');let blob=null,host=null;
   try{
     await loadH2P();
