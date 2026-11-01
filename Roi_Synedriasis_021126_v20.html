@@ -1199,11 +1199,17 @@ const mcpMsg=e=>{const c=e&&e.code;return{
    one day at a time, sent and received separately; threads are processed once, messages filtered by time. */
 /* Before counting: the claude.ai Gmail connection must be the Grand Secretariat's mailbox (grand.secretary@ / info@).
    Sent mail shows whose mailbox it is; with no sent mail, mail addressed to those addresses must exist. */
+async function gcall(mcp,tool,input){for(let i=0;;i++){
+  try{return (await mcp.callTool('Gmail',tool,input)).payload||{}}
+  catch(e){const c=e&&e.code;if(i<3&&(e&&e.retryable||c==='upstream_error'||c==='server_unavailable'||c==='rate_limited')){await new Promise(r=>setTimeout(r,(e&&e.retryAfterMs||1500*(i+1))+Math.random()*800));continue}throw e}}}
 async function gmailAccount(mcp){
-  const q=async query=>((await mcp.callTool('Gmail','search_threads',{query,pageSize:10,view:'THREAD_VIEW_METADATA_ONLY'})).payload||{}).threads||[];
+  const q=async query=>((await gcall(mcp,'search_threads',{query,pageSize:30,view:'THREAD_VIEW_METADATA_ONLY'}))||{}).threads||[];
   const senders=[];(await q('in:sent')).forEach(th=>(th.messages||[]).forEach(m=>{const a=normAddr(m.sender);if(a)senders.push(a)}));
-  const own=senders.find(a=>OWN_N.includes(a));if(own)return{ok:true,acct:OWN[OWN_N.indexOf(own)]};
-  if(senders.length){const c={};senders.forEach(a=>c[a]=(c[a]||0)+1);return{ok:false,acct:Object.entries(c).sort((x,y)=>y[1]-x[1])[0][0]}}
+  /* a personal mailbox that can also send as grand.secretary@ shows its own address among the sent mail too */
+  if(senders.length){const c={};senders.forEach(a=>c[a]=(c[a]||0)+1);const top=Object.entries(c).sort((x,y)=>y[1]-x[1]);
+    const own=senders.filter(a=>OWN_N.includes(a)).length,other=top.find(([a])=>!OWN_N.includes(a));
+    if(own/senders.length>=0.8)return{ok:true,acct:OWN[OWN_N.indexOf(top.find(([a])=>OWN_N.includes(a))[0])]};
+    return{ok:false,acct:other?other[0]:top[0][0]}}
   const ok=(await q('to:grand.secretary@nglgreece.gr OR to:info@nglgreece.gr OR deliveredto:grand.secretary@nglgreece.gr')).length>0;return{ok,acct:ok?OWN[0]:''}}
 function acctShow(ac){const box=$('acctBox'),t=$('acctState');box.classList.toggle('ok',!!ac.ok);box.classList.toggle('bad',!ac.ok);
   t.textContent=ac.ok?`✓ Συνδεδεμένο: ${ac.acct||'γραμματοκιβώτιο της Μεγάλης Γραμματείας'} · σωστός λογαριασμός`:`⚠ Συνδεδεμένο: ${ac.acct||'άλλος λογαριασμός'} · λάθος λογαριασμός — πατήστε «Αλλαγή λογαριασμού»`;
@@ -1218,8 +1224,7 @@ $('acctCheck').addEventListener('click',async()=>{const b=$('acctCheck');
 const WRONG_ACCT=a=>`<b>⚠ Ο υπολογισμός δεν έγινε.</b> Το Gmail του claude.ai είναι συνδεδεμένο με ${a?`τον λογαριασμό <b>${esc(a)}</b>`:'άλλον λογαριασμό'} και όχι με το γραμματοκιβώτιο της Μεγάλης Γραμματείας (grand.secretary@nglgreece.gr · info@nglgreece.gr).<br>Αλλάξτε τη σύνδεση: <a href="https://claude.ai/customize/connectors" target="_blank" rel="noopener">claude.ai → Connectors</a> → Gmail → ⋯ → Disconnect → Connect και επιλέξτε <b>grand.secretary@nglgreece.gr</b>. Μετά πατήστε ξανά «Υπολογισμός στατιστικών». Τα αποθηκευμένα στοιχεία δεν άλλαξαν.`;
 async function gmailStats(mcp,from,to,progress){
   const start=athensMidnight(from),end=athensMidnight(shiftDay(to,1));
-  const call=async(tool,input)=>{try{return (await mcp.callTool('Gmail',tool,input)).payload||{}}
-    catch(e){if(e&&e.retryable){await new Promise(r=>setTimeout(r,(e.retryAfterMs||1500)+Math.random()*800));return (await mcp.callTool('Gmail',tool,input)).payload||{}}throw e}};
+  const call=(tool,input)=>gcall(mcp,tool,input);
   const mk=()=>({in:0,out:0,s:new Set(),r:new Set(),inv:0});
   const tot=mk(),per={};OWN_N.forEach(a=>per[a]=mk());let other=0;
   const seenM=new Set(),seenT=new Set(),invs=[],reps=[],webs=[],excs=[];let full=0,days=0,complete=true;
@@ -1263,6 +1268,8 @@ async function gmailStats(mcp,from,to,progress){
       const body=String(m.plaintextBody||m.snippet||''),own=body.split(/\n\s*(?:Στις |On |From:|>)/)[0];
       if(isExcuse(m.subject,own,snd))excs.push({r:t,f:snd,n:excName(body),w:excWhy(own)})}}
   const seenE=new Set(),excuses=excs.sort((a,b)=>a.r-b.r).filter(x=>{if(seenE.has(x.f))return false;seenE.add(x.f);return true});
+  const ownIn=OWN_N.reduce((n,a)=>n+per[a].in,0);
+  if(tot.in>=40&&ownIn/tot.in<0.3){const e=new Error('wrong_account');e.code='wrong_account';throw e}
   return{incoming:tot.in,outgoing:tot.out,uniqueSenders:tot.s.size,uniqueRecipients:tot.r.size,invitations:tot.inv,
     byAddress,invites,reports,web,excuses,otherIncoming:other,messagesScanned:seenM.size,complete}}
 function applyStats(r){
@@ -1379,7 +1386,7 @@ $('emCalc').addEventListener('click',async()=>{
           acctShow(ac);if(!ac.ok){st.innerHTML=WRONG_ACCT(ac.acct);st.classList.add('em-warn');toast('Λάθος λογαριασμός Gmail · δείτε την ενότητα 2');return}
           st.classList.remove('em-warn');st.textContent='Μέτρηση στο Gmail της Γραμματείας (grand.secretary@ · info@)…';
           done(await gmailStats(mcp,f,t,(d,n)=>{st.textContent=`Μέτρηση στο Gmail της Γραμματείας… ημέρα ${nf(d)} από ${nf(n)}`}),'Gmail')}
-        catch(e){st.textContent=mcpMsg(e)}}
+        catch(e){if(e&&e.code==='wrong_account'){st.innerHTML=WRONG_ACCT('');st.classList.add('em-warn');acctShow({ok:false,acct:''})}else st.textContent=mcpMsg(e)+' Οι αριθμοί παρακάτω είναι από τον προηγούμενο υπολογισμό.'}}
     }else if(EMAIL_API){
       st.textContent='Μέτρηση στο γραμματοκιβώτιο — μπορεί να χρειαστεί 1–3 λεπτά.';
       try{const r=await fetch(EMAIL_API+'?from='+encodeURIComponent(f)+'&to='+encodeURIComponent(t)).then(x=>{if(!x.ok)throw new Error('http');return x.json()});
