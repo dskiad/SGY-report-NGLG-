@@ -1152,10 +1152,10 @@ function emSummary(){
     if(i>0)s+=`· η Γραμματεία απάντησε ή απέστειλε ${Math.round(o/i*100)} μηνύματα ανά 100 εισερχόμενα`;ps.push(s+'.')}
   if(inv!==null)ps.push(inv?`Από τα εισερχόμενα, ${nf(inv)} ${inv===1?'ήταν πρόσκληση':'ήταν προσκλήσεις'} (αρχικά και προωθημένα μηνύματα με «πρόσκληση» στο θέμα, χωρίς απαντήσεις και αυτόματες ειδοποιήσεις)${i?` — ${(inv/i*100).toLocaleString('el-GR',{maximumFractionDigits:1})}% των εισερχομένων`:''}.`:'Δεν ελήφθησαν προσκλήσεις στο διάστημα αυτό.');
   let tbl='';try{const D=JSON.parse($('t13-em-detail').value||'null');
-    if(D&&D.byAddress){const rows=Object.entries(D.byAddress).map(([a,x])=>{const c=v=>typeof v==='number'?nf(v):'—';return `<tr><td>${esc(a)}</td><td class="num">${c(x.in??x.incoming)}</td><td class="num">${c(x.out??x.outgoing)}</td><td class="num">${c(x.uin)}</td><td class="num">${c(x.uout)}</td><td class="num">${c(x.inv)}</td></tr>`});
+    if(D&&D.byAddress){const rows=Object.entries(D.byAddress).map(([a,x])=>{const c=v=>typeof v==='number'?nf(v):'—';return `<tr><td>${esc(a)}</td><td class="num">${c(x.in??x.incoming)}</td><td class="num">${c(x.out??x.outgoing)}${x.outManual?'*':''}</td><td class="num">${c(x.uin)}</td><td class="num">${c(x.uout)}</td><td class="num">${c(x.inv)}</td></tr>`});
       rows.push(`<tr class="em-tot"><td>Σύνολο Γραμματείας</td><td class="num">${i===null?'—':nf(i)}</td><td class="num">${o===null?'—':nf(o)}</td><td class="num">${ui===null?'—':nf(ui)}</td><td class="num">${uo===null?'—':nf(uo)}</td><td class="num">${inv===null?'—':nf(inv)}</td></tr>`);
       tbl=`<div class="tcap" data-t="Κίνηση ηλεκτρονικού ταχυδρομείου ανά διεύθυνση"></div><table class="dr-t em-t"><thead><tr><th>Διεύθυνση</th><th>Εισερχ.</th><th>Εξερχ.</th><th>Αποστολείς</th><th>Παραλήπτες</th><th>Προσκλ.</th></tr></thead><tbody>${rows.join('')}</tbody></table>`+
-        `<p class="dr-note">Ένα μήνυμα προς δύο διευθύνσεις μετρά σε καθεμία, αλλά μία φορά στο σύνολο.${D.other?` ${nf(D.other)} εισερχόμενα δεν είχαν καμία από τις δύο ως ρητό παραλήπτη (π.χ. κρυφή κοινοποίηση ή λίστα) και μετρούν μόνο στο σύνολο.`:''}</p>`}}catch(e){}
+        `<p class="dr-note">${Object.values(D.byAddress).some(x=>x.outManual)?'* Απεσταλμένα μετρημένα απευθείας στον λογαριασμό info@ (δεν είναι ορατά στο γραμματοκιβώτιο του grand.secretary@). ':''}Ένα μήνυμα προς δύο διευθύνσεις μετρά σε καθεμία, αλλά μία φορά στο σύνολο.${D.other?` ${nf(D.other)} εισερχόμενα δεν είχαν καμία από τις δύο ως ρητό παραλήπτη (π.χ. κρυφή κοινοποίηση ή λίστα) και μετρούν μόνο στο σύνολο.`:''}</p>`}}catch(e){}
   box.innerHTML=ps.map(x=>`<p>${esc(x)}</p>`).join('')+tbl;box.hidden=false}
 /* Archive statistics from the Grand Secretariat's Drive folder (Google Drive connector, owner only) */
 const DRIVE_FOLDER='1kKR7v86jjs5QJE9-K5uUebvS6nZd9J03';
@@ -1418,7 +1418,10 @@ async function gmailStats(mcp,from,to,progress){
     byAddress,invites,reports,web,excuses,otherIncoming:other,messagesScanned:seenM.size,complete}}
 function applyStats(r){
   /* a recount keeps names and reasons already corrected by hand */
-  const prev=mailDetail();if(prev&&prev.excuses&&r.excuses)r.excuses.forEach(x=>{const o=prev.excuses.find(y=>y.f===x.f);if(o){x.n=o.n||x.n;x.w=o.w||x.w}});
+  const prev=mailDetail();
+  if(prev&&prev.byAddress&&r.byAddress)Object.entries(prev.byAddress).forEach(([a,x])=>{const n=r.byAddress[a];
+    if(x.outManual&&n){r.outgoing=(r.outgoing||0)-(n.out||0)+x.out;n.out=x.out;n.outManual=true}});
+  if(prev&&prev.excuses&&r.excuses)r.excuses.forEach(x=>{const o=prev.excuses.find(y=>y.f===x.f);if(o){x.n=o.n||x.n;x.w=o.w||x.w}});
   $('t13-em-detail').value=r.byAddress?JSON.stringify({byAddress:r.byAddress,other:r.otherIncoming||0,invites:r.invites||[],reports:r.reports||[],web:r.web||[],excuses:r.excuses||[]}):'';
   [['t13-in','incoming'],['t13-out','outgoing'],['t13-uin','uniqueSenders'],['t13-uout','uniqueRecipients'],['t13-inv','invitations']].forEach(([id,k])=>{if(typeof r[k]==='number')$(id).value=r[k]});
   refresh();save()}
