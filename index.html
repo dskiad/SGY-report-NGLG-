@@ -742,7 +742,7 @@ const ITEMS=[
    note('<b>Σημείωση:</b> Αν δεν αναφερθούν από τον Μ.Δ., τις παρουσιάζει ο Γραμματέας.'),
    `<div class="sub"><h3><span class="k">4.1</span>Αξίωμα Μεγάλου Μέντορα</h3>${doc('https://docs.google.com/document/d/1TgeMc1FqfD6vPok4_MLcgCEy8ygkejXk/edit?usp=sharing&ouid=103548126304534355692&rtpof=true&sd=true','Αξίωμα Μεγάλου Μέντορα')}${vote('t41','A','Έγκριση',{proposer:'Μ.Δ.',proposerLabel:'Προτείνει την έγκριση',action:'Ενέργεια / Αποστολή εγγράφου'})}</div>`,
    `<div class="sub"><h3><span class="k">4.2</span>Πρόταση Τροποποίησης ΒΓΝκΚ v2</h3>${doc('https://docs.google.com/document/d/1pCw4KutewFpf3P4TVEmhPbBzJQTY7FR3/edit?usp=sharing&ouid=103548126304534355692&rtpof=true&sd=true','Πρόταση_Τροποποίησης_ΒΓΝκΚ_v2')}${vote('t42','A','Έγκριση',{proposer:'Μ.Δ.',proposerLabel:'Προτείνει την έγκριση',action:'Ενέργεια / Αποστολή εγγράφου'})}</div>`]},
- {t:'Ανακοινώσεις Προέδρου ΣΓΥ',b:[note('<b>Εκκρεμεί:</b> Θα ζητηθεί;'),area('t5-n','Σημειώσεις / Θέματα')]},
+ {t:'Ανακοινώσεις Προέδρου ΣΓΥ',b:[note('<b>Εκκρεμεί:</b> Θα ζητηθεί;'),attBox('t5-att','Αναφορά / Ανακοινώσεις Προέδρου ΣΓΥ · αρχείο'),area('t5-n','Σημειώσεις / Θέματα')]},
  {t:'Απόφασις για Συνδρομές, Τέλη & Εισφορές',ref:'Περίοδος 1/1/2027 – 31/12/2027 · Βάσει Κανόνων 269 & 270',b:[
    doc('https://drive.google.com/file/d/1gGPcJMLigNv6vEfq2dNsmUF-6luj9ziL/view?usp=sharing','Πληρωτέες Συνδρομές, Τέλη και Εισφορές'),
    script(['«Τα στοιχεία για τις πληρωτέες συνδρομές, τέλη και εισφορές έχουν αποσταλεί στα μέλη με ηλεκτρονική αλληλογραφία και δεν υπήρξαν παρατηρήσεις. Προτείνω όπως θεωρηθούν αναγνωσθέντα.»']),
@@ -765,7 +765,7 @@ const ITEMS=[
  {t:'Αναφορές Επιτροπών',b:[`<div class="checks" style="gap:12px">${[
    ['t9-1','Οικονομικών'],['t9-2','Εξωτερικών Σχέσεων'],['t9-3','Διαδικασίας & Ειδικών Θεμάτων'],['t9-4','Βιβλιοθήκης, Τέχνης & Δημοσιευμάτων'],['t9-5','Πληροφορήσεως, Επικοινωνίας & Κτιρίων']
    ].map(([i,l])=>text(i,'Επιτροπή '+l)).join('')}</div>`]},
- {t:'Αναφορά Προέδρου Μεγάλου Αγαθοεργού Σώματος',b:[area('t10-n','Σημειώσεις')]},
+ {t:'Αναφορά Προέδρου Μεγάλου Αγαθοεργού Σώματος',b:[attBox('t10-att','Αναφορά Μεγάλου Αγαθοεργού Σώματος · αρχείο'),area('t10-n','Σημειώσεις')]},
  {t:'Ανακοινώσεις Μεγάλου Καγκελαρίου',b:[doc('https://drive.google.com/file/d/1oYOQf0CWQApTr_5vMikzn6JE2HFWnjNC/view?usp=drive_link','Ανακοινώσεις'),area('t11-n','Σημειώσεις')]},
  {t:'Ανακοινώσεις Μεγάλου Γραμματέως Εκπαιδεύσεως',b:[area('t12-n','Σημειώσεις')]},
  {t:'Ανακοινώσεις Μεγάλου Γραμματέως',b:[
@@ -1099,7 +1099,7 @@ function buildAttach(){const id=VIEW?VIEW.id:SESSION_ID,seal=(document.querySele
   <h1 class="att-h">${UP('Μεγάλη Γραμματεία')}<br>${UP('Συνημμένα · Έλεγχος')}<br><span>${esc(UP('για το Συμβούλιο Γενικών Υποθέσεων της '+sessGen(id)))}</span></h1>
   <p class="att-intro">Κατάλογος των εγγράφων που πρέπει να συνοδεύουν την Πρόσκληση και τα Θέματα της Ημερησίας Διατάξεως, προς έλεγχο από τη Μεγάλη Γραμματεία πριν από την αποστολή τους στα Μέλη του Συμβουλίου.</p>
   ${ATT_LIST.map(([h,rows])=>`<div class="att-sec"><h2>${esc(UP(h))}</h2><table><thead><tr><th class="c">Θέμα</th><th>Συνημμένο έγγραφο</th><th>Αρμόδιος</th><th class="c">Εστάλη</th></tr></thead><tbody>${
-    rows.map(([n,d,w])=>{const f=n==='7'?attData('t7-att'):[];return `<tr><td class="c">${esc(n)}</td><td>${esc(d)}${f.length?`<br><b>Επισυνάφθηκε:</b> ${esc(f.map(x=>x.name).join(', '))}`:''}</td><td>${esc(w)}</td><td class="c"><span class="att-box${f.length?' on':''}">${f.length?'✓':''}</span></td></tr>`}).join('')}</tbody></table></div>`).join('')}
+    rows.map(([n,d,w])=>{const f={'5':'t5-att','7':'t7-att','10':'t10-att'}[n]?attData({'5':'t5-att','7':'t7-att','10':'t10-att'}[n]):[];return `<tr><td class="c">${esc(n)}</td><td>${esc(d)}${f.length?`<br><b>Επισυνάφθηκε:</b> ${esc(f.map(x=>x.name).join(', '))}`:''}</td><td>${esc(w)}</td><td class="c"><span class="att-box${f.length?' on':''}">${f.length?'✓':''}</span></td></tr>`}).join('')}</tbody></table></div>`).join('')}
   <p class="att-close">Με Αφοσίωση και Αδελφική Αγάπη,</p>
   <div class="att-sign"><div class="att-sig"><img class="att-seal" src="${seal}" alt=""><img class="att-pen" src="${sig}" alt=""></div><div class="att-line"></div>
     <b>${esc(txt('sig2')||'Πσεβ. Αδ. Δημήτριος Σκιαδόπουλος')}</b><span class="att-role">${esc(txt('sig3')||'Μέγας Γραμματεύς')}</span><span>${esc(txt('sig4')||'Εθνική Μεγάλη Στοά της Ελλάδος')}</span></div>`;
